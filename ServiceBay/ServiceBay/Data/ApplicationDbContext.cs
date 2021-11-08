@@ -1,9 +1,10 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
 //using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using ServiceBay.Models;
+using ServiceBay.Dto;
 
 namespace ServiceBay.Data
 {
@@ -14,6 +15,7 @@ namespace ServiceBay.Data
         {
         }
         public DbSet<ServiceBay.Models.Auction> Auction { get; set; }
+        public DbSet<ServiceBay.Dto.AuctionForCreationDto> AuctionForCreationDto { get; set; }
         
     }
 }
