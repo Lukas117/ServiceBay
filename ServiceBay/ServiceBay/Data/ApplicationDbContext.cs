@@ -16,6 +16,7 @@ namespace ServiceBay.Data
         }
         public DbSet<ServiceBay.Models.Auction> Auction { get; set; }
         public DbSet<ServiceBay.Dto.AuctionForCreationDto> AuctionForCreationDto { get; set; }
+        public DbSet<ServiceBay.Dto.BidForCreationDto> BidForCreationDto { get; set; }
         
     }
 }

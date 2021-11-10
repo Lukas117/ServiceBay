@@ -12,6 +12,6 @@ namespace ServiceBay.Dto
         public string AuctionDescription { get; set; }
         public DateTime StartingDate { get; set; }
         public DateTime EndDate { get; set; }
-        public double? StartingPrice { get; set; }
+        public double StartingPrice { get; set; }
     }
 }

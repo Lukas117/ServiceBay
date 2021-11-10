@@ -43,7 +43,6 @@ namespace ServiceBay.Controllers
         }
 
         // PUT: api/ApiAuction/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
         public async Task<IActionResult> PutAuction(int id, Auction auction)
         {
@@ -74,7 +73,6 @@ namespace ServiceBay.Controllers
         }
 
         // POST: api/ApiAuction
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public async Task<ActionResult<Auction>> PostAuction(Auction auction)
         {

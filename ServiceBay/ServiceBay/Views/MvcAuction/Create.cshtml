@@ -1,4 +1,4 @@
-﻿@model ServiceBay.Dto.AuctionForCreationDto
+﻿@model ServiceBay.Models.Auction
 
 @{
     ViewData["Title"] = "Create";
@@ -6,7 +6,7 @@
 
 <h1>Create</h1>
 
-<h4>AuctionForCreationDto</h4>
+<h4>Auction</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -36,6 +36,21 @@
                 <label asp-for="StartingPrice" class="control-label"></label>
                 <input asp-for="StartingPrice" class="form-control" />
                 <span asp-validation-for="StartingPrice" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SellerId" class="control-label"></label>
+                <input asp-for="SellerId" class="form-control"/>
+                <span asp-validation-for="SellerId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Price" class="control-label"></label>
+                <input asp-for="Price" class="form-control" />
+                <span asp-validation-for="Price" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Version" class="control-label"></label>
+                <input asp-for="Version" class="form-control" />
+                <span asp-validation-for="Version" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
