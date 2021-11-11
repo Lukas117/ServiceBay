@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 
 #nullable disable
 
@@ -20,7 +21,7 @@ namespace ServiceBay.Models
         public double StartingPrice { get; set; }
         public int SellerId { get; set; }
         public double? Price { get; set; }
-        public DateTime Version { get; set; }
+        public DataRowVersion? RowVersion { get; }
 
         public virtual Person Seller { get; set; }
         public virtual ICollection<Bid> Bids { get; set; }

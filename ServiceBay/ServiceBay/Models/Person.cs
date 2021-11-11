@@ -21,7 +21,7 @@ namespace ServiceBay.Models
         public string PasswordHash { get; set; }
         public string PasswordSalt { get; set; }
         public int UserRole { get; set; }
-        public int? AddressId { get; set; }
+        public int AddressId { get; set; }
 
         public virtual Address Address { get; set; }
         public virtual ICollection<Auction> Auctions { get; set; }
