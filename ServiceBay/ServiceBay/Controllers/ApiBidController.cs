@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using ServiceBay.Contracts;
 using ServiceBay.Data;
 using ServiceBay.Models;
+using ServiceBay.Repository;
 
 namespace ServiceBay.Controllers
 {
@@ -16,10 +17,12 @@ namespace ServiceBay.Controllers
     public class ApiBidController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
+        private readonly IAuctionRepository _auctionRepo;
 
         public ApiBidController(ApplicationDbContext context)
         {
             _context = context;
+            _auctionRepo = new AuctionRepository(_context);
         }
 
         //private readonly IBidRepository _bidRepo;
@@ -85,16 +88,28 @@ namespace ServiceBay.Controllers
 
         //// POST: api/ApiBid
         //// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        //[HttpPost]
-        //public async Task<ActionResult<Bid>> PostBid(Bid bid)
-        //{
-        //    //await _bidRepo.CreateBid(bid);
-        //    _context.Bid.Add(bid);
-        //    await _context.SaveChangesAsync();
-        //    ApiAuctionController apiAuction = new ApiAuctionController(_context);
-        //    apiAuction.ChangePrice(bid.AuctionId, bid.Price);
-        //    return CreatedAtAction("GetBid", new { id = bid.Id }, bid);
-        //}
+        [HttpPost]
+        public async Task<ActionResult<Bid>> PostBid(Bid bid)
+        {
+            //await _bidRepo.CreateBid(bid);
+            var auction = await _context.Auction.FindAsync(bid.AuctionId);
+            var version = auction.RowVersion;
+            if (auction != null)
+            {
+                if (auction.RowVersion == version && auction.SellerId != bid.BuyerId && auction.Price <bid.Price && auction.StartingPrice < bid.Price && auction.EndDate <= DateTime.Now)
+                {
+                    _context.Bid.Add(bid);
+                    await _context.SaveChangesAsync();
+                    ApiAuctionController apiAuction = new ApiAuctionController(_context);
+                    _auctionRepo.UpdatePrice(bid.AuctionId, bid.Price);
+                    return CreatedAtAction("GetBid", new { id = bid.Id }, bid);
+                }
+                return BadRequest();
+            }
+
+            return NotFound();
+           
+        }
 
         // DELETE: api/ApiBid/5
         [HttpDelete("{id}")]

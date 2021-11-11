@@ -49,6 +49,7 @@ namespace ServiceBay.Repository
 
         public void UpdatePrice(int id, double price)
         {
+            
             var auction = new Auction() { Id = id, Price = price };
             using (var db = _context)
             {
