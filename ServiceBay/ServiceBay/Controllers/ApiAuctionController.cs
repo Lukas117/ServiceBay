@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using ServiceBay.Contracts;
 using ServiceBay.Data;
 using ServiceBay.Dto;
 
@@ -20,15 +19,6 @@ namespace ServiceBay.Controllers
         public ApiAuctionController(ApplicationDbContext context)
         {
             _context = context;
-        }
-
-        private readonly IAuctionRepository _auctionRepo;
-
-        public ApiAuctionController(IAuctionRepository auctionRepo)
-        {
-
-            _auctionRepo = auctionRepo;
-
         }
 
         // GET: api/ApiAuction
@@ -88,7 +78,8 @@ namespace ServiceBay.Controllers
         [HttpPost]
         public async Task<ActionResult<AuctionForCreationDto>> PostAuctionForCreationDto(AuctionForCreationDto auctionForCreationDto)
         {
-            await _auctionRepo.CreateAuction(auctionForCreationDto);
+            _context.AuctionForCreationDto.Add(auctionForCreationDto);
+            await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetAuctionForCreationDto", new { id = auctionForCreationDto.Id }, auctionForCreationDto);
         }
