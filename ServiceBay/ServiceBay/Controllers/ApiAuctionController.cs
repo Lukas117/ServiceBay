@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ServiceBay.Data;
-using ServiceBay.Dto;
+using ServiceBay.Models;
 
 namespace ServiceBay.Controllers
 {
@@ -23,36 +23,35 @@ namespace ServiceBay.Controllers
 
         // GET: api/ApiAuction
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<AuctionForCreationDto>>> GetAuctionForCreationDto()
+        public async Task<ActionResult<IEnumerable<Auction>>> GetAuction()
         {
-            return await _context.AuctionForCreationDto.ToListAsync();
+            return await _context.Auction.ToListAsync();
         }
 
         // GET: api/ApiAuction/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<AuctionForCreationDto>> GetAuctionForCreationDto(int id)
+        public async Task<ActionResult<Auction>> GetAuction(int id)
         {
-            var auctionForCreationDto = await _context.AuctionForCreationDto.FindAsync(id);
+            var auction = await _context.Auction.FindAsync(id);
 
-            if (auctionForCreationDto == null)
+            if (auction == null)
             {
                 return NotFound();
             }
 
-            return auctionForCreationDto;
+            return auction;
         }
 
         // PUT: api/ApiAuction/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutAuctionForCreationDto(int id, AuctionForCreationDto auctionForCreationDto)
+        public async Task<IActionResult> PutAuction(int id, Auction auction)
         {
-            if (id != auctionForCreationDto.Id)
+            if (id != auction.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(auctionForCreationDto).State = EntityState.Modified;
+            _context.Entry(auction).State = EntityState.Modified;
 
             try
             {
@@ -60,7 +59,7 @@ namespace ServiceBay.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!AuctionForCreationDtoExists(id))
+                if (!AuctionExists(id))
                 {
                     return NotFound();
                 }
@@ -74,35 +73,34 @@ namespace ServiceBay.Controllers
         }
 
         // POST: api/ApiAuction
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<AuctionForCreationDto>> PostAuctionForCreationDto(AuctionForCreationDto auctionForCreationDto)
+        public async Task<ActionResult<Auction>> PostAuction(Auction auction)
         {
-            _context.AuctionForCreationDto.Add(auctionForCreationDto);
+            _context.Auction.Add(auction);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetAuctionForCreationDto", new { id = auctionForCreationDto.Id }, auctionForCreationDto);
+            return CreatedAtAction("GetAuction", new { id = auction.Id }, auction);
         }
 
         // DELETE: api/ApiAuction/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteAuctionForCreationDto(int id)
+        public async Task<IActionResult> DeleteAuction(int id)
         {
-            var auctionForCreationDto = await _context.AuctionForCreationDto.FindAsync(id);
-            if (auctionForCreationDto == null)
+            var auction = await _context.Auction.FindAsync(id);
+            if (auction == null)
             {
                 return NotFound();
             }
 
-            _context.AuctionForCreationDto.Remove(auctionForCreationDto);
+            _context.Auction.Remove(auction);
             await _context.SaveChangesAsync();
 
             return NoContent();
         }
 
-        private bool AuctionForCreationDtoExists(int id)
+        private bool AuctionExists(int id)
         {
-            return _context.AuctionForCreationDto.Any(e => e.Id == id);
+            return _context.Auction.Any(e => e.Id == id);
         }
     }
 }
