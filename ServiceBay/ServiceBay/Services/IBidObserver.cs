@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ServiceBay.Services
 {
-    interface IBidObserver
+    public interface IBidObserver
     {
         public void updateBid(Bid bid);
     }
