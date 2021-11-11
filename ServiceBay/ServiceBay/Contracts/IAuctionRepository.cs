@@ -12,7 +12,7 @@ namespace ServiceBay.Contracts
         public Task<int> CreateAuction(Auction auction);
         public Task<Auction> GetAuction(int id);
         public Task<Auction> UpdateAuction();
-        public Task<bool> DeleteAuction(int id);
+        public Task<int> DeleteAuction(int id);
         public Task<IEnumerable<Auction>> GetAuctions();
     }
 }

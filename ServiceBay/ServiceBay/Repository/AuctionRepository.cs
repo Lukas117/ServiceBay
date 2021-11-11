@@ -24,23 +24,16 @@ namespace ServiceBay.Repository
             return await _context.SaveChangesAsync();
         }
 
-        public async Task<bool> DeleteAuction(int id)
+        public async Task<int> DeleteAuction(int id)
         {
             var auction = await _context.Auction.FindAsync(id);
             _context.Auction.Remove(auction);
-            await _context.SaveChangesAsync();
-            return true;
+            return await _context.SaveChangesAsync(); ;
         }
 
         public async Task<Auction> GetAuction(int id)
         {
             var auction = await _context.Auction.FindAsync(id);
-
-            if (auction == null)
-            {
-                return null;
-            }
-
             return auction;
         }
 

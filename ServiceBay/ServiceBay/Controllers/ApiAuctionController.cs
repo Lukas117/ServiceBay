@@ -35,12 +35,10 @@ namespace ServiceBay.Controllers
         public async Task<ActionResult<Auction>> GetAuction(int id)
         {
             var auction = await _auctionRepo.GetAuction(id);
-
             if (auction == null)
             {
                 return NotFound();
             }
-
             return auction;
         }
 
@@ -80,7 +78,6 @@ namespace ServiceBay.Controllers
         public async Task<ActionResult<Auction>> PostAuction(Auction auction)
         {
             await _auctionRepo.CreateAuction(auction);
-
             return CreatedAtAction("GetAuction", new { id = auction.Id }, auction);
         }
 
@@ -89,7 +86,7 @@ namespace ServiceBay.Controllers
         public async Task<IActionResult> DeleteAuction(int id)
         {
             var auction = await _auctionRepo.DeleteAuction(id);
-            if (auction == false)
+            if (auction > 0)
             {
                 return NotFound();
             }
