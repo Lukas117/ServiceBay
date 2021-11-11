@@ -1,4 +1,5 @@
 ﻿using ServiceBay.Contracts;
+using ServiceBay.Data;
 using ServiceBay.Dto;
 using ServiceBay.Models;
 using System;
@@ -10,9 +11,18 @@ namespace ServiceBay.Repository
 {
     public class AuctionRepository : IAuctionRepository
     {
-        public Task<AuctionForCreationDto> CreateAuction(AuctionForCreationDto auctionDto)
+        private readonly ApplicationDbContext _context;
+
+        public AuctionRepository(ApplicationDbContext context)
         {
-            throw new NotImplementedException();
+            _context = context;
+        }
+
+        public async Task<int> CreateAuction(AuctionForCreationDto auctionDto)
+        {
+
+            _context.AuctionForCreationDto.Add(auctionDto);
+            return await _context.SaveChangesAsync();
         }
 
         public Task<Auction> DeleteAuction()
