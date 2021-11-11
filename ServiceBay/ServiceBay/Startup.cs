@@ -10,8 +10,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using ServiceBay.Data;
 using Microsoft.EntityFrameworkCore;
-using ServiceBay.Contracts;
-using ServiceBay.Repository;
 
 namespace ServiceBay
 {
@@ -32,7 +30,6 @@ namespace ServiceBay
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
             services.AddDatabaseDeveloperPageExceptionFilter();
-            services.AddScoped<IBidRepository, BidRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
