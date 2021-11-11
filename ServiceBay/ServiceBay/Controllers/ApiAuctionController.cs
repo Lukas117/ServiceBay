@@ -5,8 +5,10 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using ServiceBay.Contracts;
 using ServiceBay.Data;
 using ServiceBay.Models;
+using ServiceBay.Repository;
 
 namespace ServiceBay.Controllers
 {
@@ -14,25 +16,25 @@ namespace ServiceBay.Controllers
     [ApiController]
     public class ApiAuctionController : ControllerBase
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IAuctionRepository _auctionRepo;
 
         public ApiAuctionController(ApplicationDbContext context)
         {
-            _context = context;
+            _auctionRepo = new AuctionRepository(context);
         }
 
         // GET: api/ApiAuction
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Auction>>> GetAuction()
+        public async Task<IEnumerable<Auction>> GetAuction()
         {
-            return await _context.Auction.ToListAsync();
+            return await _auctionRepo.GetAuctions();
         }
 
         // GET: api/ApiAuction/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Auction>> GetAuction(int id)
         {
-            var auction = await _context.Auction.FindAsync(id);
+            var auction = await _auctionRepo.GetAuction(id);
 
             if (auction == null)
             {
@@ -42,53 +44,42 @@ namespace ServiceBay.Controllers
             return auction;
         }
 
-        // PUT: api/ApiAuction/5
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutAuction(int id, Auction auction)
-        {
-            if (id != auction.Id)
-            {
-                return BadRequest();
-            }
+        //// PUT: api/ApiAuction/5
+        //[HttpPut("{id}")]
+        //public async Task<IActionResult> PutAuction(int id, Auction auction)
+        //{
+        //    if (id != auction.Id)
+        //    {
+        //        return BadRequest();
+        //    }
 
-            _context.Entry(auction).State = EntityState.Modified;
+        //    _context.Entry(auction).State = EntityState.Modified;
 
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!AuctionExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+        //    try
+        //    {
+        //        await _context.SaveChangesAsync();
+        //    }
+        //    catch (DbUpdateConcurrencyException)
+        //    {
+        //        if (!AuctionExists(id))
+        //        {
+        //            return NotFound();
+        //        }
+        //        else
+        //        {
+        //            throw;
+        //        }
+        //    }
 
-            return NoContent();
-        }
+        //    return NoContent();
+        //}
 
-        public void ChangePrice(int id, double price)
-        {
-            var auction = new Auction() { Id = id, Price = price };
-            using (var db = _context)
-            {
-                db.Auction.Attach(auction);
-                db.Entry(auction).Property(x => x.Price).IsModified = true;
-                db.SaveChanges();
-            }
-        }
 
         // POST: api/ApiAuction
         [HttpPost]
         public async Task<ActionResult<Auction>> PostAuction(Auction auction)
         {
-            _context.Auction.Add(auction);
-            await _context.SaveChangesAsync();
+            await _auctionRepo.CreateAuction(auction);
 
             return CreatedAtAction("GetAuction", new { id = auction.Id }, auction);
         }
@@ -97,21 +88,17 @@ namespace ServiceBay.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteAuction(int id)
         {
-            var auction = await _context.Auction.FindAsync(id);
-            if (auction == null)
+            var auction = await _auctionRepo.DeleteAuction(id);
+            if (auction == false)
             {
                 return NotFound();
             }
-
-            _context.Auction.Remove(auction);
-            await _context.SaveChangesAsync();
-
             return NoContent();
         }
 
-        private bool AuctionExists(int id)
-        {
-            return _context.Auction.Any(e => e.Id == id);
-        }
+        //private bool AuctionExists(int id)
+        //{
+        //    return _context.Auction.Any(e => e.Id == id);
+        //}
     }
 }

@@ -26,10 +26,11 @@ namespace ServiceBay.Repository
             observers.Add(observer);
         }
 
-        public async Task<int> CreateBid(Bid bid)
+        public Task<int> CreateBid(Bid bid)
         {
-            _context.Add(bid);
-            return await _context.SaveChangesAsync();
+            throw new NotImplementedException();
+            //_context.Add(bid);
+            //return await _context.SaveChangesAsync();
         }
 
         public Task<Bid> DeleteBid()

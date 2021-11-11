@@ -9,9 +9,10 @@ namespace ServiceBay.Contracts
 {
     public interface IAuctionRepository
     {
-        public Task<AuctionForCreationDto> CreateAuction(AuctionForCreationDto auctionDto);
-        public Task<Auction> GetAuction();
+        public Task<int> CreateAuction(Auction auction);
+        public Task<Auction> GetAuction(int id);
         public Task<Auction> UpdateAuction();
-        public Task<Auction> DeleteAuction();
+        public Task<bool> DeleteAuction(int id);
+        public Task<IEnumerable<Auction>> GetAuctions();
     }
 }

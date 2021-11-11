@@ -83,18 +83,18 @@ namespace ServiceBay.Controllers
             return NoContent();
         }
 
-        // POST: api/ApiBid
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        public async Task<ActionResult<Bid>> PostBid(Bid bid)
-        {
-            //await _bidRepo.CreateBid(bid);
-            _context.Bid.Add(bid);
-            await _context.SaveChangesAsync();
-            ApiAuctionController apiAuction = new ApiAuctionController(_context);
-            apiAuction.ChangePrice(bid.AuctionId, bid.Price);
-            return CreatedAtAction("GetBid", new { id = bid.Id }, bid);
-        }
+        //// POST: api/ApiBid
+        //// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        //[HttpPost]
+        //public async Task<ActionResult<Bid>> PostBid(Bid bid)
+        //{
+        //    //await _bidRepo.CreateBid(bid);
+        //    _context.Bid.Add(bid);
+        //    await _context.SaveChangesAsync();
+        //    ApiAuctionController apiAuction = new ApiAuctionController(_context);
+        //    apiAuction.ChangePrice(bid.AuctionId, bid.Price);
+        //    return CreatedAtAction("GetBid", new { id = bid.Id }, bid);
+        //}
 
         // DELETE: api/ApiBid/5
         [HttpDelete("{id}")]

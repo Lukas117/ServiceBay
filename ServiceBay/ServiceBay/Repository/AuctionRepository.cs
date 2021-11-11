@@ -1,4 +1,6 @@
-﻿using ServiceBay.Contracts;
+﻿using Microsoft.EntityFrameworkCore;
+using ServiceBay.Contracts;
+using ServiceBay.Data;
 using ServiceBay.Dto;
 using ServiceBay.Models;
 using System;
@@ -10,24 +12,57 @@ namespace ServiceBay.Repository
 {
     public class AuctionRepository : IAuctionRepository
     {
-        public Task<AuctionForCreationDto> CreateAuction(AuctionForCreationDto auctionDto)
+        private readonly ApplicationDbContext _context;
+
+        public AuctionRepository(ApplicationDbContext context)
         {
-            throw new NotImplementedException();
+            _context = context;
+        }
+        public async Task<int> CreateAuction(Auction auction)
+        {
+            _context.Auction.Add(auction);
+            return await _context.SaveChangesAsync();
         }
 
-        public Task<Auction> DeleteAuction()
+        public async Task<bool> DeleteAuction(int id)
         {
-            throw new NotImplementedException();
+            var auction = await _context.Auction.FindAsync(id);
+            _context.Auction.Remove(auction);
+            await _context.SaveChangesAsync();
+            return true;
         }
 
-        public Task<Auction> GetAuction()
+        public async Task<Auction> GetAuction(int id)
         {
-            throw new NotImplementedException();
+            var auction = await _context.Auction.FindAsync(id);
+
+            if (auction == null)
+            {
+                return null;
+            }
+
+            return auction;
+        }
+
+        public async Task<IEnumerable<Auction>> GetAuctions()
+        {
+            return await _context.Auction.ToListAsync();
         }
 
         public Task<Auction> UpdateAuction()
         {
             throw new NotImplementedException();
+        }
+
+        public void UpdatePrice(int id, double price)
+        {
+            var auction = new Auction() { Id = id, Price = price };
+            using (var db = _context)
+            {
+                db.Auction.Attach(auction);
+                db.Entry(auction).Property(x => x.Price).IsModified = true;
+                db.SaveChanges();
+            }
         }
     }
 }
