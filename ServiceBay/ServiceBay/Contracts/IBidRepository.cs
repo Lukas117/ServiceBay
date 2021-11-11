@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace ServiceBay.Contracts
 {
-    interface IBidRepository : IBidNotifier
+    public interface IBidRepository : IBidNotifier
     {
-        public Task<int> CreateBid(BidForCreationDto bidDto);
+        public Task<int> CreateBid(Bid bid);
         public Task<Bid> GetBid();
         public Task<Bid> UpdateBid();
         public Task<Bid> DeleteBid();

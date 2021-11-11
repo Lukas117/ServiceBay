@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ServiceBay.Contracts
 {
-    interface IAuctionRepository
+    public interface IAuctionRepository
     {
         public Task<AuctionForCreationDto> CreateAuction(AuctionForCreationDto auctionDto);
         public Task<Auction> GetAuction();

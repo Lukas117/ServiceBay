@@ -26,9 +26,9 @@ namespace ServiceBay.Repository
             observers.Add(observer);
         }
 
-        public async Task<int> CreateBid(BidForCreationDto bidDto)
+        public async Task<int> CreateBid(Bid bid)
         {
-            _context.Add(bidDto);
+            _context.Add(bid);
             return await _context.SaveChangesAsync();
         }
 

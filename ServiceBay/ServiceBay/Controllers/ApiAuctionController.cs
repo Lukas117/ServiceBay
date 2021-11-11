@@ -72,6 +72,17 @@ namespace ServiceBay.Controllers
             return NoContent();
         }
 
+        public void ChangePrice(int id, double price)
+        {
+            var auction = new Auction() { Id = id, Price = price };
+            using (var db = _context)
+            {
+                db.Auction.Attach(auction);
+                db.Entry(auction).Property(x => x.Price).IsModified = true;
+                db.SaveChanges();
+            }
+        }
+
         // POST: api/ApiAuction
         [HttpPost]
         public async Task<ActionResult<Auction>> PostAuction(Auction auction)

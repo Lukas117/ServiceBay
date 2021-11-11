@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ServiceBay.Services
 {
-    interface IBidNotifier
+    public interface IBidNotifier
     {
         public void Attach(IBidObserver observer);
         public void Detach(IBidObserver observer);
