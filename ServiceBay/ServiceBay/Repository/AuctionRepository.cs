@@ -28,7 +28,7 @@ namespace ServiceBay.Repository
         {
             var auction = await _context.Auction.FindAsync(id);
             _context.Auction.Remove(auction);
-            return await _context.SaveChangesAsync(); ;
+            return await _context.SaveChangesAsync();
         }
 
         public async Task<Auction> GetAuction(int id)

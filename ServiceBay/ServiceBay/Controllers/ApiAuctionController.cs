@@ -86,7 +86,7 @@ namespace ServiceBay.Controllers
         public async Task<IActionResult> DeleteAuction(int id)
         {
             var auction = await _auctionRepo.DeleteAuction(id);
-            if (auction > 0)
+            if (auction == 0)
             {
                 return NotFound();
             }

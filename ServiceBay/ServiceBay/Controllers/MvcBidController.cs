@@ -15,7 +15,7 @@ namespace ServiceBay.Controllers
         {
             IEnumerable<Bid> bid = null;
             HttpClient hc = new HttpClient();
-            hc.BaseAddress = new Uri("https://localhost:5001/api/ApiBid");
+            hc.BaseAddress = new Uri("https://localhost:44349/api/ApiBid");
 
             var consumeapi = hc.GetAsync("ApiBid");
             consumeapi.Wait();
@@ -40,7 +40,7 @@ namespace ServiceBay.Controllers
         public IActionResult Create(Bid inserttemp)
         {
             HttpClient hc = new HttpClient();
-            hc.BaseAddress = new Uri("https://localhost:5001/api/ApiBid");
+            hc.BaseAddress = new Uri("https://localhost:44349/api/ApiBid");
 
             var insertrecord = hc.PostAsJsonAsync<Bid>("ApiBid", inserttemp);
             insertrecord.Wait();
