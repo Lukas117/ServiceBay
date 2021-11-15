@@ -8,6 +8,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using ServiceBay.Services;
+using System.Collections;
 
 namespace ServiceBay.Repository
 {
@@ -30,19 +31,18 @@ namespace ServiceBay.Repository
 
         public async Task<int> CreateBid(Bid bid)
         {
-            //AuctionRepository _auctionRepo = new AuctionRepository(_context);
             var auction = await _auctionRepo.GetAuction(bid.AuctionId);
-            var version = _context.Entry(auction).OriginalValues["RowVersion"];
+            var version = _context.Entry(auction).CurrentValues["RowVersion"];
             try
             {
                 if (auction.SellerId != bid.BuyerId && auction.Price < bid.Price && auction.StartingPrice < bid.Price && auction.EndDate >= DateTime.Now)
                 {
                     _context.Add(bid);
-                    //_auctionRepo.UpdatePrice(bid.AuctionId, bid.Price);
                     auction.Price = bid.Price;
                     _context.Auction.Attach(auction);
                     _context.Entry(auction).Property(x => x.Price).IsModified = true;
-                    if (version == _context.Entry(auction).OriginalValues["RowVersion"])
+                    var rowVersion = _context.Entry(auction).CurrentValues["RowVersion"];
+                    if (StructuralComparisons.StructuralEqualityComparer.Equals(version, rowVersion))
                     {
                         return await _context.SaveChangesAsync();
                     }
@@ -50,12 +50,11 @@ namespace ServiceBay.Repository
             }
             catch (DbUpdateConcurrencyException ex)
             {
-                
-                if (auction.RowVersion.Equals(version)) Console.WriteLine("The record you attempted to edit "
-        + "was modified by another user after you got the original value. The"
-        + "edit operation was canceled and the current values in the database "
-        + "have been displayed. If you still want to edit this record, click "
-        + "the Save button again. Otherwise click the Back to List hyperlink.");
+                Console.WriteLine("The record you attempted to edit "
+                + "was modified by another user after you got the original value. The"
+                + "edit operation was canceled and the current values in the database "
+                + "have been displayed. If you still want to edit this record, click "
+                + "the Save button again. Otherwise click the Back to List hyperlink.");
                 return 0;
             }
             return 0;
