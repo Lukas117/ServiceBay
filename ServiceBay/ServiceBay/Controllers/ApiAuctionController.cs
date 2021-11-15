@@ -16,10 +16,12 @@ namespace ServiceBay.Controllers
     [ApiController]
     public class ApiAuctionController : ControllerBase
     {
+        private readonly ApplicationDbContext _context;
         private readonly IAuctionRepository _auctionRepo;
 
         public ApiAuctionController(ApplicationDbContext context)
         {
+            _context = context;
             _auctionRepo = new AuctionRepository(context);
         }
 
@@ -42,36 +44,33 @@ namespace ServiceBay.Controllers
             return auction;
         }
 
-        //// PUT: api/ApiAuction/5
-        //[HttpPut("{id}")]
-        //public async Task<IActionResult> PutAuction(int id, Auction auction)
-        //{
-        //    if (id != auction.Id)
-        //    {
-        //        return BadRequest();
-        //    }
+        // PUT: api/ApiAuction/5
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutAuction(int id, Auction auction)
+        {
+            if (id != auction.Id)
+            {
+                return BadRequest();
+            }
 
-        //    _context.Entry(auction).State = EntityState.Modified;
+            try
+            {
+                await _auctionRepo.UpdateAuction(id, auction);
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!AuctionExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
 
-        //    try
-        //    {
-        //        await _context.SaveChangesAsync();
-        //    }
-        //    catch (DbUpdateConcurrencyException)
-        //    {
-        //        if (!AuctionExists(id))
-        //        {
-        //            return NotFound();
-        //        }
-        //        else
-        //        {
-        //            throw;
-        //        }
-        //    }
-
-        //    return NoContent();
-        //}
-
+            return NoContent();
+        }
 
         // POST: api/ApiAuction
         [HttpPost]
@@ -93,9 +92,10 @@ namespace ServiceBay.Controllers
             return NoContent();
         }
 
-        //private bool AuctionExists(int id)
-        //{
-        //    return _context.Auction.Any(e => e.Id == id);
-        //}
+
+        private bool AuctionExists(int id)
+        {
+            return _context.Auction.Any(e => e.Id == id);
+        }
     }
 }

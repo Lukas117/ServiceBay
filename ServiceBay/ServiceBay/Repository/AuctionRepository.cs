@@ -18,6 +18,7 @@ namespace ServiceBay.Repository
         {
             _context = context;
         }
+
         public async Task<int> CreateAuction(Auction auction)
         {
             _context.Auction.Add(auction);
@@ -42,14 +43,20 @@ namespace ServiceBay.Repository
             return await _context.Auction.ToListAsync();
         }
 
-        public Task<Auction> UpdateAuction()
+        public async Task<int> UpdateAuction(int id, Auction auction)
         {
-            throw new NotImplementedException();
+            try {
+                _context.Entry(auction).State = EntityState.Modified;
+                return await _context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error updating blog post: '{ex.Message}'.", ex);
+            }
         }
 
         public void UpdatePrice(int id, double price)
         {
-            
             var auction = new Auction() { Id = id, Price = price };
             using (var db = _context)
             {

@@ -26,11 +26,17 @@ namespace ServiceBay.Repository
             observers.Add(observer);
         }
 
-        public Task<int> CreateBid(Bid bid)
+        public async Task<int> CreateBid(Bid bid)
         {
-            throw new NotImplementedException();
-            //_context.Add(bid);
-            //return await _context.SaveChangesAsync();
+            AuctionRepository _auctionRepo = new AuctionRepository(_context);
+            var auction = await _auctionRepo.GetAuction(bid.AuctionId);
+            if (auction.SellerId != bid.BuyerId && auction.Price < bid.Price && auction.StartingPrice < bid.Price && auction.EndDate >= DateTime.Now)
+            {
+                _context.Add(bid);
+                _auctionRepo.UpdatePrice(bid.AuctionId, bid.Price);
+                return await _context.SaveChangesAsync();
+            }
+            return 0;
         }
 
         public Task<Bid> DeleteBid()
