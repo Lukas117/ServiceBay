@@ -95,7 +95,7 @@ namespace ServiceBay.Controllers
          {
             await _bidRepo.CreateBid(bid);
             //var auction = await _auctionRepo.GetAuction(bid.AuctionId);
-            return CreatedAtAction("GetBid", new { id = bid.Id }, bid);
+            return Ok();
 
             //if (auction != null)
             //{

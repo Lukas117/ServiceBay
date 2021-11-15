@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Data;
 
 #nullable disable
@@ -21,7 +22,8 @@ namespace ServiceBay.Models
         public double StartingPrice { get; set; }
         public int SellerId { get; set; }
         public double? Price { get; set; }
-        public DataRowVersion? RowVersion { get; }
+        [Timestamp]
+        public byte[] RowVersion { get; set; }
 
         public virtual Person Seller { get; set; }
         public virtual ICollection<Bid> Bids { get; set; }

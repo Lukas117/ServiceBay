@@ -58,12 +58,10 @@ namespace ServiceBay.Repository
         public void UpdatePrice(int id, double price)
         {
             var auction = new Auction() { Id = id, Price = price };
-            using (var db = _context)
-            {
-                db.Auction.Attach(auction);
-                db.Entry(auction).Property(x => x.Price).IsModified = true;
-                db.SaveChanges();
-            }
+            _context.Auction.Attach(auction);
+            _context.Entry(auction).Property(x => x.Price).IsModified = true;
+            _context.SaveChangesAsync();
         }
+
     }
 }

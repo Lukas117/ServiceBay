@@ -33,6 +33,8 @@ namespace ServiceBay
                     Configuration.GetConnectionString("DefaultConnection")));
             services.AddDatabaseDeveloperPageExceptionFilter();
             services.AddScoped<IBidRepository, BidRepository>();
+            services.AddScoped<IAuctionRepository, AuctionRepository>();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
