@@ -42,7 +42,10 @@ namespace ServiceBay.Repository
                     auction.Price = bid.Price;
                     _context.Auction.Attach(auction);
                     _context.Entry(auction).Property(x => x.Price).IsModified = true;
-                    return await _context.SaveChangesAsync();
+                    if (version == _context.Entry(auction).OriginalValues["RowVersion"])
+                    {
+                        return await _context.SaveChangesAsync();
+                    }
                 }
             }
             catch (DbUpdateConcurrencyException ex)
