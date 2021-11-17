@@ -15,13 +15,13 @@ namespace ServiceBay.Controllers
     [ApiController]
     public class ApiAuctionController : ControllerBase
     {
-        private readonly ApplicationDbContext _context;
+        
         private readonly IAuctionRepository _auctionRepo;
 
-        public ApiAuctionController(ApplicationDbContext context)
+        public ApiAuctionController(IAuctionRepository auctionRepository)
         {
-            _context = context;
-            _auctionRepo = new AuctionRepository(context);
+
+            _auctionRepo = auctionRepository;
         }
 
         // GET: api/ApiAuction
@@ -55,7 +55,7 @@ namespace ServiceBay.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!AuctionExists(id))
+                if (!_auctionRepo.AuctionExists(id))
                 {
                     return NotFound();
                 }
@@ -85,9 +85,6 @@ namespace ServiceBay.Controllers
         }
 
 
-        private bool AuctionExists(int id)
-        {
-            return _context.Auction.Any(e => e.Id == id);
-        }
+        
     }
 }

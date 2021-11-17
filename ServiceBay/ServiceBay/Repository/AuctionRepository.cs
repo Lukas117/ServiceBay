@@ -5,6 +5,7 @@ using ServiceBay.Dto;
 using ServiceBay.Models;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace ServiceBay.Repository
@@ -52,6 +53,11 @@ namespace ServiceBay.Repository
             {
                 throw new Exception($"Error updating blog post: '{ex.Message}'.", ex);
             }
+        }
+
+        private bool AuctionExists(int id)
+        {
+            return _context.Auction.Any(e => e.Id == id);
         }
 
         //public void UpdatePrice(int id, double price)
