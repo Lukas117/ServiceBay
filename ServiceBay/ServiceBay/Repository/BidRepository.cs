@@ -73,7 +73,8 @@ namespace ServiceBay.Repository
 
         public Task<Bid> GetBid()
         {
-            throw new NotImplementedException();
+
+
         }
 
         public void Notify(Bid bid)
@@ -87,6 +88,11 @@ namespace ServiceBay.Repository
         public Task<Bid> UpdateBid()
         {
             throw new NotImplementedException();
+        }
+
+        public Task<IEnumerable<Bid>> GetBids()
+        {
+            return await _context.Bid.ToListAsync();
         }
     }
 }

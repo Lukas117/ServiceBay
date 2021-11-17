@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ServiceBay.Contracts;
@@ -37,10 +36,7 @@ namespace ServiceBay.Controllers
         public async Task<ActionResult<Auction>> GetAuction(int id)
         {
             var auction = await _auctionRepo.GetAuction(id);
-            if (auction == null)
-            {
-                return NotFound();
-            }
+            if (auction == null) { return NotFound(); }
             return auction;
         }
 
@@ -68,7 +64,6 @@ namespace ServiceBay.Controllers
                     throw;
                 }
             }
-
             return NoContent();
         }
 
@@ -85,10 +80,7 @@ namespace ServiceBay.Controllers
         public async Task<IActionResult> DeleteAuction(int id)
         {
             var auction = await _auctionRepo.DeleteAuction(id);
-            if (auction == 0)
-            {
-                return NotFound();
-            }
+            if (auction == 0) { return NotFound(); }
             return NoContent();
         }
 

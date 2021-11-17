@@ -17,19 +17,17 @@ namespace ServiceBay.Controllers
     public class ApiBidController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
-        private readonly IAuctionRepository _auctionRepo;
         private readonly IBidRepository _bidRepo;
 
         public ApiBidController(ApplicationDbContext context)
         {
             _context = context;
-            _auctionRepo = new AuctionRepository(_context);
             _bidRepo = new BidRepository(_context);
         }
 
         // GET: api/ApiBid
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Bid>>> GetBid()
+        public async Task<ActionResult<IEnumerable<Bid>>> GetBids()
         {
             return await _context.Bid.ToListAsync();
         }

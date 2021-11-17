@@ -5,7 +5,6 @@ using ServiceBay.Dto;
 using ServiceBay.Models;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace ServiceBay.Repository
@@ -55,13 +54,12 @@ namespace ServiceBay.Repository
             }
         }
 
-        public void UpdatePrice(int id, double price)
-        {
-            var auction = new Auction() { Id = id, Price = price };
-            _context.Auction.Attach(auction);
-            _context.Entry(auction).Property(x => x.Price).IsModified = true;
-            _context.SaveChangesAsync();
-        }
-
+        //public void UpdatePrice(int id, double price)
+        //{
+        //    var auction = new Auction() { Id = id, Price = price };
+        //    _context.Auction.Attach(auction);
+        //    _context.Entry(auction).Property(x => x.Price).IsModified = true;
+        //    _context.SaveChangesAsync();
+        //}
     }
 }

@@ -14,6 +14,7 @@ namespace ServiceBay.Contracts
         public Task<Bid> GetBid();
         public Task<Bid> UpdateBid();
         public Task<Bid> DeleteBid();
+        public Task<IEnumerable<Bid>> GetBids();
         //public Task<int> UpdatePrice(int id, double price);
 
     }
