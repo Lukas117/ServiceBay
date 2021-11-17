@@ -24,7 +24,7 @@ namespace ServiceBay.Controllers
 
         // GET: api/ApiAuction
         [HttpGet]
-        public async Task<IEnumerable<Auction>> GetAuction()
+        public async Task<IEnumerable<Auction>> GetAuctions()
         {
             return await _auctionRepo.GetAuctions();
         }
