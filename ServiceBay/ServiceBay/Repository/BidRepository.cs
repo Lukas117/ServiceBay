@@ -61,20 +61,16 @@ namespace ServiceBay.Repository
             return 0;
         }
 
-        public Task<Bid> DeleteBid()
+        public async Task<int> DeleteBid(int id)
         {
-            throw new NotImplementedException();
+            var bid = await _context.Bid.FindAsync(id);
+            _context.Bid.Remove(bid);
+            return await _context.SaveChangesAsync();
         }
 
         public void Detach(IBidObserver observer)
         {
             observers.Remove(observer);
-        }
-
-        public Task<Bid> GetBid()
-        {
-
-
         }
 
         public void Notify(Bid bid)
@@ -85,14 +81,32 @@ namespace ServiceBay.Repository
             }
         }
 
-        public Task<Bid> UpdateBid()
+        public async Task<Bid> GetBid(int id)
         {
-            throw new NotImplementedException();
+            return await _context.Bid.FindAsync(id);
         }
 
-        public Task<IEnumerable<Bid>> GetBids()
+        public async Task<int> UpdateBid(int id, Bid bid)
+        {
+            try
+            {
+                _context.Entry(bid).State = EntityState.Modified;
+                return await _context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error updating bid: '{ex.Message}'.", ex);
+            }
+        }
+
+        public async Task<IEnumerable<Bid>> GetBids()
         {
             return await _context.Bid.ToListAsync();
+        }
+
+        public bool BidExists(int id)
+        {
+            return _context.Bid.Any(e => e.Id == id);
         }
     }
 }

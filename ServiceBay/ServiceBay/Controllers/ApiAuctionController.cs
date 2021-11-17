@@ -15,12 +15,10 @@ namespace ServiceBay.Controllers
     [ApiController]
     public class ApiAuctionController : ControllerBase
     {
-        
         private readonly IAuctionRepository _auctionRepo;
 
         public ApiAuctionController(IAuctionRepository auctionRepository)
         {
-
             _auctionRepo = auctionRepository;
         }
 
@@ -82,9 +80,6 @@ namespace ServiceBay.Controllers
             var auction = await _auctionRepo.DeleteAuction(id);
             if (auction == 0) { return NotFound(); }
             return NoContent();
-        }
-
-
-        
+        } 
     }
 }

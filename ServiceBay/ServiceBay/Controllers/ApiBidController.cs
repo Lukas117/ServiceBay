@@ -16,33 +16,26 @@ namespace ServiceBay.Controllers
     [ApiController]
     public class ApiBidController : ControllerBase
     {
-        private readonly ApplicationDbContext _context;
         private readonly IBidRepository _bidRepo;
 
-        public ApiBidController(ApplicationDbContext context)
+        public ApiBidController(IBidRepository bidRepo)
         {
-            _context = context;
-            _bidRepo = new BidRepository(_context);
+            _bidRepo = bidRepo;
         }
 
         // GET: api/ApiBid
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Bid>>> GetBids()
+        public async Task<IEnumerable<Bid>> GetBids()
         {
-            return await _context.Bid.ToListAsync();
+            return await _bidRepo.GetBids();
         }
 
         // GET: api/ApiBid/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Bid>> GetBid(int id)
         {
-            var bid = await _context.Bid.FindAsync(id);
-
-            if (bid == null)
-            {
-                return NotFound();
-            }
-
+            var bid = await _bidRepo.GetBid(id);
+            if (bid == null) { return NotFound(); }
             return bid;
         }
 
@@ -51,29 +44,17 @@ namespace ServiceBay.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutBid(int id, Bid bid)
         {
-            if (id != bid.Id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(bid).State = EntityState.Modified;
+            if (id != bid.Id) { return BadRequest(); }
 
             try
             {
-                await _context.SaveChangesAsync();
+                await _bidRepo.UpdateBid(id, bid);
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!BidExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                if (!_bidRepo.BidExists(id)) { return NotFound(); }
+                else { throw; }
             }
-
             return NoContent();
         }
 
@@ -83,31 +64,15 @@ namespace ServiceBay.Controllers
          {
             await _bidRepo.CreateBid(bid);
             return Ok();
-
-            //if (auction != null) {}
-            //return NotFound();
-
         }
 
         // DELETE: api/ApiBid/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteBid(int id)
         {
-            var bid = await _context.Bid.FindAsync(id);
-            if (bid == null)
-            {
-                return NotFound();
-            }
-
-            _context.Bid.Remove(bid);
-            await _context.SaveChangesAsync();
-
+            var bid = await _bidRepo.DeleteBid(id);
+            if (bid == 0) { return NotFound(); }
             return NoContent();
-        }
-
-        private bool BidExists(int id)
-        {
-            return _context.Bid.Any(e => e.Id == id);
         }
     }
 }

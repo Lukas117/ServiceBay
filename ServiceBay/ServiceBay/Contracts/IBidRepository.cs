@@ -11,10 +11,11 @@ namespace ServiceBay.Contracts
     public interface IBidRepository : IBidNotifier
     {
         public Task<int> CreateBid(Bid bid);
-        public Task<Bid> GetBid();
-        public Task<Bid> UpdateBid();
-        public Task<Bid> DeleteBid();
+        public Task<Bid> GetBid(int id);
+        public Task<int> UpdateBid(int id, Bid bid);
+        public Task<int> DeleteBid(int id);
         public Task<IEnumerable<Bid>> GetBids();
+        public bool BidExists(int id);
         //public Task<int> UpdatePrice(int id, double price);
 
     }

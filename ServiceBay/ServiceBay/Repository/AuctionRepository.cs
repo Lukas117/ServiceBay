@@ -34,8 +34,7 @@ namespace ServiceBay.Repository
 
         public async Task<Auction> GetAuction(int id)
         {
-            var auction = await _context.Auction.FindAsync(id);
-            return auction;
+           return await _context.Auction.FindAsync(id);
         }
 
         public async Task<IEnumerable<Auction>> GetAuctions()
@@ -51,11 +50,11 @@ namespace ServiceBay.Repository
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error updating blog post: '{ex.Message}'.", ex);
+                throw new Exception($"Error updating auction: '{ex.Message}'.", ex);
             }
         }
 
-        private bool AuctionExists(int id)
+        public bool AuctionExists(int id)
         {
             return _context.Auction.Any(e => e.Id == id);
         }
