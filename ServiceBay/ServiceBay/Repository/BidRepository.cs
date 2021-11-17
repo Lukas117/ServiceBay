@@ -32,7 +32,7 @@ namespace ServiceBay.Repository
         public async Task<int> CreateBid(Bid bid)
         {
             var auction = await _auctionRepo.GetAuction(bid.AuctionId);
-            var version = _context.Entry(auction).CurrentValues["RowVersion"];
+            //var version = _context.Entry(auction).CurrentValues["RowVersion"];
             try
             {
                 if (auction.SellerId != bid.BuyerId && auction.Price < bid.Price && auction.StartingPrice < bid.Price && auction.EndDate >= DateTime.Now)
@@ -41,11 +41,11 @@ namespace ServiceBay.Repository
                     auction.Price = bid.Price;
                     _context.Auction.Attach(auction);
                     _context.Entry(auction).Property(x => x.Price).IsModified = true;
-                    var rowVersion = _context.Entry(auction).CurrentValues["RowVersion"];
-                    if (StructuralComparisons.StructuralEqualityComparer.Equals(version, rowVersion))
-                    {
+                    //var rowVersion = _context.Entry(auction).CurrentValues["RowVersion"];
+                    //if (StructuralComparisons.StructuralEqualityComparer.Equals(version, rowVersion))
+                    //{
                         return await _context.SaveChangesAsync();
-                    }
+                    //}
                 }
             }
             catch (DbUpdateConcurrencyException ex)
