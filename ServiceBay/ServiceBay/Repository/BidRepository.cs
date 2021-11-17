@@ -31,6 +31,8 @@ namespace ServiceBay.Repository
 
         public async Task<int> CreateBid(Bid bid)
         {
+            var observer = new EmailObserver();
+            Attach(observer);
             var auction = await _auctionRepo.GetAuction(bid.AuctionId);
             //var version = _context.Entry(auction).CurrentValues["RowVersion"];
             try
@@ -41,10 +43,11 @@ namespace ServiceBay.Repository
                     auction.Price = bid.Price;
                     _context.Auction.Attach(auction);
                     _context.Entry(auction).Property(x => x.Price).IsModified = true;
+                    Notify(bid);
                     //var rowVersion = _context.Entry(auction).CurrentValues["RowVersion"];
                     //if (StructuralComparisons.StructuralEqualityComparer.Equals(version, rowVersion))
                     //{
-                        return await _context.SaveChangesAsync();
+                    return await _context.SaveChangesAsync();
                     //}
                 }
             }
