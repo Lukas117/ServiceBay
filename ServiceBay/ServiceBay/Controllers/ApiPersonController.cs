@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using ServiceBay.Contracts;
 using ServiceBay.Data;
 using ServiceBay.Models;
 
@@ -14,31 +15,27 @@ namespace ServiceBay.Controllers
     [ApiController]
     public class ApiPersonController : ControllerBase
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IPersonRepository _personRepo;
 
-        public ApiPersonController(ApplicationDbContext context)
+        public ApiPersonController(IPersonRepository personRepo)
         {
-            _context = context;
+            _personRepo = personRepo;
         }
 
         // GET: api/ApiPerson
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Person>>> GetPerson()
+        public async Task<IEnumerable<Person>> GetPersons()
         {
-            return await _context.Person.ToListAsync();
+            return await _personRepo.GetPersons();
         }
 
         // GET: api/ApiPerson/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Person>> GetPerson(int id)
         {
-            var person = await _context.Person.FindAsync(id);
+            var person = await _personRepo.GetPerson(id);
 
-            if (person == null)
-            {
-                return NotFound();
-            }
-
+            if (person == null) { return NotFound(); }
             return person;
         }
 
@@ -47,29 +44,17 @@ namespace ServiceBay.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutPerson(int id, Person person)
         {
-            if (id != person.Id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(person).State = EntityState.Modified;
+            if (id != person.Id) { return BadRequest(); }
 
             try
             {
-                await _context.SaveChangesAsync();
+                await _personRepo.UpdatePerson(id, person);
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!PersonExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                if (!_personRepo.PersonExists(id)) { return NotFound(); }
+                else { throw; }
             }
-
             return NoContent();
         }
 
@@ -78,9 +63,7 @@ namespace ServiceBay.Controllers
         [HttpPost]
         public async Task<ActionResult<Person>> PostPerson(Person person)
         {
-            _context.Person.Add(person);
-            await _context.SaveChangesAsync();
-
+            await _personRepo.CreatePerson(person);
             return CreatedAtAction("GetPerson", new { id = person.Id }, person);
         }
 
@@ -88,21 +71,9 @@ namespace ServiceBay.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeletePerson(int id)
         {
-            var person = await _context.Person.FindAsync(id);
-            if (person == null)
-            {
-                return NotFound();
-            }
-
-            _context.Person.Remove(person);
-            await _context.SaveChangesAsync();
-
+            var person = await _personRepo.DeletePerson(id);
+            if (person == 0) { return NotFound(); }
             return NoContent();
-        }
-
-        private bool PersonExists(int id)
-        {
-            return _context.Person.Any(e => e.Id == id);
         }
     }
 }
