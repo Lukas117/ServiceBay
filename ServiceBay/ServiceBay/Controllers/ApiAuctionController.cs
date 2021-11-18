@@ -93,7 +93,7 @@ namespace ServiceBay.Controllers
 
             try
             {
-                await _auctionRepo.DisableAuction(id);
+                await _auctionRepo.DisableAuction(id, auction);
             }
             catch (DbUpdateConcurrencyException)
             {
