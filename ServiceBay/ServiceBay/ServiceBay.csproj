@@ -10,6 +10,9 @@
     <EmbeddedResource Remove="Repositroy\**" />
     <None Remove="Repositroy\**" />
     <None Remove="Moq" />
+    <None Remove="AutoMapper" />
+    <None Remove="AutoMapper.Extensions.Microsoft.DependencyInjection" />
+    <None Remove="Dto\Mapper\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -32,8 +35,11 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="5.0.11" />
     <PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="5.2.7" />
     <PackageReference Include="Moq" Version="4.16.1" />
+    <PackageReference Include="AutoMapper" Version="10.1.1" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Data\" />
+    <Folder Include="Dto\Mapper\" />
   </ItemGroup>
 </Project>
