@@ -10,17 +10,16 @@ namespace ServiceBay.Services
 {
     public class EmailObserver : IBidObserver
     {
-        public void updateBid(Bid bid)
+        public void updateBid(Bid bid, String email)
         {
-            SendUpdateEmail(bid);
-            //System.Diagnostics.Debug.WriteLine("it works fucker.");
+            SendUpdateEmail(bid, email);
         }
 
-        public void SendUpdateEmail(Bid bid)
+        public void SendUpdateEmail(Bid bid, String email)
         {
             String FROM = "1086340@ucn.dk";
             String FROMNAME = "Marton Vadasz";
-            String TO = "vadasz.marton02@gmail.com";
+            String TO = email;
             String SMTP_USERNAME = "AKIAUIXC57BTVX32VWYC";
             String SMTP_PASSWORD = "BNAm86ueYlyebB6M2fpcD0Iw9n0UkwZvwUoZGU46JxGr";
             String HOST = "email-smtp.eu-west-2.amazonaws.com";

@@ -141,7 +141,7 @@ namespace TestBidding
             var auctionValue = await auctionApi.GetAuction(auctionId);
              
             var actionResult = Assert.IsType<ActionResult<Bid>>(value);
-            Assert.IsType<OkResult>(actionResult.Result);
+            Assert.IsType<CreatedAtActionResult>(actionResult.Result);
 
             Assert.Equal(auctionId, auctionValue.Value.Id);
             Assert.Equal(auctionName, auctionValue.Value.AuctionName);
@@ -154,7 +154,62 @@ namespace TestBidding
 
         }
 
-        
+        [Fact]
+        public async Task DisableAuctionById_ShouldSetEndDateCorrectly_WhenAuctionExist()
+        {
+            //Arrange
+            var auctionId = 1;
+            var auctionName = "Test";
+            var auctionDescription = "Test";
+            var auctionStartingDate = DateTime.Now;
+            var auctionEndDate = DateTime.Now.AddDays(1);
+            var auctionSPrice = 10;
+            var auctionPrice = 10;
+            var auctionSellerId = 1;
+
+            var auction = new Auction
+            {
+                Id = auctionId,
+                AuctionName = auctionName,
+                AuctionDescription = auctionDescription,
+                StartingDate = auctionStartingDate,
+                EndDate = auctionEndDate,
+                StartingPrice = auctionSPrice,
+                SellerId = auctionSellerId,
+                Price = auctionPrice
+            };
+
+            var auctionModified = new Auction
+            {
+                Id = auctionId,
+                AuctionName = auctionName,
+                AuctionDescription = auctionDescription,
+                StartingDate = auctionStartingDate,
+                EndDate = DateTime.Now,
+                StartingPrice = auctionSPrice,
+                SellerId = auctionSellerId,
+                Price = auctionPrice
+            };
+
+            auctionRepoMock.Setup(x => x.GetAuction(auctionId)).ReturnsAsync(auctionModified);
+
+            //Act
+            var value = await auctionApi.DisableAuction(auctionId, auction);
+            var auctionValue = await auctionApi.GetAuction(auctionId);
+
+            //Assert
+            Assert.Equal(auctionModified.Id, auctionValue.Value.Id);
+            Assert.Equal(auctionModified.AuctionName, auctionValue.Value.AuctionName);
+            Assert.Equal(auctionModified.AuctionDescription, auctionValue.Value.AuctionDescription);
+            Assert.Equal(auctionModified.StartingDate, auctionValue.Value.StartingDate);
+            Assert.Equal(auctionModified.EndDate, auctionValue.Value.EndDate);
+            Assert.Equal(auctionModified.StartingPrice, auctionValue.Value.StartingPrice);
+            Assert.Equal(auctionModified.SellerId, auctionValue.Value.SellerId);
+            Assert.Equal(auctionModified.Price, auctionValue.Value.Price);
+
+        }
+
+
 
     }
 }

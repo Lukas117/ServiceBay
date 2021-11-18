@@ -8,7 +8,7 @@ namespace ServiceBay.Services
 {
     public class NotificationObserver : IBidObserver
     {
-        public void updateBid(Bid bid)
+        public void updateBid(Bid bid, String email)
         {
             throw new NotImplementedException();
         }
