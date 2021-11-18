@@ -63,8 +63,8 @@ namespace ServiceBay.Controllers
         public async Task<ActionResult<Bid>> PostBid(Bid bid)
         {
             await _bidRepo.CreateBid(bid);
-            return CreatedAtAction("GetBid", new { id = bid.Id }, bid);
-            //return Ok();
+            //return CreatedAtAction("GetBid", new { id = bid.Id }, bid);
+            return Ok();
         }
 
         // DELETE: api/ApiBid/5
