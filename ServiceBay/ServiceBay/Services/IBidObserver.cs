@@ -8,6 +8,6 @@ namespace ServiceBay.Services
 {
     public interface IBidObserver
     {
-        public void updateBid(Bid bid);
+        public void updateBid(Bid bid, String email);
     }
 }
