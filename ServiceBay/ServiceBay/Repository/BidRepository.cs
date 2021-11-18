@@ -17,11 +17,13 @@ namespace ServiceBay.Repository
         public List<IBidObserver> observers = new List<IBidObserver>();
         private readonly ApplicationDbContext _context;
         private readonly IAuctionRepository _auctionRepo;
+        private readonly EmailObserver emailObserver;
 
         public BidRepository(ApplicationDbContext context)
         {
             _context = context;
             _auctionRepo = new AuctionRepository(_context);
+            emailObserver = new EmailObserver();
         }
 
         public void Attach(IBidObserver observer)
@@ -31,8 +33,8 @@ namespace ServiceBay.Repository
 
         public async Task<int> CreateBid(Bid bid)
         {
-            var observer = new EmailObserver();
-            Attach(observer);
+            //var observer = new EmailObserver();
+            //Attach(observer);
             var auction = await _auctionRepo.GetAuction(bid.AuctionId);
             //var version = _context.Entry(auction).CurrentValues["RowVersion"];
             try
@@ -43,7 +45,12 @@ namespace ServiceBay.Repository
                     auction.Price = bid.Price;
                     _context.Auction.Attach(auction);
                     _context.Entry(auction).Property(x => x.Price).IsModified = true;
-                    Notify(bid);
+                    var lastBid = auction.Bids.ElementAt(auction.Bids.Count);
+                    if (lastBid != null)
+                    {
+                        Notify(bid, lastBid.Buyer.Email);
+                    }
+                    Notify(bid, bid.Auction.Seller.Email);
                     //var rowVersion = _context.Entry(auction).CurrentValues["RowVersion"];
                     //if (StructuralComparisons.StructuralEqualityComparer.Equals(version, rowVersion))
                     //{
@@ -76,12 +83,9 @@ namespace ServiceBay.Repository
             observers.Remove(observer);
         }
 
-        public void Notify(Bid bid)
+        public void Notify(Bid bid, String email)
         {
-            foreach (var observer in observers)
-            {
-                observer.updateBid(bid);
-            }
+            emailObserver.SendUpdateEmail(bid, email);
         }
 
         public async Task<Bid> GetBid(int id)
