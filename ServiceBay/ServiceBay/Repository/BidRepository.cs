@@ -18,12 +18,14 @@ namespace ServiceBay.Repository
         private readonly ApplicationDbContext _context;
         private readonly IAuctionRepository _auctionRepo;
         private readonly EmailObserver emailObserver;
+        private readonly PersonRepository personRepository;
 
         public BidRepository(ApplicationDbContext context)
         {
             _context = context;
             _auctionRepo = new AuctionRepository(_context);
             emailObserver = new EmailObserver();
+            personRepository = new PersonRepository(_context);
         }
 
         public void Attach(IBidObserver observer)
@@ -45,12 +47,15 @@ namespace ServiceBay.Repository
                     auction.Price = bid.Price;
                     _context.Auction.Attach(auction);
                     _context.Entry(auction).Property(x => x.Price).IsModified = true;
-                    var lastBid = auction.Bids.ElementAt(auction.Bids.Count);
-                    if (lastBid != null)
+                    var lastBid = bid.Auction.Bids.OrderByDescending(x => x.Price).First();
+                    var lastBidder = await personRepository.GetPerson(lastBid.BuyerId);
+                    if (lastBid != null && lastBidder != null)
                     {
-                        Notify(bid, lastBid.Buyer.Email);
+                        Notify(bid, lastBidder.Email);
                     }
-                    Notify(bid, bid.Auction.Seller.Email);
+                    var seller = await personRepository.GetPerson(bid.Auction.SellerId);
+                    NotifySeller(bid, seller.Email);
+                    lastBid = bid;
                     //var rowVersion = _context.Entry(auction).CurrentValues["RowVersion"];
                     //if (StructuralComparisons.StructuralEqualityComparer.Equals(version, rowVersion))
                     //{
@@ -86,6 +91,11 @@ namespace ServiceBay.Repository
         public void Notify(Bid bid, String email)
         {
             emailObserver.SendUpdateEmail(bid, email);
+        }
+
+        public void NotifySeller(Bid bid, String email)
+        {
+            emailObserver.SendSellerEmail(bid, email);
         }
 
         public async Task<Bid> GetBid(int id)
