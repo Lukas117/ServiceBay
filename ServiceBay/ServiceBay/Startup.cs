@@ -34,6 +34,7 @@ namespace ServiceBay
             services.AddDatabaseDeveloperPageExceptionFilter();
             services.AddScoped<IBidRepository, BidRepository>();
             services.AddScoped<IAuctionRepository, AuctionRepository>();
+            services.AddScoped<IPersonRepository, PersonRepository>();
 
             services.AddAutoMapper(typeof(Startup));
 
