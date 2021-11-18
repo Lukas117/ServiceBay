@@ -80,6 +80,33 @@ namespace ServiceBay.Controllers
             var auction = await _auctionRepo.DeleteAuction(id);
             if (auction == 0) { return NotFound(); }
             return NoContent();
-        } 
+        }
+
+        // PUT: api/ApiAuction/5
+        [HttpPut("{id}")]
+        public async Task<IActionResult> DisableAuction(int id, Auction auction)
+        {
+            if (id != auction.Id)
+            {
+                return BadRequest();
+            }
+
+            try
+            {
+                await _auctionRepo.DisableAuction(id);
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!_auctionRepo.AuctionExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+            return NoContent();
+        }
     }
 }

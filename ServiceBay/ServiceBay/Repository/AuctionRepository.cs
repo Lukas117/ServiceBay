@@ -53,6 +53,24 @@ namespace ServiceBay.Repository
                 throw new Exception($"Error updating auction: '{ex.Message}'.", ex);
             }
         }
+        public async Task<int> DisableAuction(int id, Auction auction)
+        {
+            try
+            {
+                if (auction != null && auction.EndDate >= DateTime.Now)
+                {
+                    auction.EndDate = DateTime.Now;
+                    _context.Auction.Attach(auction);
+                    _context.Entry(auction).Property(x => x.EndDate).IsModified = true;
+                    return await _context.SaveChangesAsync();
+                }
+                return 0;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error updating auction: '{ex.Message}'.", ex);
+            }
+        }
 
         public bool AuctionExists(int id)
         {
