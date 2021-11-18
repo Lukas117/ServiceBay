@@ -139,8 +139,7 @@ namespace TestBidding
             //Act
             var value = await bidApi.PostBid(bid);
             var auctionValue = await auctionApi.GetAuction(auctionId);
-
-            //Assert
+             
             var actionResult = Assert.IsType<ActionResult<Bid>>(value);
             Assert.IsType<OkResult>(actionResult.Result);
 
@@ -155,69 +154,7 @@ namespace TestBidding
 
         }
 
-        [Fact]
-        public async Task UpdatePrice_ShouldNotUpdateAuctionPrice_WhenAuctionAndBidIsNotValid()
-        {
-            //Arrange
-            var auctionId = 1;
-            var auctionName = "Test";
-            var auctionDescription = "Test";
-            var auctionStartingDate = DateTime.Now;
-            var auctionEndDate = DateTime.Now.AddDays(1);
-            var auctionSPrice = 10;
-            var auctionPrice = 10;
-            var auctionSellerId = 1;
-
-            var auction = new Auction
-            {
-                Id = auctionId,
-                AuctionName = auctionName,
-                AuctionDescription = auctionDescription,
-                StartingDate = auctionStartingDate,
-                EndDate = auctionEndDate,
-                StartingPrice = auctionSPrice,
-                SellerId = auctionSellerId,
-                Price = auctionPrice
-            };
-
-         
-
-
-            var bidId = 1;
-            var bidPrice = 5;
-            var bidBuyer = 2;
-            var bidAuctionid = 1;
-
-            var bid = new Bid
-            {
-                Id = bidId,
-                Price = bidPrice,
-                BuyerId = bidBuyer,
-                AuctionId = bidAuctionid
-            };
-
-
-            auctionRepoMock.Setup(x => x.GetAuction(auctionId)).ReturnsAsync(() => auction);
-            bidRepoMock.Setup(x => x.CreateBid(bid)).ReturnsAsync(() => 0);
-
-            //Act
-            var value = await bidApi.PostBid(bid);
-            var auctionValue = await auctionApi.GetAuction(auctionId);
-
-            //Assert
-            var actionResult = Assert.IsType<ActionResult<Bid>>(value);
-            Assert.IsType<OkResult>(actionResult.Result);
-
-            Assert.Equal(auctionId, auctionValue.Value.Id);
-            Assert.Equal(auctionName, auctionValue.Value.AuctionName);
-            Assert.Equal(auctionDescription, auctionValue.Value.AuctionDescription);
-            Assert.Equal(auctionStartingDate, auctionValue.Value.StartingDate);
-            Assert.Equal(auctionEndDate, auctionValue.Value.EndDate);
-            Assert.Equal(auctionSPrice, auctionValue.Value.StartingPrice);
-            Assert.Equal(auctionSellerId, auctionValue.Value.SellerId);
-            Assert.Equal(auctionPrice2, auctionValue.Value.Price);
-
-        }
+        
 
     }
 }
