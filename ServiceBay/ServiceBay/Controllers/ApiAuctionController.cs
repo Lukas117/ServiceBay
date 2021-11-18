@@ -2,10 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ServiceBay.Contracts;
 using ServiceBay.Data;
+using ServiceBay.Dto;
 using ServiceBay.Models;
 using ServiceBay.Repository;
 
@@ -16,10 +18,12 @@ namespace ServiceBay.Controllers
     public class ApiAuctionController : ControllerBase
     {
         private readonly IAuctionRepository _auctionRepo;
+        private readonly IMapper _mapper;
 
-        public ApiAuctionController(IAuctionRepository auctionRepository)
+        public ApiAuctionController(IAuctionRepository auctionRepository, IMapper mapper)
         {
             _auctionRepo = auctionRepository;
+            _mapper = mapper;
         }
 
         // GET: api/ApiAuction
@@ -31,11 +35,12 @@ namespace ServiceBay.Controllers
 
         // GET: api/ApiAuction/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Auction>> GetAuction(int id)
+        public async Task<ActionResult<AuctionForCreationDto>> GetAuction(int id)
         {
             var auction = await _auctionRepo.GetAuction(id);
+            var auctionDto = _mapper.Map<AuctionForCreationDto>(auction);
             if (auction == null) { return NotFound(); }
-            return auction;
+            return auctionDto;
         }
 
         // PUT: api/ApiAuction/5

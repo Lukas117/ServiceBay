@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using ServiceBay.Dto;
 using ServiceBay.Models;
 
 namespace ServiceBay.Controllers
@@ -55,7 +56,7 @@ namespace ServiceBay.Controllers
         
         public IActionResult Details(int id)
         {
-            Auction auction = null;
+            AuctionForCreationDto auction = null;
 
             HttpClient hc = new HttpClient();
             hc.BaseAddress = new Uri("https://localhost:5001/api/ApiAuction");
@@ -66,7 +67,7 @@ namespace ServiceBay.Controllers
             var readdata = consumeapi.Result;
             if (readdata.IsSuccessStatusCode)
             {
-                var displaydata = readdata.Content.ReadAsAsync<Auction>();
+                var displaydata = readdata.Content.ReadAsAsync<AuctionForCreationDto>();
                 displaydata.Wait();
                 auction = displaydata.Result;
             }
