@@ -45,8 +45,9 @@ namespace ServiceBay.Controllers
 
         // PUT: api/ApiAuction/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutAuction(int id, Auction auction)
+        public async Task<IActionResult> PutAuction(int id)
         {
+            var auction = await _auctionRepo.GetAuction(id);
             if (id != auction.Id)
             {
                 return BadRequest();
@@ -87,31 +88,31 @@ namespace ServiceBay.Controllers
             return NoContent();
         }
 
-        // PUT: api/ApiAuction/5
-        [HttpPut("{id}")]
-        public async Task<IActionResult> DisableAuction(int id, Auction auction)
-        {
-            if (id != auction.Id)
-            {
-                return BadRequest();
-            }
+        //// PUT: api/ApiAuction/5
+        //[HttpPut("{id}")]
+        //public async Task<IActionResult> DisableAuction(int id, Auction auction)
+        //{
+        //    if (id != auction.Id)
+        //    {
+        //        return BadRequest();
+        //    }
 
-            try
-            {
-                await _auctionRepo.DisableAuction(id, auction);
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!_auctionRepo.AuctionExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-            return NoContent();
-        }
+        //    try
+        //    {
+        //        await _auctionRepo.DisableAuction(id, auction);
+        //    }
+        //    catch (DbUpdateConcurrencyException)
+        //    {
+        //        if (!_auctionRepo.AuctionExists(id))
+        //        {
+        //            return NotFound();
+        //        }
+        //        else
+        //        {
+        //            throw;
+        //        }
+        //    }
+        //    return NoContent();
+        //}
     }
 }

@@ -90,32 +90,55 @@ namespace ServiceBay.Controllers
             return View("Index");
         }
 
-        public IActionResult Edit()
-        {
-            return View();
-        }
-
-        [HttpPut]
         public IActionResult Edit(int id)
         {
             Auction auction = null;
 
             HttpClient hc = new HttpClient();
             hc.BaseAddress = new Uri("https://localhost:44349/api/ApiAuction");
-            var updaterecord = hc.GetAsync("ApiAuction/" + id.ToString());
-            updaterecord.Wait();
+            var readrecord = hc.GetAsync("ApiAuction/" + id.ToString());
+            readrecord.Wait();
 
-            var updatadata = updaterecord.Result;
-            if(updatadata.IsSuccessStatusCode)
+            var readdata = readrecord.Result;
+            if(readdata.IsSuccessStatusCode)
             {
-                var readTask = updatadata.Content.ReadAsAsync<Auction>();
+                var readTask = readdata.Content.ReadAsAsync<Auction>();
                 readTask.Wait();
                 auction = readTask.Result;
 
             }
-
             return View(auction);
-
         }
+
+        [HttpPut]
+        public IActionResult Edit(Auction auction)
+        {
+            HttpClient hc = new HttpClient();
+            hc.BaseAddress = new Uri("https://localhost:44349/api/ApiAuction");
+            var updaterecord = hc.PutAsJsonAsync<Auction>("ApiAuction", auction);
+            updaterecord.Wait();
+
+            var updatadata = updaterecord.Result;
+            if (updatadata.IsSuccessStatusCode)
+            {
+                return RedirectToAction("Index");
+            }
+            return View(auction);
+        }
+
+        //public IActionResult Disable(int id)
+        //{
+        //    HttpClient hc = new HttpClient();
+        //    hc.BaseAddress = new Uri("https://localhost:44349/api/ApiAuction");
+        //    var disablerecord = hc.GetAsync("ApiAuction/" + id.ToString());
+        //    disablerecord.Wait();
+
+        //    var deletedata = disablerecord.Result;
+        //    if (deletedata.IsSuccessStatusCode)
+        //    {
+        //        return RedirectToAction("Index");
+        //    }
+        //    return View("Index");
+        //}
     }
 }
