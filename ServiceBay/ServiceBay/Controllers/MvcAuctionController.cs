@@ -11,11 +11,13 @@ namespace ServiceBay.Controllers
 {
     public class MvcAuctionController : Controller
     {
+        private readonly string uri = "https://localhost:44349/api/";
+
         public IActionResult Index()
         {
             IEnumerable<Auction> auction = null;
             HttpClient hc = new HttpClient();
-            hc.BaseAddress = new Uri("https://localhost:44349/api/ApiAuction");
+            hc.BaseAddress = new Uri(uri);
 
             var consumeapi = hc.GetAsync("ApiAuction");
             consumeapi.Wait();
@@ -92,7 +94,7 @@ namespace ServiceBay.Controllers
 
         public IActionResult Edit(int id)
         {
-            Auction auction = null;
+            AuctionForUpdateDto auction = null;
 
             HttpClient hc = new HttpClient();
             hc.BaseAddress = new Uri("https://localhost:44349/api/ApiAuction");
@@ -102,7 +104,7 @@ namespace ServiceBay.Controllers
             var readdata = readrecord.Result;
             if(readdata.IsSuccessStatusCode)
             {
-                var readTask = readdata.Content.ReadAsAsync<Auction>();
+                var readTask = readdata.Content.ReadAsAsync<AuctionForUpdateDto>();
                 readTask.Wait();
                 auction = readTask.Result;
 
@@ -110,12 +112,12 @@ namespace ServiceBay.Controllers
             return View(auction);
         }
 
-        [HttpPut]
-        public IActionResult Edit(Auction auction)
+        [HttpPost]
+        public IActionResult Edit(int id, AuctionForUpdateDto auction)
         {
             HttpClient hc = new HttpClient();
             hc.BaseAddress = new Uri("https://localhost:44349/api/ApiAuction");
-            var updaterecord = hc.PutAsJsonAsync<Auction>("ApiAuction", auction);
+            var updaterecord = hc.PutAsJsonAsync<AuctionForUpdateDto>("ApiAuction/" + id.ToString(), auction);
             updaterecord.Wait();
 
             var updatadata = updaterecord.Result;

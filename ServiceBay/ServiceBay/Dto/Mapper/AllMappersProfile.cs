@@ -10,6 +10,8 @@ namespace ServiceBay.Dto.Mapper
         {
             CreateMap<Auction, AuctionForCreationDto>();
             CreateMap<Person, PersonForCreationDto>();
+            CreateMap<AuctionForUpdateDto, Auction>();
         }
+
     }
 }

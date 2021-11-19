@@ -45,9 +45,10 @@ namespace ServiceBay.Controllers
 
         // PUT: api/ApiAuction/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutAuction(int id)
+        public async Task<IActionResult> PutAuction(int id, AuctionForUpdateDto auctionDto)
         {
-            var auction = await _auctionRepo.GetAuction(id);
+            //var auction = await _auctionRepo.GetAuction(id);
+            var auction = _mapper.Map<Auction>(auctionDto);
             if (id != auction.Id)
             {
                 return BadRequest();
@@ -55,6 +56,7 @@ namespace ServiceBay.Controllers
 
             try
             {
+
                 await _auctionRepo.UpdateAuction(id, auction);
             }
             catch (DbUpdateConcurrencyException)

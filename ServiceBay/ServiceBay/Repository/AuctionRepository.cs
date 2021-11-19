@@ -45,7 +45,10 @@ namespace ServiceBay.Repository
         public async Task<int> UpdateAuction(int id, Auction auction)
         {
             try {
-                _context.Entry(auction).State = EntityState.Modified;
+                //_context.Entry(auction).State = EntityState.Modified;
+                _context.Entry(auction).Property(x => x.AuctionName).IsModified = true;
+                _context.Entry(auction).Property(x => x.AuctionDescription).IsModified = true;
+                _context.Entry(auction).Property(x => x.EndDate).IsModified = true;
                 return await _context.SaveChangesAsync();
             }
             catch (Exception ex)

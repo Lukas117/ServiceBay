@@ -12,6 +12,7 @@ using ServiceBay.Data;
 using Microsoft.EntityFrameworkCore;
 using ServiceBay.Contracts;
 using ServiceBay.Repository;
+using Microsoft.OpenApi.Models;
 
 namespace ServiceBay
 {
@@ -37,6 +38,11 @@ namespace ServiceBay
             services.AddScoped<IPersonRepository, PersonRepository>();
 
             services.AddAutoMapper(typeof(Startup));
+           
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "WebApi", Version = "v1" });
+            });
 
         }
 
@@ -46,6 +52,8 @@ namespace ServiceBay
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                app.UseSwagger();
+                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "WebApi v1"));
             }
             else
             {
