@@ -12,6 +12,7 @@ using ServiceBay.Data;
 using Microsoft.EntityFrameworkCore;
 using ServiceBay.Contracts;
 using ServiceBay.Repository;
+using Microsoft.AspNetCore.Identity;
 
 namespace ServiceBay
 {
@@ -38,11 +39,14 @@ namespace ServiceBay
 
             services.AddAutoMapper(typeof(Startup));
 
+            services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -57,6 +61,8 @@ namespace ServiceBay
             app.UseStaticFiles();
 
             app.UseRouting();
+
+            app.UseAuthentication();
 
             app.UseAuthorization();
 

@@ -5,10 +5,11 @@ using System.Text;
 using Microsoft.EntityFrameworkCore;
 using ServiceBay.Models;
 using ServiceBay.Dto;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace ServiceBay.Data
 {
-    public class ApplicationDbContext : DbContext
+    public class ApplicationDbContext : IdentityDbContext
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
