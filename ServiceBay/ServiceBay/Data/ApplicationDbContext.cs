@@ -5,10 +5,11 @@ using System.Text;
 using Microsoft.EntityFrameworkCore;
 using ServiceBay.Models;
 using ServiceBay.Dto;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace ServiceBay.Data
 {
-    public class ApplicationDbContext : DbContext
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
@@ -17,7 +18,6 @@ namespace ServiceBay.Data
         public DbSet<ServiceBay.Models.Auction> Auction { get; set; }
         public DbSet<ServiceBay.Models.Bid> Bid { get; set; }
         public DbSet<ServiceBay.Models.Person> Person { get; set; }
-        public DbSet<ServiceBay.Dto.AuctionForUpdateDto> AuctionForUpdateDto { get; set; }
-        
+
     }
 }
