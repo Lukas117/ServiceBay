@@ -15,7 +15,7 @@ namespace ServiceBay.Controllers
         {
             IEnumerable<Auction> auction = null;
             HttpClient hc = new HttpClient();
-            hc.BaseAddress = new Uri("https://localhost:44349/api/ApiAuction");
+            hc.BaseAddress = new Uri("https://localhost:5001/api/ApiAuction");
 
             var consumeapi = hc.GetAsync("ApiAuction");
             consumeapi.Wait();
@@ -40,7 +40,7 @@ namespace ServiceBay.Controllers
         public IActionResult Create(Auction inserttemp)
         {
             HttpClient hc = new HttpClient();
-            hc.BaseAddress = new Uri("https://localhost:44349/api/ApiAuction");
+            hc.BaseAddress = new Uri("https://localhost:5001/api/ApiAuction");
 
             var insertrecord = hc.PostAsJsonAsync<Auction>("ApiAuction", inserttemp);
             insertrecord.Wait();
@@ -59,7 +59,7 @@ namespace ServiceBay.Controllers
             AuctionForCreationDto auction = null;
 
             HttpClient hc = new HttpClient();
-            hc.BaseAddress = new Uri("https://localhost:44349/api/ApiAuction");
+            hc.BaseAddress = new Uri("https://localhost:5001/api/ApiAuction");
 
             var consumeapi = hc.GetAsync("ApiAuction/" + id.ToString());
             consumeapi.Wait();
@@ -78,7 +78,7 @@ namespace ServiceBay.Controllers
         public IActionResult Delete(int id)
         {
             HttpClient hc = new HttpClient();
-            hc.BaseAddress = new Uri("https://localhost:44349/api/ApiAuction");
+            hc.BaseAddress = new Uri("https://localhost:5001/api/ApiAuction");
             var removerecord = hc.DeleteAsync("ApiAuction/" + id.ToString());
             removerecord.Wait();
 
@@ -95,7 +95,7 @@ namespace ServiceBay.Controllers
             Auction auction = null;
 
             HttpClient hc = new HttpClient();
-            hc.BaseAddress = new Uri("https://localhost:44349/api/ApiAuction");
+            hc.BaseAddress = new Uri("https://localhost:5001/api/ApiAuction");
             var readrecord = hc.GetAsync("ApiAuction/" + id.ToString());
             readrecord.Wait();
 
@@ -114,7 +114,7 @@ namespace ServiceBay.Controllers
         public IActionResult Edit(Auction auction)
         {
             HttpClient hc = new HttpClient();
-            hc.BaseAddress = new Uri("https://localhost:44349/api/ApiAuction");
+            hc.BaseAddress = new Uri("https://localhost:5001/api/ApiAuction");
             var updaterecord = hc.PutAsJsonAsync<Auction>("ApiAuction", auction);
             updaterecord.Wait();
 
