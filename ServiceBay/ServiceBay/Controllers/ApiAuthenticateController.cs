@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using ServiceBay.Dto;
 using ServiceBay.Models;
 
 namespace ServiceBay.Controllers
@@ -18,11 +19,11 @@ namespace ServiceBay.Controllers
     [ApiController]
     public class AuthenticateController : ControllerBase
     {
-        private readonly UserManager<ApplicationUser> userManager;
+        private readonly UserManager<Person> userManager;
         private readonly RoleManager<IdentityRole> roleManager;
         private readonly IConfiguration _configuration;
 
-        public AuthenticateController(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, IConfiguration configuration)
+        public AuthenticateController(UserManager<Person> userManager, RoleManager<IdentityRole> roleManager, IConfiguration configuration)
         {
             this.userManager = userManager;
             this.roleManager = roleManager;
@@ -70,19 +71,22 @@ namespace ServiceBay.Controllers
 
         [HttpPost]
         [Route("register")]
-        public async Task<IActionResult> Register([FromBody] Register model)
+        public async Task<IActionResult> Register(Register model)
         {
             var userExists = await userManager.FindByNameAsync(model.Email);
             if (userExists != null)
                 return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = "User already exists!" });
 
-            ApplicationUser user = new ApplicationUser()
+            Person person = new Person()
             {
                 Email = model.Email,
+                Fname = model.Fname,
+                Lname = model.Lname,
+                Phoneno = model.Phoneno,
                 SecurityStamp = Guid.NewGuid().ToString(),
 
             };
-            var result = await userManager.CreateAsync(user, model.Password);
+            var result = await userManager.CreateAsync(person, model.Password);
             if (!result.Succeeded)
                 return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = "User creation failed! Please check user details and try again." });
 

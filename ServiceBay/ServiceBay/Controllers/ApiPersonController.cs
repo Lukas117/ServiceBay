@@ -31,7 +31,7 @@ namespace ServiceBay.Controllers
 
         // GET: api/ApiPerson/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Person>> GetPerson(int id)
+        public async Task<ActionResult<Person>> GetPerson(string id)
         {
             var person = await _personRepo.GetPerson(id);
 
@@ -42,7 +42,7 @@ namespace ServiceBay.Controllers
         // PUT: api/ApiPerson/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutPerson(int id, Person person)
+        public async Task<IActionResult> PutPerson(string id, Person person)
         {
             if (id != person.Id) { return BadRequest(); }
 
@@ -69,7 +69,7 @@ namespace ServiceBay.Controllers
 
         // DELETE: api/ApiPerson/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeletePerson(int id)
+        public async Task<IActionResult> DeletePerson(string id)
         {
             var person = await _personRepo.DeletePerson(id);
             if (person == 0) { return NotFound(); }

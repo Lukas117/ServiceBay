@@ -16,5 +16,15 @@ namespace ServiceBay.Models
         [Display(Name = "Confirm Password")]
         [Compare("Password", ErrorMessage = "Password and confirmation password not match.")]
         public string ConfirmPassword { get; set; }
+
+        [Required]
+        public string Fname { get; set; }
+
+        [Required]
+        public string Lname { get; set; }
+
+        [Required]
+        public string Phoneno { get; set; }
+
     }
 }
