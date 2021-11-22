@@ -47,7 +47,6 @@ namespace ServiceBay.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutAuction(int id, AuctionForUpdateDto auctionDto)
         {
-            //var auction = await _auctionRepo.GetAuction(id);
             var auction = _mapper.Map<Auction>(auctionDto);
             if (id != auction.Id)
             {
@@ -75,8 +74,9 @@ namespace ServiceBay.Controllers
 
         // POST: api/ApiAuction
         [HttpPost]
-        public async Task<ActionResult<Auction>> PostAuction(Auction auction)
+        public async Task<ActionResult<AuctionForCreationDto>> PostAuction(AuctionForCreationDto auctionDto)
         {
+            var auction = _mapper.Map<Auction>(auctionDto);
             await _auctionRepo.CreateAuction(auction);
             return CreatedAtAction("GetAuction", new { id = auction.Id }, auction);
         }
@@ -90,31 +90,32 @@ namespace ServiceBay.Controllers
             return NoContent();
         }
 
-        //// PUT: api/ApiAuction/5
-        //[HttpPut("{id}")]
-        //public async Task<IActionResult> DisableAuction(int id, Auction auction)
-        //{
-        //    if (id != auction.Id)
-        //    {
-        //        return BadRequest();
-        //    }
+        // PUT: api/ApiAuction/5
+        [HttpPut("disable/{id}")]
+        public async Task<IActionResult> DisableAuction(int id, AuctionForUpdateDto auctionDto)
+        {
+            var auction = _mapper.Map<Auction>(auctionDto);
+            if (id != auction.Id)
+            {
+                return BadRequest();
+            }
 
-        //    try
-        //    {
-        //        await _auctionRepo.DisableAuction(id, auction);
-        //    }
-        //    catch (DbUpdateConcurrencyException)
-        //    {
-        //        if (!_auctionRepo.AuctionExists(id))
-        //        {
-        //            return NotFound();
-        //        }
-        //        else
-        //        {
-        //            throw;
-        //        }
-        //    }
-        //    return NoContent();
-        //}
+            try
+            {
+                await _auctionRepo.DisableAuction(id, auction);
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!_auctionRepo.AuctionExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+            return NoContent();
+        }
     }
 }

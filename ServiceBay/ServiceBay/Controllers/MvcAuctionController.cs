@@ -39,12 +39,12 @@ namespace ServiceBay.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create(Auction inserttemp)
+        public IActionResult Create(AuctionForCreationDto inserttemp)
         {
             HttpClient hc = new HttpClient();
             hc.BaseAddress = new Uri("https://localhost:44349/api/ApiAuction");
 
-            var insertrecord = hc.PostAsJsonAsync<Auction>("ApiAuction", inserttemp);
+            var insertrecord = hc.PostAsJsonAsync<AuctionForCreationDto>("ApiAuction", inserttemp);
             insertrecord.Wait();
 
             var savedata = insertrecord.Result;
@@ -130,17 +130,38 @@ namespace ServiceBay.Controllers
 
         //public IActionResult Disable(int id)
         //{
+        //    AuctionForUpdateDto auction = null;
+
         //    HttpClient hc = new HttpClient();
         //    hc.BaseAddress = new Uri("https://localhost:44349/api/ApiAuction");
-        //    var disablerecord = hc.GetAsync("ApiAuction/" + id.ToString());
-        //    disablerecord.Wait();
+        //    var readrecord = hc.GetAsync("ApiAuction/" + id.ToString());
+        //    readrecord.Wait();
 
-        //    var deletedata = disablerecord.Result;
-        //    if (deletedata.IsSuccessStatusCode)
+        //    var readdata = readrecord.Result;
+        //    if (readdata.IsSuccessStatusCode)
         //    {
-        //        return RedirectToAction("Index");
+        //        var readTask = readdata.Content.ReadAsAsync<AuctionForUpdateDto>();
+        //        readTask.Wait();
+        //        auction = readTask.Result;
+
         //    }
-        //    return View("Index");
+        //    return View(auction);
         //}
+
+        [HttpPost]
+        public IActionResult Disable(int id, AuctionForUpdateDto auction)
+        {
+            HttpClient hc = new HttpClient();
+            hc.BaseAddress = new Uri("https://localhost:44349/api/ApiAuction");
+            var disablerecord = hc.PutAsJsonAsync<AuctionForUpdateDto>("ApiAuction/disable/" + id.ToString(), auction);
+            disablerecord.Wait();
+
+            var deletedata = disablerecord.Result;
+            if (deletedata.IsSuccessStatusCode)
+            {
+                return RedirectToAction("Index");
+            }
+            return View("Index");
+        }
     }
 }

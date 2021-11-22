@@ -63,7 +63,7 @@ namespace ServiceBay.Repository
                 if (auction != null && auction.EndDate >= DateTime.Now)
                 {
                     auction.EndDate = DateTime.Now;
-                    _context.Auction.Attach(auction);
+                    //_context.Auction.Attach(auction);
                     _context.Entry(auction).Property(x => x.EndDate).IsModified = true;
                     return await _context.SaveChangesAsync();
                 }

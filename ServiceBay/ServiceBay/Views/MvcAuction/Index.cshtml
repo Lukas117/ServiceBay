@@ -37,36 +37,39 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.AuctionName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.AuctionDescription)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.StartingDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.EndDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.StartingPrice)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Price)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.SellerId)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a> |
-                <a asp-action="Disable" asp-route-id="@item.Id">Disable</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.AuctionName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.AuctionDescription)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.StartingDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.EndDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.StartingPrice)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Price)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SellerId)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a> |
+                    <a asp-action="Disable" asp-route-id="@item.Id">Disable</a>
+                    <input id="Button1" type="button" valu<input id="Button1" type="button" value="button" /><input id="Button1" type="button" value="button" /><input id="Button1" type="button" value="button" /><input id="Button1" type="button" value="button" /><input id="Button1" type="button" value="button" />e="button" />
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
+@*onclick="location.href = '@Url.Action("Delete/" + @item.Id, "MvcAuction")'"*@

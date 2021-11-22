@@ -1,17 +1,18 @@
-﻿@model ServiceBay.Dto.AuctionForCreationDto
+﻿@model ServiceBay.Dto.AuctionForUpdateDto
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Disable";
 }
 
-<h1>Create</h1>
+<h1>Disable</h1>
 
-<h4>AuctionForCreationDto</h4>
+<h4>AuctionForUpdateDto</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
+        <form asp-action="Disable">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
             <div class="form-group">
                 <label asp-for="AuctionName" class="control-label"></label>
                 <input asp-for="AuctionName" class="form-control" />
@@ -23,27 +24,12 @@
                 <span asp-validation-for="AuctionDescription" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="StartingDate" class="control-label"></label>
-                <input asp-for="StartingDate" class="form-control" />
-                <span asp-validation-for="StartingDate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
                 <label asp-for="EndDate" class="control-label"></label>
                 <input asp-for="EndDate" class="form-control" />
                 <span asp-validation-for="EndDate" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="StartingPrice" class="control-label"></label>
-                <input asp-for="StartingPrice" class="form-control" />
-                <span asp-validation-for="StartingPrice" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="SellerId" class="control-label"></label>
-                <input asp-for="SellerId" class="form-control" />
-                <span asp-validation-for="SellerId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="Save" class="btn btn-primary" />
             </div>
         </form>
     </div>

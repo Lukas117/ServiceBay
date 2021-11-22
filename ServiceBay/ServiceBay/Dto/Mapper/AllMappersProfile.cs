@@ -9,6 +9,7 @@ namespace ServiceBay.Dto.Mapper
         public AllMappersProfile()
         {
             CreateMap<Auction, AuctionForCreationDto>();
+            CreateMap<AuctionForCreationDto, Auction>();
             CreateMap<Person, PersonForCreationDto>();
             CreateMap<AuctionForUpdateDto, Auction>();
         }
