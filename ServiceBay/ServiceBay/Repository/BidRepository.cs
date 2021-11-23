@@ -53,7 +53,7 @@ namespace ServiceBay.Repository
                     {
                         Notify(bid, lastBidder.Email);
                     }
-                    var seller = await personRepository.GetPerson(bid.Auction.SellerId);
+                    var seller = await personRepository.GetPerson(auction.SellerId);
                     NotifySeller(bid, seller.Email);
                     lastBid = bid;
                     //var rowVersion = _context.Entry(auction).CurrentValues["RowVersion"];
