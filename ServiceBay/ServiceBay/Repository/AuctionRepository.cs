@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ServiceBay.Contracts;
 using ServiceBay.Data;
-using ServiceBay.Dto;
 using ServiceBay.Models;
 using System;
 using System.Collections.Generic;
@@ -21,31 +20,46 @@ namespace ServiceBay.Repository
 
         public async Task<int> CreateAuction(Auction auction)
         {
-            _context.Auction.Add(auction);
-            return await _context.SaveChangesAsync();
-        }
-
-        public async Task<int> DeleteAuction(int id)
-        {
-            var auction = await _context.Auction.FindAsync(id);
-            _context.Auction.Remove(auction);
-            return await _context.SaveChangesAsync();
+            try
+            {
+                auction.Price = auction.StartingPrice;
+                _context.Auction.Add(auction);
+                return await _context.SaveChangesAsync();
+            }
+            catch(DbUpdateConcurrencyException ex)
+            {
+                throw new DbUpdateConcurrencyException($"Error creating auction: '{ex.Message}'.", ex);
+            }
         }
 
         public async Task<Auction> GetAuction(int id)
         {
-           return await _context.Auction.FindAsync(id);
+            try
+            {
+                return await _context.Auction.FindAsync(id);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error getting auction: '{ex.Message}'.", ex);
+            }
         }
 
         public async Task<IEnumerable<Auction>> GetAuctions()
         {
-            return await _context.Auction.ToListAsync();
+            try
+            {
+                return await _context.Auction.ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error getting auctions: '{ex.Message}'.", ex);
+            }
         }
 
         public async Task<int> UpdateAuction(int id, Auction auction)
         {
-            try {
-                //_context.Entry(auction).State = EntityState.Modified;
+            try
+            {
                 _context.Entry(auction).Property(x => x.AuctionName).IsModified = true;
                 _context.Entry(auction).Property(x => x.AuctionDescription).IsModified = true;
                 _context.Entry(auction).Property(x => x.EndDate).IsModified = true;
@@ -56,6 +70,21 @@ namespace ServiceBay.Repository
                 throw new Exception($"Error updating auction: '{ex.Message}'.", ex);
             }
         }
+
+        public async Task<int> DeleteAuction(int id)
+        {
+            try
+            {
+                var auction = await _context.Auction.FindAsync(id);
+                _context.Auction.Remove(auction);
+                return await _context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error deleting auction: '{ex.Message}'.", ex);
+            }
+        }
+
         public async Task<int> DisableAuction(int id, Auction auction)
         {
             try
@@ -63,7 +92,6 @@ namespace ServiceBay.Repository
                 if (auction != null && auction.EndDate >= DateTime.Now)
                 {
                     auction.EndDate = DateTime.Now;
-                    //_context.Auction.Attach(auction);
                     _context.Entry(auction).Property(x => x.EndDate).IsModified = true;
                     return await _context.SaveChangesAsync();
                 }
@@ -79,13 +107,5 @@ namespace ServiceBay.Repository
         {
             return _context.Auction.Any(e => e.Id == id);
         }
-
-        //public void UpdatePrice(int id, double price)
-        //{
-        //    var auction = new Auction() { Id = id, Price = price };
-        //    _context.Auction.Attach(auction);
-        //    _context.Entry(auction).Property(x => x.Price).IsModified = true;
-        //    _context.SaveChangesAsync();
-        //}
     }
 }

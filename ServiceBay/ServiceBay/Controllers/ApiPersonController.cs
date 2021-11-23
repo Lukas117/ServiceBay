@@ -22,6 +22,14 @@ namespace ServiceBay.Controllers
             _personRepo = personRepo;
         }
 
+        // POST: api/ApiPerson
+        [HttpPost]
+        public async Task<ActionResult<Person>> PostPerson(Person person)
+        {
+            await _personRepo.CreatePerson(person);
+            return CreatedAtAction("GetPerson", new { id = person.Id }, person);
+        }
+
         // GET: api/ApiPerson
         [HttpGet]
         public async Task<IEnumerable<Person>> GetPersons()
@@ -40,7 +48,6 @@ namespace ServiceBay.Controllers
         }
 
         // PUT: api/ApiPerson/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
         public async Task<IActionResult> PutPerson(int id, Person person)
         {
@@ -56,15 +63,6 @@ namespace ServiceBay.Controllers
                 else { throw; }
             }
             return NoContent();
-        }
-
-        // POST: api/ApiPerson
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        public async Task<ActionResult<Person>> PostPerson(Person person)
-        {
-            await _personRepo.CreatePerson(person);
-            return CreatedAtAction("GetPerson", new { id = person.Id }, person);
         }
 
         // DELETE: api/ApiPerson/5

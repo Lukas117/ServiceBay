@@ -8,13 +8,8 @@ using System.Threading.Tasks;
 
 namespace ServiceBay.Services
 {
-    public class EmailObserver : IBidObserver
+    public class EmailService
     {
-        public void updateBid(Bid bid, String email)
-        {
-            SendUpdateEmail(bid, email);
-        }
-
         public void SendUpdateEmail(Bid bid, String email)
         {
             String FROM = "1086340@ucn.dk";

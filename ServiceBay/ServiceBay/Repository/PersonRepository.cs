@@ -20,13 +20,39 @@ namespace ServiceBay.Repository
 
         public async Task<int> CreatePerson(Person person)
         {
-            _context.Person.Add(person);
-            return await _context.SaveChangesAsync();
+            try
+            {
+                _context.Person.Add(person);
+                return await _context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error creating person: '{ex.Message}'.", ex);
+            }
         }
 
         public async Task<Person> GetPerson(int id)
         {
-            return await _context.Person.FindAsync(id);
+            try
+            {
+                return await _context.Person.FindAsync(id);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error getting person: '{ex.Message}'.", ex);
+            }
+        }
+
+        public async Task<IEnumerable<Person>> GetPersons()
+        {
+            try
+            {
+                return await _context.Person.ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error getting people: '{ex.Message}'.", ex);
+            }
         }
 
         public async Task<int> UpdatePerson(int id, Person person)
@@ -44,14 +70,16 @@ namespace ServiceBay.Repository
 
         public async Task<int> DeletePerson(int id)
         {
-            var person = await _context.Person.FindAsync(id);
-            _context.Person.Remove(person);
-            return await _context.SaveChangesAsync();
-        }
-
-        public async Task<IEnumerable<Person>> GetPersons()
-        {
-            return await _context.Person.ToListAsync();
+            try
+            {
+                var person = await _context.Person.FindAsync(id);
+                _context.Person.Remove(person);
+                return await _context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error deleting person: '{ex.Message}'.", ex);
+            }
         }
 
         public bool PersonExists(int id)

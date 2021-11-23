@@ -1,6 +1,5 @@
 ﻿using ServiceBay.Contracts;
 using ServiceBay.Data;
-using ServiceBay.Dto;
 using ServiceBay.Models;
 using System;
 using System.Collections.Generic;
@@ -8,99 +7,76 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using ServiceBay.Services;
-using System.Collections;
 
 namespace ServiceBay.Repository
 {
     public class BidRepository : IBidRepository
     {
-        public List<IBidObserver> observers = new List<IBidObserver>();
         private readonly ApplicationDbContext _context;
         private readonly IAuctionRepository _auctionRepo;
-        private readonly EmailObserver emailObserver;
+        private readonly EmailService emailService;
         private readonly PersonRepository personRepository;
 
         public BidRepository(ApplicationDbContext context)
         {
             _context = context;
             _auctionRepo = new AuctionRepository(_context);
-            emailObserver = new EmailObserver();
+            emailService = new EmailService();
             personRepository = new PersonRepository(_context);
-        }
-
-        public void Attach(IBidObserver observer)
-        {
-            observers.Add(observer);
         }
 
         public async Task<int> CreateBid(Bid bid)
         {
-            //var observer = new EmailObserver();
-            //Attach(observer);
             var auction = await _auctionRepo.GetAuction(bid.AuctionId);
-            //var version = _context.Entry(auction).CurrentValues["RowVersion"];
             try
             {
                 if (auction.SellerId != bid.BuyerId && auction.Price < bid.Price && auction.StartingPrice < bid.Price && auction.EndDate >= DateTime.Now)
                 {
-                    _context.Add(bid);
                     auction.Price = bid.Price;
+                    _context.Add(bid);
                     _context.Auction.Attach(auction);
                     _context.Entry(auction).Property(x => x.Price).IsModified = true;
+
                     var lastBid = bid.Auction.Bids.OrderByDescending(x => x.Price).First();
                     var lastBidder = await personRepository.GetPerson(lastBid.BuyerId);
-                    if (lastBid != null && lastBidder != null)
-                    {
-                        Notify(bid, lastBidder.Email);
-                    }
+                    if (lastBid != null && lastBidder != null) { NotifyBuyer(bid, lastBidder.Email); }
                     var seller = await personRepository.GetPerson(auction.SellerId);
                     NotifySeller(bid, seller.Email);
                     lastBid = bid;
-                    //var rowVersion = _context.Entry(auction).CurrentValues["RowVersion"];
-                    //if (StructuralComparisons.StructuralEqualityComparer.Equals(version, rowVersion))
-                    //{
+
                     return await _context.SaveChangesAsync();
-                    //}
                 }
             }
             catch (DbUpdateConcurrencyException ex)
             {
-                Console.WriteLine(ex.Message);
-                Console.WriteLine("The record you attempted to edit "
-                + "was modified by another user after you got the original value. The"
-                + "edit operation was canceled and the current values in the database "
-                + "have been displayed. If you still want to edit this record, click "
-                + "the Save button again. Otherwise click the Back to List hyperlink.");
-                return 0;
+                throw new DbUpdateConcurrencyException($"Error creating bid: '{ex.Message}'.", ex);
             }
             return 0;
         }
 
-        public async Task<int> DeleteBid(int id)
-        {
-            var bid = await _context.Bid.FindAsync(id);
-            _context.Bid.Remove(bid);
-            return await _context.SaveChangesAsync();
-        }
-
-        public void Detach(IBidObserver observer)
-        {
-            observers.Remove(observer);
-        }
-
-        public void Notify(Bid bid, String email)
-        {
-            emailObserver.SendUpdateEmail(bid, email);
-        }
-
-        public void NotifySeller(Bid bid, String email)
-        {
-            emailObserver.SendSellerEmail(bid, email);
-        }
-
         public async Task<Bid> GetBid(int id)
         {
-            return await _context.Bid.FindAsync(id);
+            try
+            {
+                return await _context.Bid.FindAsync(id);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error getting bid: '{ex.Message}'.", ex);
+            }
+        }
+
+        public async Task<IEnumerable<Bid>> GetBids()
+        {
+            try
+            {
+                return await _context.Bid.ToListAsync();
+
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error getting bids: '{ex.Message}'.", ex);
+            }
         }
 
         public async Task<int> UpdateBid(int id, Bid bid)
@@ -110,16 +86,36 @@ namespace ServiceBay.Repository
                 _context.Entry(bid).State = EntityState.Modified;
                 return await _context.SaveChangesAsync();
             }
-            catch (Exception ex)
+            catch (DbUpdateConcurrencyException ex)
             {
-                throw new Exception($"Error updating bid: '{ex.Message}'.", ex);
+                throw new DbUpdateConcurrencyException($"Error updating bid: '{ex.Message}'.", ex);
             }
         }
 
-        public async Task<IEnumerable<Bid>> GetBids()
+        public async Task<int> DeleteBid(int id)
         {
-            return await _context.Bid.ToListAsync();
+            var bid = await _context.Bid.FindAsync(id);
+            try
+            {
+                _context.Bid.Remove(bid);
+                return await _context.SaveChangesAsync();
+            }
+
+            catch (Exception ex)
+            {
+                throw new Exception($"Error getting bids: '{ex.Message}'.", ex);
+            }
         }
+
+        public void NotifyBuyer(Bid bid, String email)
+        {
+            emailService.SendUpdateEmail(bid, email);
+        }
+
+        public void NotifySeller(Bid bid, String email)
+        {
+            emailService.SendSellerEmail(bid, email);
+        }    
 
         public bool BidExists(int id)
         {

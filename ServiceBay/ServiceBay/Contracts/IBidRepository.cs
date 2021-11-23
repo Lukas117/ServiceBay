@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace ServiceBay.Contracts
 {
-    public interface IBidRepository : IBidNotifier
+    public interface IBidRepository
     {
         public Task<int> CreateBid(Bid bid);
         public Task<Bid> GetBid(int id);
@@ -16,7 +16,5 @@ namespace ServiceBay.Contracts
         public Task<int> DeleteBid(int id);
         public Task<IEnumerable<Bid>> GetBids();
         public bool BidExists(int id);
-        //public Task<int> UpdatePrice(int id, double price);
-
     }
 }

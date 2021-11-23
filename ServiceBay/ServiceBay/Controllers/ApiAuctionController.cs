@@ -1,15 +1,12 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ServiceBay.Contracts;
-using ServiceBay.Data;
 using ServiceBay.Dto;
 using ServiceBay.Models;
-using ServiceBay.Repository;
 
 namespace ServiceBay.Controllers
 {
