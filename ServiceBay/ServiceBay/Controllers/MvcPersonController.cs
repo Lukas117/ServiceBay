@@ -10,11 +10,13 @@ namespace ServiceBay.Controllers
 {
     public class MvcPersonController : Controller
     {
+        private readonly string uri = "https://localhost:5001/api/";
+
         public IActionResult Index()
         {
             IEnumerable<Person> person = null;
             HttpClient hc = new HttpClient();
-            hc.BaseAddress = new Uri("https://localhost:5001/api/ApiPerson");
+            hc.BaseAddress = new Uri(uri);
 
             var consumeapi = hc.GetAsync("ApiPerson");
             consumeapi.Wait();
@@ -39,7 +41,7 @@ namespace ServiceBay.Controllers
         public IActionResult Create(Person inserttemp)
         {
             HttpClient hc = new HttpClient();
-            hc.BaseAddress = new Uri("https://localhost:5001/api/ApiPerson");
+            hc.BaseAddress = new Uri(uri);
 
             var insertrecord = hc.PostAsJsonAsync<Person>("ApiPerson", inserttemp);
             insertrecord.Wait();
@@ -57,7 +59,7 @@ namespace ServiceBay.Controllers
             Person person = null;
 
             HttpClient hc = new HttpClient();
-            hc.BaseAddress = new Uri("https://localhost:5001/api/ApiPerson");
+            hc.BaseAddress = new Uri(uri);
 
             var consumeapi = hc.GetAsync("ApiPerson/" + id.ToString());
             consumeapi.Wait();
@@ -76,7 +78,7 @@ namespace ServiceBay.Controllers
         public IActionResult Delete(int id)
         {
             HttpClient hc = new HttpClient();
-            hc.BaseAddress = new Uri("https://localhost:5001/api/ApiPerson");
+            hc.BaseAddress = new Uri(uri);
             var removerecord = hc.DeleteAsync("ApiPerson/" + id.ToString());
             removerecord.Wait();
 
@@ -99,7 +101,7 @@ namespace ServiceBay.Controllers
             Person person = null;
 
             HttpClient hc = new HttpClient();
-            hc.BaseAddress = new Uri("https://localhost:5001/api/ApiPerson");
+            hc.BaseAddress = new Uri(uri);
             var updaterecord = hc.GetAsync("ApiPerson/" + id.ToString());
             updaterecord.Wait();
 
