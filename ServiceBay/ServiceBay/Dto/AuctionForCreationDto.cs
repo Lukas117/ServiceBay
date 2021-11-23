@@ -14,5 +14,6 @@ namespace ServiceBay.Dto
         public DateTime EndDate { get; set; }
         public double StartingPrice { get; set; }
         public int SellerId { get; set; }
+        public int Price { get; set; }
     }
 }
