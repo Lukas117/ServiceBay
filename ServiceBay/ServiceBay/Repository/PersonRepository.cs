@@ -86,5 +86,12 @@ namespace ServiceBay.Repository
         {
             return _context.Person.Any(e => e.Id == id);
         }
+
+        //TO-Do implemnt into api and mvc
+        public async Task<Person> GetPersonByEmail(string email)
+        {
+            return await _context.Person.FirstOrDefaultAsync(x => x.Email.Equals(email));
+            
+        }
     }
 }

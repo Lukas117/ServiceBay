@@ -14,5 +14,6 @@ namespace ServiceBay.Contracts
         public Task<int> DeletePerson(int id);
         public Task<IEnumerable<Person>> GetPersons();
         public bool PersonExists(int id);
+        public Task<Person> GetPersonByEmail(string email);
     }
 }

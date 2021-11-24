@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ServiceBay.Contracts;
@@ -25,6 +26,7 @@ namespace ServiceBay.Controllers
 
         // GET: api/ApiAuction
         [HttpGet]
+        [Authorize]
         public async Task<IEnumerable<Auction>> GetAuctions()
         {
             return await _auctionRepo.GetAuctions();
