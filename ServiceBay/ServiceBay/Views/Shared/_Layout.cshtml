@@ -88,7 +88,6 @@
         @await RenderSectionAsync("Scripts", required: false)
     </body>
 </html>
-<script src="~/Views/Shared/_Layout.cshtml.cs"></script>
 <script>
     $(document).ready(function () {
         $(".notification_icon").click(function () {
@@ -107,11 +106,21 @@
                 console.log(myJson.value);
                 if (response != null) {
                     console.log("yesss");
-                    var newRow = '<p>Jó vagy geci:</p>';
-                    $('#first').html(newRow);
+                    //var newRow = '<p>Jó vagy geci:</p>';
+                    //$('#first').html(newRow);
                 }
+                return myJson;
             }
         });
+    }
+
+    function Checking() {
+        var first = Notification(26);
+        var second = setTimeout(Notification(26), 1000);
+        if (first.value != second.value) {
+            var newRow = '<p>You got outbid by:</p>' + second.value + 'DKK';
+            $('#first').html(newRow);
+        }
     }
      
     $(document).ready(function () {
