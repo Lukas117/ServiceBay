@@ -55,10 +55,9 @@ namespace ServiceBay.Controllers
             return View("Create");
         }
 
-        
-        public IActionResult Details(int id)
+        public JsonResult DetailsForNoti(int id)
         {
-            AuctionForCreationDto auction = null;
+            Auction auction = null;
 
             HttpClient hc = new HttpClient();
             hc.BaseAddress = new Uri(uri);
@@ -69,12 +68,32 @@ namespace ServiceBay.Controllers
             var readdata = consumeapi.Result;
             if (readdata.IsSuccessStatusCode)
             {
-                var displaydata = readdata.Content.ReadAsAsync<AuctionForCreationDto>();
+                var displaydata = readdata.Content.ReadAsAsync<Auction>();
                 displaydata.Wait();
                 auction = displaydata.Result;
             }
-            return View(auction);
+            return Json(auction.Price);
         }
+
+        //public IActionResult Details(int id)
+        //{
+        //    AuctionForCreationDto auction = null;
+
+        //    HttpClient hc = new HttpClient();
+        //    hc.BaseAddress = new Uri(uri);
+
+        //    var consumeapi = hc.GetAsync("ApiAuction/" + id.ToString());
+        //    consumeapi.Wait();
+
+        //    var readdata = consumeapi.Result;
+        //    if (readdata.IsSuccessStatusCode)
+        //    {
+        //        var displaydata = readdata.Content.ReadAsAsync<AuctionForCreationDto>();
+        //        displaydata.Wait();
+        //        auction = displaydata.Result;
+        //    }
+        //    return View(auction);
+        //}
 
         [HttpDelete]
         public IActionResult Delete(int id)

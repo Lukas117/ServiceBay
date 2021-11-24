@@ -12,10 +12,12 @@ namespace ServiceBay.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly MvcAuctionController mvc;
 
         public HomeController(ILogger<HomeController> logger)
         {
             _logger = logger;
+            mvc = new MvcAuctionController();
         }
 
         public IActionResult Index()
@@ -25,7 +27,13 @@ namespace ServiceBay.Controllers
 
         public IActionResult Privacy()
         {
-            return View();
+            return View(); 
+        }
+
+        [HttpPost]
+        public JsonResult DetailsForNoti(int id)
+        {
+            return Json(mvc.DetailsForNoti(id));
         }
     }
 }

@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.810.12
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ServiceBay", "ServiceBay\ServiceBay.csproj", "{119A7774-8EC9-401B-9F66-BAC1AA84F281}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestBidding", "TestBidding\TestBidding.csproj", "{E8922582-1A4E-4E56-A1D8-D54ABF65DF51}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestBidding", "TestBidding\TestBidding.csproj", "{E8922582-1A4E-4E56-A1D8-D54ABF65DF51}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
