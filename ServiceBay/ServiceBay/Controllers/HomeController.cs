@@ -35,5 +35,17 @@ namespace ServiceBay.Controllers
         {
             return Json(mvc.DetailsForNoti(id));
         }
+
+        [HttpPost]
+        public JsonResult IsUpdated(int id)
+        {
+            return Json(mvc.IsUpdated(id));
+        }
+
+        [HttpPost]
+        public JsonResult AllAuctions()
+        {
+            return Json(mvc.AllAuctions());
+        }
     }
 }

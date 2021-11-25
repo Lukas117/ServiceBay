@@ -88,42 +88,80 @@
         @await RenderSectionAsync("Scripts", required: false)
     </body>
 </html>
-<script>
+    <script>
     $(document).ready(function () {
         $(".notification_icon").click(function () {
             $(".dropdown").toggleClass("active");
         })
     });
 
+    function GetAll() {
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("AllAuctions")",
+            dataType: "json",
+            success: function (response) {
+                let list = response.value;
+                list.forEach(function (item, index, array) {
+                    $.ajax({
+                        type: "POST",
+                        url: "@Url.Action("IsUpdated")",
+                        data: { id: item.id },
+                        dataType: "json",
+                        success: function (boolean,) {
+                            
+                            if (boolean.value == true) {
+                                console.log("it works! New price is: " + item.price + "DKK");
+                                //var newRow = '<p>You got outbid by:</p>' + 'DKK';
+                                //$('#first').html(newRow); console.log("nice");
+                            }
+                            else {
+                                console.log("also nice");
+                            }
+                        },
+                    });
+                })
+            }
+        })
+    }
+
     function Notification(id) {
         $.ajax({
             type: "POST",
-            url: "@Url.Action("DetailsForNoti")",
+            url: "@Url.Action("IsUpdated")",
             data: {id: id},
             dataType: "json",
             success: function (response) {
-                var myJson = response;
-                console.log(myJson.value);
-                if (response != null) {
-                    console.log("yesss");
-                    //var newRow = '<p>Jó vagy geci:</p>';
-                    //$('#first').html(newRow);
-                }
-                return myJson;
-            }
+                returnResp(response);
+            },
         });
     }
 
-    function Checking() {
-        var first = Notification(26);
-        var second = setTimeout(Notification(26), 1000);
-        if (first.value != second.value) {
+    function returnResp(myResponse) {
+        if (myResponse.value == true) {
+            var newRow = '<p>You got outbid by:</p>' + 'DKK';
+            $('#first').html(newRow);console.log("nice");
+        }
+        else {
+            console.log("also nice");
+        }
+    }
+
+    function Checking(id) {
+        var first = Notification(id);
+        console.log("first: " + first);
+        var second = Notification(id);
+        console.log("second: " + second);
+        if (first != null && second != null && first.value != second.value) {
             var newRow = '<p>You got outbid by:</p>' + second.value + 'DKK';
             $('#first').html(newRow);
         }
     }
-     
+
     $(document).ready(function () {
-        setInterval(Notification(26), 1000);
+        GetAll();
+        setInterval(function () {
+            GetAll();
+        }, 5000);
     });
-</script>
+    </script>

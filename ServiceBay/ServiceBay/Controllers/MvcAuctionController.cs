@@ -75,6 +75,46 @@ namespace ServiceBay.Controllers
             return Json(auction.Price);
         }
 
+        public JsonResult IsUpdated(int id)
+        {
+            bool result = false;
+            var first = DetailsForNoti(id);
+            System.Threading.Thread.Sleep(2000);
+            var second = DetailsForNoti(id);
+            if (first != null && second != null)
+            {
+                if (!first.Value.Equals(second.Value))
+                {
+                    result = true;
+                }
+                else
+                {
+                    result = false;
+                }
+            }
+            return Json(result);
+        }
+
+        public JsonResult AllAuctions()
+        {
+            IEnumerable<Auction> auction = null;
+            HttpClient hc = new HttpClient();
+            hc.BaseAddress = new Uri(uri);
+
+            var consumeapi = hc.GetAsync("ApiAuction");
+            consumeapi.Wait();
+
+            var readdata = consumeapi.Result;
+            if (readdata.IsSuccessStatusCode)
+            {
+                var displaydata = readdata.Content.ReadAsAsync<IList<Auction>>();
+                displaydata.Wait();
+
+                auction = displaydata.Result;
+            }
+            return Json(auction);
+        }
+
         //public IActionResult Details(int id)
         //{
         //    AuctionForCreationDto auction = null;
