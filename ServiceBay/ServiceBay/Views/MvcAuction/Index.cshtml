@@ -65,10 +65,28 @@
                     <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
                     <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
                     <a asp-action="Delete" asp-route-id="@item.Id">Delete</a> |
-                    <a asp-action="Disable" asp-route-id="@item.Id">Disable</a>
+                    <button onclick="Disable(@item.Id)">Disable</button>
                 </td>
             </tr>
         }
     </tbody>
 </table>
-@*onclick="location.href = '@Url.Action("Delete/" + @item.Id, "MvcAuction")'"*@
+
+<script>
+    function Disable(id) {
+        $.ajax({
+            type: "GET",
+            url: "@Url.Action("DetailsAuction")",
+            data: {id: id},
+            dataType: "json",
+            success: function (auction) {
+                $.ajax({
+                    type: "PUT",
+                    url: "@Url.Action("DisableAuction")",
+                    data: { id: id, auction: auction },
+                    dataType: "json",
+                });
+            }
+        })
+    }
+</script>

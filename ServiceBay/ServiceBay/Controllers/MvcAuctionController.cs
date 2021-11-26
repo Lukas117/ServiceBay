@@ -187,32 +187,12 @@ namespace ServiceBay.Controllers
             return View(auction);
         }
 
-        //public IActionResult Disable(int id)
-        //{
-        //    AuctionForUpdateDto auction = null;
-
-        //    HttpClient hc = new HttpClient();
-        //    hc.BaseAddress = new Uri(uri);
-        //    var readrecord = hc.GetAsync("ApiAuction/" + id.ToString());
-        //    readrecord.Wait();
-
-        //    var readdata = readrecord.Result;
-        //    if (readdata.IsSuccessStatusCode)
-        //    {
-        //        var readTask = readdata.Content.ReadAsAsync<AuctionForUpdateDto>();
-        //        readTask.Wait();
-        //        auction = readTask.Result;
-
-        //    }
-        //    return View(auction);
-        //}
-
-        [HttpPost]
-        public IActionResult Disable(int id, AuctionForUpdateDto auction)
+        [HttpPut]
+        public IActionResult Disable(int id, Auction auction)
         {
             HttpClient hc = new HttpClient();
             hc.BaseAddress = new Uri(uri);
-            var disablerecord = hc.PutAsJsonAsync<AuctionForUpdateDto>("ApiAuction/disable/" + id.ToString(), auction);
+            var disablerecord = hc.PutAsJsonAsync<Auction>("ApiAuction/disable/" + id.ToString(), auction);
             disablerecord.Wait();
 
             var deletedata = disablerecord.Result;
@@ -221,6 +201,32 @@ namespace ServiceBay.Controllers
                 return RedirectToAction("Index");
             }
             return View("Index");
+        }
+
+        public JsonResult DisableAuction(int id, Auction auction)
+        {
+            return Json(Disable(id, auction));
+        }
+        
+        [HttpGet]
+        public JsonResult DetailsAuction(int id)
+        {
+            Auction auction = null;
+
+            HttpClient hc = new HttpClient();
+            hc.BaseAddress = new Uri(uri);
+
+            var consumeapi = hc.GetAsync("ApiAuction/" + id.ToString());
+            consumeapi.Wait();
+
+            var readdata = consumeapi.Result;
+            if (readdata.IsSuccessStatusCode)
+            {
+                var displaydata = readdata.Content.ReadAsAsync<Auction>();
+                displaydata.Wait();
+                auction = displaydata.Result;
+            }
+            return Json(auction);
         }
     }
 }
