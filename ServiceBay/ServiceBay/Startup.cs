@@ -87,6 +87,7 @@ namespace ServiceBay
 
             }).AddJwtBearer(options =>
             {
+                //options.SaveToken = true;
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuer = false,

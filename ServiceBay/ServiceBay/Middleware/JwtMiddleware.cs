@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
@@ -27,6 +28,7 @@ namespace ServiceBay.Middleware
         public async Task Invoke(HttpContext context)
         {
             var token = context.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
+            //var token = context.Items["Token"]?.ToString().Split(" ").Last();
 
             if (token != null)
                 AttachAccountToContext(context, token);
@@ -51,12 +53,14 @@ namespace ServiceBay.Middleware
                 }, out SecurityToken validatedToken);
 
                 var jwtToken = (JwtSecurityToken)validatedToken;
-                var accountId = jwtToken.Claims.First(x => x.Type == "id").Value;
+                var identity = new ClaimsIdentity(jwtToken.Claims, "basic");
+                context.User = new ClaimsPrincipal(identity);
+                //var accountId = jwtToken.Claims.First(x => x.Type == "id").Value;
                 // attach account to context on successful jwt validation
            //     Login login = new Login();
              //   login.Email = jwtToken.Claims.First(x => x.Type == "email").Value.ToString();
              //   login.Password = jwtToken.Claims.First(x => x.Type == "password").Value.ToString();
-                   context.Items["User"] = accountId;
+                   //context.Items["User"] = accountId;
                  //  context.Items["Token"] = validatedToken;
                
              

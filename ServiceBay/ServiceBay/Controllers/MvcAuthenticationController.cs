@@ -11,8 +11,9 @@ namespace ServiceBay.Controllers
 {
     public class MvcAuthenticationController : Controller
     {
+        public string tokenbased;
 
-        private readonly string uri = "https://localhost:5001/api/";
+        private readonly string uri = "https://localhost:44349/api/";
 
         public ActionResult Index()
         {
@@ -31,7 +32,7 @@ namespace ServiceBay.Controllers
             HttpClient hc = new HttpClient();
             hc.BaseAddress = new Uri(uri);
             hc.DefaultRequestHeaders.Clear();
-            var tokenbased = String.Empty;
+            //var tokenbased = String.Empty;
             hc.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
 
 
@@ -44,8 +45,8 @@ namespace ServiceBay.Controllers
                 var responseMessage = response.Result.Content.ReadAsStringAsync().Result;
                 //responseMessage.Split(":");
                 tokenbased = JsonConvert.DeserializeObject<string>(responseMessage);
-                
-                //Session["TokenNumber"] = tokenbased;
+                //HttpContext.Items["Token"] = tokenbased;
+                Session["TokenNumber"] = tokenbased;
                 return RedirectToAction("Login");
             }
             return View();
