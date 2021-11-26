@@ -33,56 +33,12 @@ namespace ServiceBay.Jwt
             {
                 Subject = new ClaimsIdentity(new[] { new Claim("id", username) }),
                 Expires = DateTime.UtcNow.AddHours(1),
-                Issuer = "https://localhost:5001;http://localhost:5000",
-                Audience = "https://localhost:5001;http://localhost:5000",
+                Issuer = "https://localhost:5001",
+                Audience = "https://localhost:5001",
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);
             return tokenHandler.WriteToken(token);
-        }
-
-        public static ClaimsPrincipal GetPrincipal(string token)
-        {
-            try
-            {
-                JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
-                JwtSecurityToken jwtToken = (JwtSecurityToken)tokenHandler.ReadToken(token);
-                if (jwtToken == null) return null;
-                byte[] key = Convert.FromBase64String(Secret);
-                TokenValidationParameters parameters = new TokenValidationParameters()
-                {
-                    RequireExpirationTime = true,
-                    ValidateIssuer = false,
-                    ValidateAudience = false,
-                    IssuerSigningKey = new SymmetricSecurityKey(key)
-                };
-                SecurityToken securityToken;
-                ClaimsPrincipal principal = tokenHandler.ValidateToken(token, parameters, out securityToken);
-                return principal;
-            }
-            catch
-            {
-                return null;
-            }
-        }
-
-        public static string ValidateToken(string token)
-        {
-            string username = null;
-            ClaimsPrincipal principal = GetPrincipal(token);
-            if (principal == null) return null;
-            ClaimsIdentity identity = null;
-            try
-            {
-                identity = (ClaimsIdentity)principal.Identity;
-            }
-            catch (NullReferenceException)
-            {
-                return null;
-            }
-            Claim usernameClaim = identity.FindFirst(ClaimTypes.Name);
-            username = usernameClaim.Value;
-            return username;
         }
     }
 }

@@ -2,8 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using ServiceBay.Dto;
 using ServiceBay.Models;
 
@@ -11,7 +13,7 @@ namespace ServiceBay.Controllers
 {
     public class MvcAuctionController : Controller
     {
-        private readonly string uri = "https://localhost:44349/api/";
+        private readonly string uri = "https://localhost:5001/api/";
 
         public IActionResult Index()
         {
@@ -23,7 +25,7 @@ namespace ServiceBay.Controllers
             consumeapi.Wait();
 
             var readdata = consumeapi.Result;
-            if(readdata.IsSuccessStatusCode)
+            if (readdata.IsSuccessStatusCode)
             {
                 var displaydata = readdata.Content.ReadAsAsync<IList<Auction>>();
                 displaydata.Wait();

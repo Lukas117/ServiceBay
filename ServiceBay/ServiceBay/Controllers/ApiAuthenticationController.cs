@@ -28,7 +28,7 @@ namespace ServiceBay.Controllers
 
         [Route("UserLogin")]
         [HttpPost]
-        public IActionResult UserLogin([FromBody] Login objVM)
+        public  IActionResult UserLogin(Login objVM)
         {
             if(_personRepo.GetPersonByEmail(objVM.Email).Result.PasswordHash.Equals(objVM.Password))
             {
@@ -67,34 +67,6 @@ namespace ServiceBay.Controllers
         {
             return Ok("API Validated");
         }
-
-        [Route("Validate")]
-        [HttpGet]
-        public Response Validate(string token, string username)
-        {
-            int UserId = _personRepo.GetPersonByEmail(username).Id;
-            if (UserId == 0) return new Response
-            {
-                Status = "Invalid",
-                Message = "Invalid User."
-            };
-            string tokenUsername = TokenGenerator.ValidateToken(token);
-            if (username.Equals(tokenUsername))
-            {
-                return new Response
-                {
-                    Status = "Success",
-                    Message = "OK",
-                };
-            }
-            return new Response
-            {
-                Status = "Invalid",
-                Message = "Invalid Token."
-            };
-        }
-
-        
 
     }
 
