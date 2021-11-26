@@ -12,9 +12,14 @@ namespace ServiceBay.Controllers
     public class MvcAuthenticationController : Controller
     {
 
-        private readonly string uri = "https://localhost:5001/api/";
+        private readonly string uri = "https://localhost:44349/api/";
 
         public ActionResult Index()
+        {
+            return View();
+        }
+
+        public ActionResult Login()
         {
             return View();
         }
@@ -30,18 +35,19 @@ namespace ServiceBay.Controllers
             hc.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
 
 
-            var response = hc.PostAsJsonAsync<Login>("ApiAuthentication", login);
+            var response = hc.PostAsJsonAsync<Login>("ApiAuthentication/UserLogin", login);
             response.Wait();
 
             var saved = response.Result;
             if (saved.IsSuccessStatusCode)
             {
-                //var responseMessage = response.Content.ReadAsStringAsync().Result;
-                //tokenbased = JsonConvert.DeserializeObject<string>(responseMessage);
+                var responseMessage = response.Result.Content.ReadAsStringAsync().Result;
+                //responseMessage.Split(":");
+                tokenbased = JsonConvert.DeserializeObject<string>(responseMessage);
                 //Session["TokenNumber"] = tokenbased;
-                return RedirectToAction("Index");
+                return RedirectToAction("Login");
             }
-            return View("");
+            return View();
         }
     }
 }

@@ -1,8 +1,10 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace ServiceBay.Models
 {
+    [Keyless]
     public class Login
     {
         [Required]

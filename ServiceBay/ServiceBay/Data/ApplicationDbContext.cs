@@ -19,6 +19,7 @@ namespace ServiceBay.Data
         public DbSet<ServiceBay.Models.Person> Person { get; set; }
         public DbSet<ServiceBay.Dto.AuctionForUpdateDto> AuctionForUpdateDto { get; set; }
         public DbSet<ServiceBay.Dto.AuctionForCreationDto> AuctionForCreationDto { get; set; }
+        public DbSet<ServiceBay.Models.Login> Login { get; set; }
         
     }
 }
