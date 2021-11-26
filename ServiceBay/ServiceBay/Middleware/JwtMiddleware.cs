@@ -57,6 +57,8 @@ namespace ServiceBay.Middleware
              //   login.Email = jwtToken.Claims.First(x => x.Type == "email").Value.ToString();
              //   login.Password = jwtToken.Claims.First(x => x.Type == "password").Value.ToString();
                    context.Items["User"] = accountId;
+                 //  context.Items["Token"] = validatedToken;
+               
              
             }
             catch
