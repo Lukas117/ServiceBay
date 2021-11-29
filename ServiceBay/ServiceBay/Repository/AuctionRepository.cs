@@ -56,6 +56,19 @@ namespace ServiceBay.Repository
             }
         }
 
+        public async Task<IEnumerable<Auction>> GetSellerAuctions(int sellerId)
+        {
+            try
+            {
+                //return await from a in _context.Auction where a.SellerId.Equals(sellerId) select a;
+                return await _context.Auction.Where(a => a.SellerId == sellerId).ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error getting auctions: '{ex.Message}'.", ex);
+            }
+        }
+
         public async Task<int> UpdateAuction(int id, Auction auction)
         {
             try

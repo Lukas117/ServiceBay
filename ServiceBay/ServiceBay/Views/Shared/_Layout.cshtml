@@ -40,30 +40,6 @@
                                     <img src="~/css/bell.png" style="width:30px;height:30px"> <span class="caret"></span>
                                 </div>
                                 <div class="dropdown" id="dropdownList">
-                                    <div class="notify_item">
-                                        <div class="notify_info">
-                                            <p id="first">Alex commented on<span>Timeline Share</span></p>
-                                            <span class="notify_time">10 minutes ago</span>
-                                        </div>
-                                    </div>
-                                    <div class="notify_item">
-                                        <div class="notify_info">
-                                            <p>Ben hur commented on your<span>Timeline Share</span></p>
-                                            <span class="notify_time">55 minutes ago</span>
-                                        </div>
-                                    </div>
-                                    <div class="notify_item">
-                                        <div class="notify_info">
-                                            <p>Meryn trant liked your<span>Cover Picture</span></p>
-                                            <span class="notify_time">2 hours ago</span>
-                                        </div>
-                                    </div>
-                                    <div class="notify_item">
-                                        <div class="notify_info">
-                                            <p>John wick commented on your<span>Profile Picture</span></p>
-                                            <span class="notify_time">6 hours ago</span>
-                                        </div>
-                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -91,77 +67,60 @@
     <script>
     $(document).ready(function () {
         $(".notification_icon").click(function () {
+            CompareBids();
             $(".dropdown").toggleClass("active");
         })
     });
 
-    function GetAll() {
-        $.ajax({
-            type: "POST",
-            url: "@Url.Action("AllAuctions")",
-            dataType: "json",
-            success: function (response) {
-                let list = response.value;
-                list.forEach(function (item, index, array) {
-                    $.ajax({
-                        type: "POST",
-                        url: "@Url.Action("IsUpdated")",
-                        data: { id: item.id },
-                        dataType: "json",
-                        success: function (boolean,) {
-                            
-                            if (boolean.value == true) {
-                                console.log("it works! New price is: " + item.price + "DKK");
-                                //var newRow = '<p>You got outbid by:</p>' + 'DKK';
-                                //$('#first').html(newRow); console.log("nice");
-                            }
-                            else {
-                                console.log("also nice");
-                            }
-                        },
-                    });
-                })
-            }
-        })
-    }
 
-    function Notification(id) {
-        $.ajax({
-            type: "POST",
-            url: "@Url.Action("IsUpdated")",
-            data: {id: id},
-            dataType: "json",
-            success: function (response) {
-                returnResp(response);
-            },
-        });
-    }
+        function CompareBids() {
+            $.ajax({
+                type: "GET",
+                url: "@Url.Action("PricesForNotification")",
+                //data: { id: id },
+                dataType: "json",
+                success: function (response) {
+                    let list = response.value;
+                    if (list.length != 0) {
+                        var dropdown = document.getElementById("dropdownList");
+                        list.forEach(function (element) {
+                            newlistitem = document.createElement("li");
+                            newdiv = document.createElement("div");
+                            newhr = document.createElement("hr");
+                            newlistitem.setAttribute("style", "list-style-type: none");
+                            newdiv.setAttribute("id", "div_demo");
+                            newhr.setAttribute("style", "height:1px;border:none;color:#333;background-color:#333;");
 
-    function returnResp(myResponse) {
-        if (myResponse.value == true) {
-            var newRow = '<p>You got outbid by:</p>' + 'DKK';
-            $('#first').html(newRow);console.log("nice");
-        }
-        else {
-            console.log("also nice");
-        }
-    }
 
-    function Checking(id) {
-        var first = Notification(id);
-        console.log("first: " + first);
-        var second = Notification(id);
-        console.log("second: " + second);
-        if (first != null && second != null && first.value != second.value) {
-            var newRow = '<p>You got outbid by:</p>' + second.value + 'DKK';
-            $('#first').html(newRow);
-        }
-    }
+                            newdiv.innerHTML = "You got a new bid on your auction. The new Price is: " + element + " DKK <br>";
+
+                            dropdown.appendChild(newlistitem);
+                            newlistitem.appendChild(newdiv);
+                            newlistitem.appendChild(newhr);
+                        });
+                    }
+                }
+            })
+        };
+
+        function SetList() {
+            $.ajax({
+                type: "GET",
+                url: "@Url.Action("SetList")",
+                //data: { id: id },
+                dataType: "json",
+                success: function (response) {
+                    const list = response.value;
+                    console.log(list);
+                }
+            })
+        };
 
     $(document).ready(function () {
-        GetAll();
+        SetList();
         setInterval(function () {
-            GetAll();
-        }, 5000);
+            CompareBids();
+        }, 3000);
     });
+
     </script>
