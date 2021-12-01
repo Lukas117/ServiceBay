@@ -16,18 +16,29 @@ using System.Windows.Shapes;
 namespace DesktopClient
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Interaction logic for PersonPage.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class PersonPage : Page
     {
-        public MainWindow()
+        public PersonPage()
         {
             InitializeComponent();
         }
 
-        public void ChangeView(Page view)
+        private void BackButton_Click(object sender, RoutedEventArgs e)
         {
-            //MainFrame.NavigationService.Navigate(view);
+            var mainWindow = (MainWindow)Application.Current.MainWindow;
+            //mainWindow.ChangeView(new MainWindow());
+        }
+
+        private void CreateButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void DeleteButton_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }
