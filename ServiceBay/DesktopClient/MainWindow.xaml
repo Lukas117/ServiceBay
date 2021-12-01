@@ -12,7 +12,14 @@
             <RowDefinition/>
             <RowDefinition/>
             <RowDefinition/>
-            
         </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="3*"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Button x:Name="button1" Grid.Row="1" Grid.Column="1" Click="button1_Click" Width="250" Height="50" Content="User Menu" FontSize="36" HorizontalAlignment="Center"/>
+        <Label Content="ServiceBay Admin" Grid.Row="0" Grid.Column="1" FontSize="45" HorizontalAlignment="Center" VerticalAlignment="Center" FontStyle="Italic"/>
+        <Button x:Name="logout" Grid.Column="2" Grid.Row="3" Content="Log out" FontSize="25" Width="100" Height="50"/>
     </Grid>
 </Window>
