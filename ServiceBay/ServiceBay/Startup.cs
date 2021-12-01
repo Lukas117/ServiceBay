@@ -99,7 +99,8 @@ namespace ServiceBay
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"])) //Configuration["JwtToken:SecretKey"]
                 };
             });
-
+           
+                
 
             services.AddAuthorization(auth =>
             {
