@@ -4,9 +4,11 @@ using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using ServiceBay.Models;
+using System.Web;
 
 namespace ServiceBay.Controllers
 {
@@ -31,6 +33,7 @@ namespace ServiceBay.Controllers
         {
 
             HttpClient hc = new HttpClient();
+            HttpContext context = HttpContext;
             hc.BaseAddress = new Uri(uri);
             hc.DefaultRequestHeaders.Clear();
             //var tokenbased = String.Empty;
@@ -47,7 +50,12 @@ namespace ServiceBay.Controllers
                 //responseMessage.Split(":");
                 tokenbased = JsonConvert.DeserializeObject<string>(responseMessage);
                 hc.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", tokenbased);
-                HttpContext.Items["Token"] = tokenbased;
+                context.Request.Headers["Authorization"] = tokenbased;
+
+               
+
+
+                //HttpContext.Items["Token"] = tokenbased;
                 //Session["TokenNumber"] = tokenbased;
 
                 return RedirectToAction("Login");

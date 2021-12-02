@@ -38,3 +38,43 @@
     <a asp-action="Index">Back to List</a>
 </div>
 
+<script>
+    $(document).ready(function () {
+        $("#formSubmit").submit(function (event) {
+            event.preventDefault();
+            var email = $("#inputEmail").val();
+            var password = $("#inputPassword").val();
+           
+            var Login = {
+                inputEmail: email,
+                inputPassword: password,
+            };
+    function SendToken(Login login) {
+        $.ajax({
+            type: "POST", 
+             url: '/ApiAuthentication/UserLogin',
+              data: JSON.stringify(loginModel),     //Data sent to server
+            contentType: 'application / json; charset=utf - 8;',
+            success: function (response) {
+                var token = response.value.data;
+                localStorage.setItem("token", token);
+                window.location.href = response.value.redirectUrl;
+            }
+    beforeSend: function (xhr) { 
+        xhr.setRequestHeader("Authorization", 'Bearer '+ jwt);
+    }
+}).done(function (response) {
+   
+}).fail(function (err)  {
+    //Error during request
+});
+    }
+
+    $(document).ready(function () {
+        setInterval(Notification(26), 1000);
+    });</script>
+
+
+
+
+

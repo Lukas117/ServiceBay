@@ -33,6 +33,7 @@ namespace ServiceBay.Controllers
             if(_personRepo.GetPersonByEmail(objVM.Email).Result.PasswordHash.Equals(objVM.Password))
             {
                 var tokenString = TokenGenerator.GenerateToken(objVM.Email);
+                //var account = TokenGenerator.ValidateJwtToken(tokenString);
                 return Ok(tokenString);
             }
             return BadRequest();

@@ -131,6 +131,12 @@ namespace ServiceBay
 
             app.UseRouting();
 
+            app.UseCors(x => x
+                .SetIsOriginAllowed(origin => true)
+                .AllowAnyMethod()
+                .AllowAnyHeader()
+                .AllowCredentials());
+
             app.UseMiddleware<JwtMiddleware>();
             app.UseAuthentication();
             app.UseAuthorization();
