@@ -8,18 +8,21 @@
         Title="MainWindow" Height="450" Width="800">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition/>
-            <RowDefinition/>
-            <RowDefinition/>
-            <RowDefinition/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="1" />
+            <RowDefinition Height="8*"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="3*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
-        <Button x:Name="button1" Grid.Row="1" Grid.Column="1" Click="button1_Click" Width="250" Height="50" Content="User Menu" FontSize="36" HorizontalAlignment="Center"/>
-        <Label Content="ServiceBay Admin" Grid.Row="0" Grid.Column="1" FontSize="45" HorizontalAlignment="Center" VerticalAlignment="Center" FontStyle="Italic"/>
-        <Button x:Name="logout" Grid.Column="2" Grid.Row="3" Content="Log out" FontSize="25" Width="100" Height="50"/>
+        <Button x:Name="mainPage" Click="MainPage_Click" Width="150" Height="35" Content="Main Menu" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="0"/>
+        <Button x:Name="auctionPage" Click="AuctionPage_Click" Width="150" Height="35" Content="Auction Menu" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="1"/>
+        <Button x:Name="personPage" Click="PersonPage_Click" Width="150" Height="35" Content="User Menu" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="2"/>
+        <Button x:Name="logout" Click="Logout_Click"  Grid.Column="3" Content="Log out" FontSize="20" Width="100" Height="35"/>
+        <Rectangle Fill="Black" Grid.Row="1" Grid.ColumnSpan="4"/>
+        <Frame x:Name="MainFrame" Grid.Row="2" Grid.ColumnSpan="4" NavigationUIVisibility="Hidden" />
     </Grid>
 </Window>

@@ -16,13 +16,32 @@ using System.Windows.Shapes;
 namespace DesktopClient
 {
     /// <summary>
-    /// Interaction logic for LoginPage.xaml
+    /// Interaction logic for AuctionPage.xaml
     /// </summary>
-    public partial class LoginPage : Page
+    public partial class AuctionPage : Page
     {
-        public LoginPage()
+        public AuctionPage()
         {
             InitializeComponent();
+        }
+
+        private void CreateButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+        private void ReadButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void UpdateButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void DeleteButton_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

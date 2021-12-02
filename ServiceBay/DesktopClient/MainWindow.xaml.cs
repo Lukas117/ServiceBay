@@ -20,13 +20,34 @@ namespace DesktopClient
     /// </summary>
     public partial class MainWindow : Window
     {
+
         public MainWindow()
         {
             InitializeComponent();
+            MainFrame.Content = new MainPage();
         }
-        private void button1_Click(object sender, RoutedEventArgs e)
-        {
 
+        private void PersonPage_Click(object sender, RoutedEventArgs e)
+        {
+            MainFrame.Content = new PersonPage();
+        }
+
+        private void MainPage_Click(object sender, RoutedEventArgs e)
+        {
+            MainFrame.Content = new MainPage();
+        }
+
+        private void AuctionPage_Click(object sender, RoutedEventArgs e)
+        {
+            MainFrame.Content = new AuctionPage();
+        }
+
+        private void Logout_Click(object sender, RoutedEventArgs e)
+        {
+            LoginWindow loginWindow = new LoginWindow();
+            loginWindow.Owner = Owner;
+            loginWindow.Show();
+            Close();
         }
     }
 }

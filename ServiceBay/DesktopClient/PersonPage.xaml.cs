@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ServiceBay.Data;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,6 +21,7 @@ namespace DesktopClient
     /// </summary>
     public partial class PersonPage : Page
     {
+
         public PersonPage()
         {
             InitializeComponent();
@@ -27,11 +29,18 @@ namespace DesktopClient
 
         private void BackButton_Click(object sender, RoutedEventArgs e)
         {
-            var mainWindow = (MainWindow)Application.Current.MainWindow;
-            //mainWindow.ChangeView(new MainWindow());
         }
 
         private void CreateButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+        private void ReadButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void UpdateButton_Click(object sender, RoutedEventArgs e)
         {
 
         }
