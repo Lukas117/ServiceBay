@@ -28,6 +28,7 @@ namespace ServiceBay.Middleware
         public async Task Invoke(HttpContext context)
         {
             var token = context.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
+            
             //var token = context.Items["Token"]?.ToString().Split(" ").Last();
            
 
@@ -35,7 +36,7 @@ namespace ServiceBay.Middleware
                 AttachAccountToContext(context, token);
 
             await _next(context);
-             
+           
         }
 
         private void AttachAccountToContext(HttpContext context, string token)
