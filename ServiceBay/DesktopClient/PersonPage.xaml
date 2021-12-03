@@ -3,7 +3,7 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:local="clr-namespace:DesktopClient"
+      xmlns:local="clr-namespace:DesktopClient" xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
       mc:Ignorable="d" 
       d:DesignHeight="400" d:DesignWidth="800"
       Title="PersonPage">
@@ -24,14 +24,40 @@
             <ColumnDefinition Width="2*"/>
             <ColumnDefinition Width="10"/>
         </Grid.ColumnDefinitions>
-        <DataGrid x:Name="table" ItemsSource="{Binding Source=Person}" AutoGenerateColumns="True" Grid.Row="1" Grid.Column="1" Grid.RowSpan="4" Grid.ColumnSpan="3">
+        <DataGrid x:Name="personTable" AutoGenerateColumns="False" Grid.Row="1" Grid.Column="1" Grid.RowSpan="4" Grid.ColumnSpan="3" CanUserAddRows="False">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="First Name" Binding="{Binding FirstName}"/>
+                <DataGridTextColumn Header="Id" Binding="{Binding Id}" Visibility="Visible"/>
+                <DataGridTextColumn Header="First name" Binding="{Binding Fname}" Visibility="Visible"/>
+                <DataGridTextColumn Header="Last name" Binding="{Binding Lname}" Visibility="Visible"/>
+                <DataGridTextColumn Header="Phone number" Binding="{Binding Phoneno}" Visibility="Visible"/>
+                <DataGridTextColumn Header="Email" Binding="{Binding Email}" Visibility="Visible"/>
+                <DataGridTextColumn Header="User role" Binding="{Binding UserRole}" Visibility="Visible"/>
+                <DataGridTextColumn Header="Address Id" Binding="{Binding AddressId}" Visibility="Visible"/>
             </DataGrid.Columns>
         </DataGrid>
-        <Button x:Name="createButton" Grid.Row="1" Grid.Column="0" Click="CreateButton_Click" Width="100" Height="30" Content="Create" VerticalAlignment="Top"/>
-        <Button x:Name="readButton" Grid.Row="2" Grid.Column="0" Click="ReadButton_Click" Width="100" Height="30" Content="Find" VerticalAlignment="Top"/>
-        <Button x:Name="updateButton" Grid.Row="3" Grid.Column="0" Click="UpdateButton_Click" Width="100" Height="30" Content="Update" VerticalAlignment="Top"/>
-        <Button x:Name="deleteButton" Grid.Row="4" Grid.Column="0" Click="DeleteButton_Click" Width="100" Height="30" Content="Delete" VerticalAlignment="Top"/>
+        <Button x:Name="createButton" Grid.Row="2" Grid.Column="0" Click="PopUpButton_Click" Height="25" Content="Create" Margin="10,0,10,50"/>
+        <TextBlock Text="Search" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="25"/>
+        <TextBlock Text="Email" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="10" Margin="0,28,0,0"/>
+        <TextBox x:Name="findText" Grid.Row="1" Margin="7,43,7,0" VerticalAlignment="Top" Height="18" TextChanged="FindText_TextChanged" />
+        <Button x:Name="updateButton" Grid.Row="2" Grid.Column="0" Click="UpdateButton_Click" Height="25" Content="Update" Margin="10,50,10,0"/>
+        <Button x:Name="deleteButton" Grid.Row="3" Grid.Column="0" Click="DeleteButton_Click" Height="25" Content="Delete" Margin="10,0,10,0"/>
+        <Popup x:Name="popup"  PlacementTarget="{Binding ElementName=createButton}" Placement="Bottom"  Width="200" Height="300" Margin="0,20,0,0">
+            <Border BorderBrush="Black" BorderThickness="1" Background="White">
+                <Grid>
+                    <TextBlock Text="First name" HorizontalAlignment="Left" Margin="5,5,100,275" FontSize="10"/>
+                    <TextBox x:Name="fname" VerticalAlignment="Center" Margin="5,20,5,260"/>
+                    <TextBlock Text="Last name" HorizontalAlignment="Left" Margin="5,45,100,235" FontSize="10"/>
+                    <TextBox x:Name="lname" VerticalAlignment="Center" Margin="5,60,5,220"/>
+                    <TextBlock Text="Phone number" HorizontalAlignment="Left" Margin="5,85,100,130" FontSize="10"/>
+                    <TextBox x:Name="phoneno" VerticalAlignment="Center" Margin="5,100,5,180"/>
+                    <TextBlock Text="Email" HorizontalAlignment="Left" Margin="5,125,100,130" FontSize="10"/>
+                    <TextBox x:Name="email" VerticalAlignment="Center" Margin="5,140,5,140"/>
+                    <TextBlock Text="Password" HorizontalAlignment="Left" Margin="5,165,100,90" FontSize="10"/>
+                    <TextBox x:Name="password" VerticalAlignment="Center" Margin="5,180,5,100"/>
+                    <Button x:Name="popUpCreateButton" Click="CreateButton_Click" Content="Create" Margin="120,260,5,10"/>
+                    <Button x:Name="popUpCloseButton" Click="PopUpCloseButton_Click" Content="Close" Margin="100,260,50,10"/>
+                </Grid>
+            </Border>
+        </Popup>
     </Grid>
 </Page>

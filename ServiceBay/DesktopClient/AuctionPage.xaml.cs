@@ -1,6 +1,11 @@
-﻿using System;
+﻿using ServiceBay.Dto;
+using ServiceBay.Models;
+using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -23,15 +28,40 @@ namespace DesktopClient
         public AuctionPage()
         {
             InitializeComponent();
+            LoadDataAsync();
+        }
+
+        public async void LoadDataAsync()
+        {
+            HttpClient hc = new HttpClient();
+            hc.BaseAddress = new Uri("https://localhost:44349/api/");
+
+            HttpResponseMessage result = hc.GetAsync("ApiAuction").Result;
+
+            if (result.IsSuccessStatusCode)
+            {
+                var displaydata = await result.Content.ReadAsAsync<IEnumerable<Auction>>();
+                auctionTable.ItemsSource = displaydata;
+            }
+        }
+
+        private void PopUpButton_Click(object sender, RoutedEventArgs e)
+        {
+            popup.IsOpen = true;
         }
 
         private void CreateButton_Click(object sender, RoutedEventArgs e)
         {
+            AuctionForCreationDto auction = new AuctionForCreationDto { AuctionName = name.Text, AuctionDescription = description.Text, StartingDate = startingDate.Value.Value, EndDate = endDate.Value.Value, StartingPrice = double.Parse(startingPrice.Text), SellerId = int.Parse(sellerId.Text) };
+            HttpClient hc = new HttpClient();
+            hc.BaseAddress = new Uri("https://localhost:44349/api/");
 
-        }
-        private void ReadButton_Click(object sender, RoutedEventArgs e)
-        {
+            HttpResponseMessage result = hc.PostAsJsonAsync<AuctionForCreationDto>("ApiAuction", auction).Result;
 
+            if (result.IsSuccessStatusCode)
+            {
+                LoadDataAsync();
+            }
         }
 
         private void UpdateButton_Click(object sender, RoutedEventArgs e)
@@ -39,9 +69,43 @@ namespace DesktopClient
 
         }
 
-        private void DeleteButton_Click(object sender, RoutedEventArgs e)
+        private async void DeleteButton_Click(object sender, RoutedEventArgs e)
         {
+            Auction row = (Auction)auctionTable.SelectedItem;
+            int id = row.Id;
+            HttpClient hc = new HttpClient();
+            hc.BaseAddress = new Uri("https://localhost:44349/api/");
 
+            HttpResponseMessage result = hc.DeleteAsync("ApiAuction/" + id).Result;
+
+            if (result.IsSuccessStatusCode)
+            {
+                IEnumerable<Auction> displaydata = await result.Content.ReadAsAsync<IEnumerable<Auction>>();
+                auctionTable.ItemsSource = displaydata;
+                auctionTable.Items.Remove(row);
+            }
+            LoadDataAsync();
+        }
+
+        private void FindText_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            TextBox textBoxName = (TextBox)sender;
+            string filterText = textBoxName.Text;
+            ICollectionView cv = CollectionViewSource.GetDefaultView(auctionTable.ItemsSource);
+
+            if (!string.IsNullOrEmpty(filterText))
+            {
+                cv.Filter = o => {
+                    /* change to get data row value */
+                    Auction a = o as Auction;
+                    return a.AuctionName.ToUpper().StartsWith(filterText.ToUpper());
+                    /* end change to get data row value */
+                };
+            }
+            else
+            {
+                LoadDataAsync();
+            }
         }
     }
 }
