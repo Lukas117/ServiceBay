@@ -96,7 +96,7 @@ namespace ServiceBay.Controllers
         }
 
         // PUT: api/ApiAuction/5
-        [HttpPut("disable/{id}")]
+        [HttpPut("Disable/{id}")]
         public async Task<IActionResult> DisableAuction(int id, Auction auction)
         {
             //var auction = _mapper.Map<Auction>(auctionDto);

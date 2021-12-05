@@ -22,6 +22,7 @@ namespace ServiceBay.Repository
         {
             try
             {
+                Lists.prevPrices.Add(auction.StartingPrice);
                 auction.Price = auction.StartingPrice;
                 _context.Auction.Add(auction);
                 return await _context.SaveChangesAsync();
@@ -89,6 +90,8 @@ namespace ServiceBay.Repository
             try
             {
                 var auction = await _context.Auction.FindAsync(id);
+                _context.Bid.RemoveRange
+                (_context.Bid.Where(b => auction.Id == b.AuctionId));
                 _context.Auction.Remove(auction);
                 return await _context.SaveChangesAsync();
             }

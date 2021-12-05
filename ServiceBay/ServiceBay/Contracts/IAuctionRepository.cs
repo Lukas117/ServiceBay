@@ -17,6 +17,5 @@ namespace ServiceBay.Contracts
         public Task<IEnumerable<Auction>> GetAuctions();
         public Task<int> DisableAuction(int id, Auction auction);
         public bool AuctionExists(int id);
-        //public void UpdatePrice(int id, double price);
     }
 }

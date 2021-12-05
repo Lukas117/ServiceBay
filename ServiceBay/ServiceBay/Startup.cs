@@ -44,6 +44,9 @@ namespace ServiceBay
             services.AddScoped<IBidRepository, BidRepository>();
             services.AddScoped<IAuctionRepository, AuctionRepository>();
             services.AddScoped<IPersonRepository, PersonRepository>();
+            services.AddScoped<IAddressRepository, AddressRepository>();
+            services.AddScoped<ICityRepository, CityRepository>();
+
 
             services.AddAutoMapper(typeof(Startup));
            

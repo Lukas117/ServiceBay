@@ -35,27 +35,57 @@
                 <DataGridTextColumn Header="Address Id" Binding="{Binding AddressId}" Visibility="Visible"/>
             </DataGrid.Columns>
         </DataGrid>
-        <Button x:Name="createButton" Grid.Row="2" Grid.Column="0" Click="PopUpButton_Click" Height="25" Content="Create" Margin="10,0,10,50"/>
+        <Button x:Name="createButton" Grid.Row="2" Grid.Column="0" Click="PopUpCreateOpenButton_Click" Height="25" Content="Create" Margin="10,30,10,20"/>
         <TextBlock Text="Search" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="25"/>
         <TextBlock Text="Email" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="10" Margin="0,28,0,0"/>
+        <TextBlock Text="Id" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Bottom" FontSize="10" Margin="0,28,0,0"/>
         <TextBox x:Name="findText" Grid.Row="1" Margin="7,43,7,0" VerticalAlignment="Top" Height="18" TextChanged="FindText_TextChanged" />
-        <Button x:Name="updateButton" Grid.Row="2" Grid.Column="0" Click="UpdateButton_Click" Height="25" Content="Update" Margin="10,50,10,0"/>
-        <Button x:Name="deleteButton" Grid.Row="3" Grid.Column="0" Click="DeleteButton_Click" Height="25" Content="Delete" Margin="10,0,10,0"/>
-        <Popup x:Name="popup"  PlacementTarget="{Binding ElementName=createButton}" Placement="Bottom"  Width="200" Height="300" Margin="0,20,0,0">
+        <TextBox x:Name="findText2" Grid.Row="2" Margin="7,0,7,0" VerticalAlignment="Top" Height="18" TextChanged="FindText2_TextChanged" />
+        <Button x:Name="updateButton" Grid.Row="3" Grid.Column="0" Click="PopUpUpdateOpenButton_Click" Height="25" Content="Update" Margin="10,0,10,50"/>
+        <Button x:Name="deleteButton" Grid.Row="3" Grid.Column="0" Click="DeleteButton_Click" Height="25" Content="Delete" Margin="10,50,10,0"/>
+        <Popup x:Name="popupCreate"  PlacementTarget="{Binding ElementName=createButton}" Placement="Bottom"  Width="200" Height="450" Margin="0,20,0,0">
+            <Border BorderBrush="Black" BorderThickness="1" Background="White">
+                <Grid>
+                    <TextBlock Text="First name" HorizontalAlignment="Left" Margin="5,5,100,425" FontSize="10"/>
+                    <TextBox x:Name="fname" VerticalAlignment="Center" Margin="5,20,5,410"/>
+                    <TextBlock Text="Last name" HorizontalAlignment="Left" Margin="5,45,100,385" FontSize="10"/>
+                    <TextBox x:Name="lname" VerticalAlignment="Center" Margin="5,60,5,370"/>
+                    <TextBlock Text="Phone number" HorizontalAlignment="Left" Margin="5,85,100,345" FontSize="10"/>
+                    <TextBox x:Name="phoneno" VerticalAlignment="Center" Margin="5,100,5,330"/>
+                    <TextBlock Text="Email" HorizontalAlignment="Left" Margin="5,125,100,305" FontSize="10"/>
+                    <TextBox x:Name="email" VerticalAlignment="Center" Margin="5,140,5,290"/>
+                    <TextBlock Text="Password" HorizontalAlignment="Left" Margin="5,165,100,265" FontSize="10"/>
+                    <TextBox x:Name="password" VerticalAlignment="Center" Margin="5,180,5,250"/>
+                    <TextBlock Text="Street name" HorizontalAlignment="Left" Margin="5,205,100,225" FontSize="10"/>
+                    <TextBox x:Name="streetName" VerticalAlignment="Center" Margin="5,220,5,210"/>
+                    <TextBlock Text="Street number" HorizontalAlignment="Left" Margin="5,245,100,185" FontSize="10"/>
+                    <TextBox x:Name="streetNumber" VerticalAlignment="Center" Margin="5,260,5,170"/>
+                    <TextBlock Text="Zipcode" HorizontalAlignment="Left" Margin="5,285,100,145" FontSize="10"/>
+                    <TextBox x:Name="zipcode" VerticalAlignment="Center" Margin="5,300,5,130"/>
+                    <TextBlock Text="City" HorizontalAlignment="Left" Margin="5,325,100,105" FontSize="10"/>
+                    <TextBox x:Name="cityName" VerticalAlignment="Center" Margin="5,340,5,90"/>
+                    <TextBlock Text="Country" HorizontalAlignment="Left" Margin="5,365,100,65" FontSize="10"/>
+                    <TextBox x:Name="country" VerticalAlignment="Center" Margin="5,380,5,50"/>
+                    <Button x:Name="popUpCreateButton" Click="CreateButton_Click" Content="Create" Margin="120,410,5,10"/>
+                    <Button x:Name="popUpCloseButton" Click="PopUpCreateCloseButton_Click" Content="Close" Margin="40,410,85,10"/>
+                </Grid>
+            </Border>
+        </Popup>
+        <Popup x:Name="popupUpdate"  PlacementTarget="{Binding ElementName=updateButton}" Placement="Bottom"  Width="200" Height="300" Margin="0,20,0,0">
             <Border BorderBrush="Black" BorderThickness="1" Background="White">
                 <Grid>
                     <TextBlock Text="First name" HorizontalAlignment="Left" Margin="5,5,100,275" FontSize="10"/>
-                    <TextBox x:Name="fname" VerticalAlignment="Center" Margin="5,20,5,260"/>
+                    <TextBox x:Name="fnameU" VerticalAlignment="Center" Margin="5,20,5,260"/>
                     <TextBlock Text="Last name" HorizontalAlignment="Left" Margin="5,45,100,235" FontSize="10"/>
-                    <TextBox x:Name="lname" VerticalAlignment="Center" Margin="5,60,5,220"/>
+                    <TextBox x:Name="lnameU" VerticalAlignment="Center" Margin="5,60,5,220"/>
                     <TextBlock Text="Phone number" HorizontalAlignment="Left" Margin="5,85,100,130" FontSize="10"/>
-                    <TextBox x:Name="phoneno" VerticalAlignment="Center" Margin="5,100,5,180"/>
+                    <TextBox x:Name="phonenoU" VerticalAlignment="Center" Margin="5,100,5,180"/>
                     <TextBlock Text="Email" HorizontalAlignment="Left" Margin="5,125,100,130" FontSize="10"/>
-                    <TextBox x:Name="email" VerticalAlignment="Center" Margin="5,140,5,140"/>
+                    <TextBox x:Name="emailU" VerticalAlignment="Center" Margin="5,140,5,140"/>
                     <TextBlock Text="Password" HorizontalAlignment="Left" Margin="5,165,100,90" FontSize="10"/>
-                    <TextBox x:Name="password" VerticalAlignment="Center" Margin="5,180,5,100"/>
-                    <Button x:Name="popUpCreateButton" Click="CreateButton_Click" Content="Create" Margin="120,260,5,10"/>
-                    <Button x:Name="popUpCloseButton" Click="PopUpCloseButton_Click" Content="Close" Margin="100,260,50,10"/>
+                    <TextBox x:Name="passwordU" VerticalAlignment="Center" Margin="5,180,5,100"/>
+                    <Button x:Name="popUpCreateOpenButton" Click="UpdateButton_Click" Content="Update" Margin="120,260,5,10"/>
+                    <Button x:Name="popUpCreateCloseButton" Click="PopUpUpdateCloseButton_Click" Content="Close" Margin="40,260,85,10"/>
                 </Grid>
             </Border>
         </Popup>

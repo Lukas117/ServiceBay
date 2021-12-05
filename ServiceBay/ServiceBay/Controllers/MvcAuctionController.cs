@@ -148,11 +148,11 @@ namespace ServiceBay.Controllers
         }
 
         [HttpPut]
-        public IActionResult Disable(int id, Auction auction)
+        public IActionResult DisableAuction(int id, Auction auction)
         {
             HttpClient hc = new HttpClient();
             hc.BaseAddress = new Uri(uri);
-            var disablerecord = hc.PutAsJsonAsync<Auction>("ApiAuction/disable/" + id.ToString(), auction);
+            var disablerecord = hc.PutAsJsonAsync<Auction>("ApiAuction/Disable/" + id.ToString(), auction);
             disablerecord.Wait();
 
             var deletedata = disablerecord.Result;
@@ -163,13 +163,15 @@ namespace ServiceBay.Controllers
             return View("Index");
         }
 
-        public JsonResult DisableAuction(int id, Auction auction)
+        [HttpPut]
+        public JsonResult Disable(int id)
         {
-            return Json(Disable(id, auction));
+            Auction auction = DetailsAuction(id);
+            return Json(DisableAuction(id, auction));
         }
         
         [HttpGet]
-        public JsonResult DetailsAuction(int id)
+        public Auction DetailsAuction(int id)
         {
             Auction auction = null;
 
@@ -186,7 +188,7 @@ namespace ServiceBay.Controllers
                 displaydata.Wait();
                 auction = displaydata.Result;
             }
-            return Json(auction);
+            return auction;
         }
     }
 }

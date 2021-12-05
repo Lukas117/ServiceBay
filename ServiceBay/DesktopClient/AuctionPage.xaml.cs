@@ -45,9 +45,37 @@ namespace DesktopClient
             }
         }
 
-        private void PopUpButton_Click(object sender, RoutedEventArgs e)
+        private void PopUpOpenButton_Click(object sender, RoutedEventArgs e)
         {
-            popup.IsOpen = true;
+            popupCreate.IsOpen = true;
+        }
+
+        private void PopUpCloseButton_Click(object sender, RoutedEventArgs e)
+        {
+            popupCreate.IsOpen = false;
+        }
+
+        private void PopUpUpdateOpenButton_Click(object sender, RoutedEventArgs e)
+        {
+            //popup.Closed(name); clear values
+            Auction row = (Auction)auctionTable.SelectedItem;
+            if (row == null)
+            {
+                MessageBox.Show("Select auction!", "Select", MessageBoxButton.OK, MessageBoxImage.Information);
+                popupUpdate.IsOpen = false;
+            }
+            else
+            {
+                popupUpdate.IsOpen = true;
+                aname.Text = row.AuctionName;
+                adescription.Text = row.AuctionDescription;
+                aendDate.Text = row.EndDate.ToString();
+            }
+        }
+
+        private void PopUpUpdateCloseButton_Click(object sender, RoutedEventArgs e)
+        {
+            popupUpdate.IsOpen = false;
         }
 
         private void CreateButton_Click(object sender, RoutedEventArgs e)
@@ -61,30 +89,51 @@ namespace DesktopClient
             if (result.IsSuccessStatusCode)
             {
                 LoadDataAsync();
+                popupCreate.IsOpen = false;
             }
         }
 
         private void UpdateButton_Click(object sender, RoutedEventArgs e)
         {
+            Auction row = (Auction)auctionTable.SelectedItem;
+            int id = row.Id;
+            AuctionForUpdateDto auction = new AuctionForUpdateDto { Id = id, AuctionName = aname.Text, AuctionDescription = adescription.Text, EndDate = aendDate.Value.Value };
+            HttpClient hc = new HttpClient();
+            hc.BaseAddress = new Uri("https://localhost:44349/api/");
 
+            HttpResponseMessage result = hc.PutAsJsonAsync<AuctionForUpdateDto>("ApiAuction/" + id, auction).Result;
+
+            if (result.IsSuccessStatusCode)
+            {
+                LoadDataAsync();
+                popupUpdate.IsOpen = false;
+            }
         }
 
         private async void DeleteButton_Click(object sender, RoutedEventArgs e)
         {
             Auction row = (Auction)auctionTable.SelectedItem;
-            int id = row.Id;
-            HttpClient hc = new HttpClient();
-            hc.BaseAddress = new Uri("https://localhost:44349/api/");
-
-            HttpResponseMessage result = hc.DeleteAsync("ApiAuction/" + id).Result;
-
-            if (result.IsSuccessStatusCode)
+            if (row == null)
             {
-                IEnumerable<Auction> displaydata = await result.Content.ReadAsAsync<IEnumerable<Auction>>();
-                auctionTable.ItemsSource = displaydata;
-                auctionTable.Items.Remove(row);
+                MessageBox.Show("Select auction!", "Select", MessageBoxButton.OK, MessageBoxImage.Information);
+                popupUpdate.IsOpen = false;
             }
-            LoadDataAsync();
+            else
+            {
+                int id = row.Id;
+                HttpClient hc = new HttpClient();
+                hc.BaseAddress = new Uri("https://localhost:44349/api/");
+
+                HttpResponseMessage result = hc.DeleteAsync("ApiAuction/" + id).Result;
+
+                if (result.IsSuccessStatusCode)
+                {
+                    IEnumerable<Auction> displaydata = await result.Content.ReadAsAsync<IEnumerable<Auction>>();
+                    auctionTable.ItemsSource = displaydata;
+                    auctionTable.Items.Remove(row);
+                }
+                LoadDataAsync();
+            }
         }
 
         private void FindText_TextChanged(object sender, TextChangedEventArgs e)

@@ -32,17 +32,17 @@
                 <DataGridTextColumn Header="Starting date" Binding="{Binding StartingDate}" Visibility="Visible"/>
                 <DataGridTextColumn Header="End date" Binding="{Binding EndDate}" Visibility="Visible"/>
                 <DataGridTextColumn Header="Starting price" Binding="{Binding StartingPrice}" Visibility="Visible"/>
-                <DataGridTextColumn Header="SellerId" Binding="{Binding SellerId}" Visibility="Visible"/>
+                <DataGridTextColumn Header="Seller id" Binding="{Binding SellerId}" Visibility="Visible"/>
                 <DataGridTextColumn Header="Price" Binding="{Binding Price}" Visibility="Visible"/>
             </DataGrid.Columns>
         </DataGrid>
-        <Button x:Name="createButton" Grid.Row="2" Grid.Column="0" Click="PopUpButton_Click" Height="25" Content="Create" Margin="10,0,10,50"/>
+        <Button x:Name="createButton" Grid.Row="2" Grid.Column="0" Click="PopUpOpenButton_Click" Height="25" Content="Create" Margin="10,0,10,50"/>
         <TextBlock Text="Search" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="25"/>
         <TextBlock Text="Auction name" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="10" Margin="0,28,0,0"/>
         <TextBox x:Name="findText" Grid.Row="1" Margin="7,43,7,0" VerticalAlignment="Top" Height="18" TextChanged="FindText_TextChanged" />
-        <Button x:Name="updateButton" Grid.Row="2" Grid.Column="0" Click="UpdateButton_Click" Height="25" Content="Update" Margin="10,50,10,0"/>
+        <Button x:Name="updateButton" Grid.Row="2" Grid.Column="0" Click="PopUpUpdateOpenButton_Click" Height="25" Content="Update" Margin="10,50,10,0"/>
         <Button x:Name="deleteButton" Grid.Row="3" Grid.Column="0" Click="DeleteButton_Click" Height="25" Content="Delete" Margin="10,0,10,0"/>
-        <Popup x:Name="popup"  PlacementTarget="{Binding ElementName=createButton}" Placement="Bottom"  Width="200" Height="300" Margin="0,20,0,0">
+        <Popup x:Name="popupCreate"  PlacementTarget="{Binding ElementName=createButton}" Placement="Bottom"  Width="200" Height="300" Margin="0,20,0,0">
             <Border BorderBrush="Black" BorderThickness="1" Background="White">
                 <Grid>
                     <TextBlock Text="Auction name" HorizontalAlignment="Left" Margin="5,5,100,275" FontSize="10"/>
@@ -58,6 +58,21 @@
                     <TextBlock Text="Seller Id" HorizontalAlignment="Left" Margin="5,205,100,50" FontSize="10"/>
                     <TextBox x:Name="sellerId" VerticalAlignment="Center" Margin="5,220,5,60"/>
                     <Button x:Name="popUpCreateButton" Click="CreateButton_Click" Content="Create" Margin="120,260,5,10"/>
+                    <Button x:Name="popUpCloseButton" Click="PopUpCloseButton_Click" Content="Close" Margin="40,260,85,10"/>
+                </Grid>
+            </Border>
+        </Popup>
+        <Popup x:Name="popupUpdate"  PlacementTarget="{Binding ElementName=updateButton}" Placement="Bottom"  Width="200" Height="200" Margin="0,20,0,0">
+            <Border BorderBrush="Black" BorderThickness="1" Background="White">
+                <Grid>
+                    <TextBlock Text="Auction name" HorizontalAlignment="Left" Margin="5,5,100,175" FontSize="10"/>
+                    <TextBox x:Name="aname" VerticalAlignment="Center" Margin="5,20,5,160"/>
+                    <TextBlock Text="Auction description" HorizontalAlignment="Left" Margin="5,45,100,135" FontSize="10"/>
+                    <TextBox x:Name="adescription" VerticalAlignment="Center" Margin="5,60,5,120"/>
+                    <TextBlock Text="End date" HorizontalAlignment="Left" Margin="5,85,100,95" FontSize="10"/>
+                    <xctk:DateTimePicker  x:Name="aendDate" VerticalAlignment="Center" Margin="5,100,5,80"/>
+                    <Button x:Name="popUpCreateOpenButton" Click="UpdateButton_Click" Content="Update" Margin="120,160,5,10"/>
+                    <Button x:Name="popUpCreateCloseButton" Click="PopUpUpdateCloseButton_Click" Content="Close" Margin="40,160,85,10"/>
                 </Grid>
             </Border>
         </Popup>

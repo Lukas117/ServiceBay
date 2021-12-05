@@ -16,12 +16,14 @@ namespace ServiceBay.Repository
         public PersonRepository(ApplicationDbContext context)
         {
             _context = context;
+
         }
 
         public async Task<int> CreatePerson(Person person)
         {
             try
             {
+                //encryption
                 _context.Person.Add(person);
                 return await _context.SaveChangesAsync();
             }

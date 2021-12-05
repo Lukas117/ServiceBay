@@ -9,6 +9,10 @@
       Title="MainPage">
 
     <Grid>
-        <TextBlock Text="Hello" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="50"/>
+        <TextBlock x:Name="header" Text="ServiceBay"  HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="60" Margin="0,30,0,0"/>
+        <TextBlock x:Name="auction" Text="Auctions created:"  HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="40" Margin="10,130,0,0"/>
+        <TextBlock x:Name="auctionsText"  HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="40" Margin="320,130,0,0"/>
+        <TextBlock x:Name="person" Text="Users registered:"  HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="40" Margin="10,183,0,0"/>
+        <TextBlock x:Name="personsText"  HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="40" Margin="309,183,0,0"/>
     </Grid>
 </Page>

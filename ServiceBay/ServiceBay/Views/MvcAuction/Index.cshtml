@@ -74,19 +74,11 @@
 
 <script>
     function Disable(id) {
-        $.ajax({
-            type: "GET",
-            url: "@Url.Action("DetailsAuction")",
-            data: {id: id},
-            dataType: "json",
-            success: function (auction) {
                 $.ajax({
                     type: "PUT",
-                    url: "@Url.Action("DisableAuction")",
-                    data: { id: id, auction: auction },
+                    url: "@Url.Action("Disable")",
+                    data: { id: id },
                     dataType: "json",
                 });
-            }
-        })
     }
 </script>

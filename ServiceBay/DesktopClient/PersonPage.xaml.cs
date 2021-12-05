@@ -46,29 +46,55 @@ namespace DesktopClient
             }
         }
 
-        private void PopUpButton_Click(object sender, RoutedEventArgs e)
+        private void PopUpCreateOpenButton_Click(object sender, RoutedEventArgs e)
         {
             //popup.Closed(name); clear values
-            popup.IsOpen = true;
+            popupCreate.IsOpen = true;
         }
 
-        private void PopUpCloseButton_Click(object sender, RoutedEventArgs e)
+        private void PopUpCreateCloseButton_Click(object sender, RoutedEventArgs e)
         {
-            popup.IsOpen = false;
+            popupCreate.IsOpen = false;
+        }
+
+        private void PopUpUpdateOpenButton_Click(object sender, RoutedEventArgs e)
+        {
+            //popup.Closed(name); clear values
+            Person row = (Person)personTable.SelectedItem;
+            if (row == null)
+            {
+                MessageBox.Show("Select person!", "Select", MessageBoxButton.OK, MessageBoxImage.Information);
+                popupUpdate.IsOpen = false;
+            }
+            else
+            {
+                popupUpdate.IsOpen = true;
+            }
+        }
+
+        private void PopUpUpdateCloseButton_Click(object sender, RoutedEventArgs e)
+        {
+            popupUpdate.IsOpen = false;
         }
 
         private void CreateButton_Click(object sender, RoutedEventArgs e)
         {
-            //TODO Dto for API
-            PersonForCreationDto person = new PersonForCreationDto { Fname = fname.Text, Lname = lname.Text, Phoneno = phoneno.Text, Email = email.Text, Password = password.Text };
             HttpClient hc = new HttpClient();
             hc.BaseAddress = new Uri("https://localhost:44349/api/");
+            //Create City
+            CityForCreationDto cityDto = new CityForCreationDto { Zipcode = zipcode.Text, CityName = cityName.Text, Country = country.Text };
+            HttpResponseMessage result1 = hc.PostAsJsonAsync<CityForCreationDto>("ApiCity", cityDto).Result;
+            //Create Address
+            AddressForCreationDto addressDto = new AddressForCreationDto { StreetName = streetName.Text, StreetNumber = streetNumber.Text, CityZipcode = cityDto.Zipcode };
+            HttpResponseMessage result2 = hc.PostAsJsonAsync<AddressForCreationDto>("ApiAddress", addressDto).Result;
+            //Create Person
+            PersonForCreationDto person = new PersonForCreationDto { Fname = fname.Text, Lname = lname.Text, Phoneno = phoneno.Text, Email = email.Text, PasswordHash = password.Text, UserRole = 1, AddressId = addressDto.Id };
+            HttpResponseMessage result3 = hc.PostAsJsonAsync<PersonForCreationDto>("ApiPerson", person).Result;
 
-            HttpResponseMessage result = hc.PostAsJsonAsync<PersonForCreationDto>("ApiPerson", person).Result;
-
-            if (result.IsSuccessStatusCode)
+            if (result1.IsSuccessStatusCode && result2.IsSuccessStatusCode && result3.IsSuccessStatusCode)
             {
                 LoadDataAsync();
+                popupCreate.IsOpen = false;
             }
         }
 
@@ -80,19 +106,27 @@ namespace DesktopClient
         private async void DeleteButton_Click(object sender, RoutedEventArgs e)
         {
             Person row = (Person)personTable.SelectedItem;
-            int id = row.Id;
-            HttpClient hc = new HttpClient();
-            hc.BaseAddress = new Uri("https://localhost:44349/api/");
-
-            HttpResponseMessage result = hc.DeleteAsync("ApiPerson/" + id).Result;
-
-            if (result.IsSuccessStatusCode)
+            if (row == null)
             {
-                IEnumerable<Person> displaydata = await result.Content.ReadAsAsync<IEnumerable<Person>>();
-                personTable.ItemsSource = displaydata;
-                personTable.Items.Remove(row);
+                MessageBox.Show("Select person!", "Select", MessageBoxButton.OK, MessageBoxImage.Information);
+                popupUpdate.IsOpen = false;
             }
-            LoadDataAsync();
+            else
+            {
+                int id = row.Id;
+                HttpClient hc = new HttpClient();
+                hc.BaseAddress = new Uri("https://localhost:44349/api/");
+
+                HttpResponseMessage result = hc.DeleteAsync("ApiPerson/" + id).Result;
+
+                if (result.IsSuccessStatusCode)
+                {
+                    IEnumerable<Person> displaydata = await result.Content.ReadAsAsync<IEnumerable<Person>>();
+                    personTable.ItemsSource = displaydata;
+                    personTable.Items.Remove(row);
+                }
+                LoadDataAsync();
+            }
         }
 
         private void FindText_TextChanged(object sender, TextChangedEventArgs e)
@@ -117,5 +151,26 @@ namespace DesktopClient
             }
         }
 
+        private void FindText2_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            TextBox textBoxName = (TextBox)sender;
+            string filterText = textBoxName.Text;
+            ICollectionView cv = CollectionViewSource.GetDefaultView(personTable.ItemsSource);
+
+            if (!string.IsNullOrEmpty(filterText))
+            {
+                cv.Filter = o =>
+                {
+                    /* change to get data row value */
+                    Person a = o as Person;
+                    return (a.Id.ToString().ToUpper().StartsWith(filterText.ToUpper()));
+                    /* end change to get data row value */
+                };
+            }
+            else
+            {
+                LoadDataAsync();
+            }
+        }
     }
 }

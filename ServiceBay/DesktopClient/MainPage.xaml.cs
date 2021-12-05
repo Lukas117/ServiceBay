@@ -1,6 +1,8 @@
-﻿using System;
+﻿using ServiceBay.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -20,9 +22,42 @@ namespace DesktopClient
     /// </summary>
     public partial class MainPage : Page
     {
+
         public MainPage()
         {
             InitializeComponent();
+            SetAuctionsText();
+            SetPersonsText();
+        }
+
+        private async void SetAuctionsText()
+        {
+            HttpClient hc = new HttpClient();
+            hc.BaseAddress = new Uri("https://localhost:44349/api/");
+
+            HttpResponseMessage result = hc.GetAsync("ApiAuction").Result;
+
+            if (result.IsSuccessStatusCode)
+            {
+                var displaydata = await result.Content.ReadAsAsync<IEnumerable<Auction>>();
+                int auctionsCount = displaydata.ToList().Count;
+                auctionsText.Text = auctionsCount.ToString();
+            }
+        }
+
+        private async void SetPersonsText()
+        {
+            HttpClient hc = new HttpClient();
+            hc.BaseAddress = new Uri("https://localhost:44349/api/");
+
+            HttpResponseMessage result = hc.GetAsync("ApiPerson").Result;
+
+            if (result.IsSuccessStatusCode)
+            {
+                var displaydata = await result.Content.ReadAsAsync<IEnumerable<Person>>();
+                int personsCount = displaydata.ToList().Count;
+                personsText.Text = personsCount.ToString();
+            }
         }
     }
 }
