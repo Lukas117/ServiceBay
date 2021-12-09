@@ -1,4 +1,5 @@
-﻿using ServiceBay.Controllers;
+﻿using Newtonsoft.Json;
+using ServiceBay.Controllers;
 using ServiceBay.Dto;
 using ServiceBay.Models;
 using System;
@@ -7,6 +8,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -87,8 +89,11 @@ namespace DesktopClient
             //Create Address
             AddressForCreationDto addressDto = new AddressForCreationDto { StreetName = streetName.Text, StreetNumber = streetNumber.Text, CityZipcode = cityDto.Zipcode };
             HttpResponseMessage result2 = hc.PostAsJsonAsync<AddressForCreationDto>("ApiAddress", addressDto).Result;
+            string jsonString = result2.Content.ReadAsStringAsync().Result;
+            AddressForCreationDto returnedAddress = JsonConvert.DeserializeObject<AddressForCreationDto>(jsonString);
             //Create Person
-            PersonForCreationDto person = new PersonForCreationDto { Fname = fname.Text, Lname = lname.Text, Phoneno = phoneno.Text, Email = email.Text, PasswordHash = password.Text, UserRole = 1, AddressId = addressDto.Id };
+            PersonForCreationDto person = new PersonForCreationDto { Fname = fname.Text, Lname = lname.Text, Phoneno = phoneno.Text, Email = email.Text, PasswordHash = password.Text, UserRole = 1, AddressId = returnedAddress.Id };
+
             HttpResponseMessage result3 = hc.PostAsJsonAsync<PersonForCreationDto>("ApiPerson", person).Result;
 
             if (result1.IsSuccessStatusCode && result2.IsSuccessStatusCode && result3.IsSuccessStatusCode)
@@ -109,23 +114,25 @@ namespace DesktopClient
             if (row == null)
             {
                 MessageBox.Show("Select person!", "Select", MessageBoxButton.OK, MessageBoxImage.Information);
-                popupUpdate.IsOpen = false;
             }
             else
             {
-                int id = row.Id;
-                HttpClient hc = new HttpClient();
-                hc.BaseAddress = new Uri("https://localhost:44349/api/");
-
-                HttpResponseMessage result = hc.DeleteAsync("ApiPerson/" + id).Result;
-
-                if (result.IsSuccessStatusCode)
+                if (MessageBox.Show("Delete person?", "Question", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
                 {
-                    IEnumerable<Person> displaydata = await result.Content.ReadAsAsync<IEnumerable<Person>>();
-                    personTable.ItemsSource = displaydata;
-                    personTable.Items.Remove(row);
+                    int id = row.Id;
+                    HttpClient hc = new HttpClient();
+                    hc.BaseAddress = new Uri("https://localhost:44349/api/");
+
+                    HttpResponseMessage result = hc.DeleteAsync("ApiPerson/" + id).Result;
+
+                    if (result.IsSuccessStatusCode)
+                    {
+                        IEnumerable<Person> displaydata = await result.Content.ReadAsAsync<IEnumerable<Person>>();
+                        personTable.ItemsSource = displaydata;
+                        personTable.Items.Remove(row);
+                    }
+                    LoadDataAsync();
                 }
-                LoadDataAsync();
             }
         }
 
@@ -141,7 +148,7 @@ namespace DesktopClient
                 {
                     /* change to get data row value */
                     Person a = o as Person;
-                    return (a.Email.ToUpper().StartsWith(filterText.ToUpper()));
+                    return a.Email.ToUpper().StartsWith(filterText.ToUpper());
                     /* end change to get data row value */
                 };
             }
@@ -163,7 +170,7 @@ namespace DesktopClient
                 {
                     /* change to get data row value */
                     Person a = o as Person;
-                    return (a.Id.ToString().ToUpper().StartsWith(filterText.ToUpper()));
+                    return a.Id.ToString().ToUpper().StartsWith(filterText.ToUpper());
                     /* end change to get data row value */
                 };
             }

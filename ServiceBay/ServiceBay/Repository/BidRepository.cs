@@ -7,6 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using ServiceBay.Services;
+using ServiceBay.Security;
 
 namespace ServiceBay.Repository
 {

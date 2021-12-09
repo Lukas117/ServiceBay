@@ -24,6 +24,7 @@ namespace ServiceBay.Repository
             {
                 _context.Address.Add(address);
                 return await _context.SaveChangesAsync();
+                int id = address.Id;
             }
             catch (Exception ex)
             {
