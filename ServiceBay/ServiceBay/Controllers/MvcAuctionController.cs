@@ -13,7 +13,7 @@ namespace ServiceBay.Controllers
 {
     public class MvcAuctionController : Controller
     {
-        private readonly string uri = "https://localhost:5001/api/";
+        private readonly string uri = "https://localhost:44349/api/";
 
         
         public IActionResult Index()
@@ -39,6 +39,27 @@ namespace ServiceBay.Controllers
         public IActionResult Create()
         {
             return View();
+        }
+
+        [HttpGet]
+        public IActionResult Details(int id)
+        {
+            AuctionForCreationDto auction = null;
+
+            HttpClient hc = new HttpClient();
+            hc.BaseAddress = new Uri(uri);
+
+            var consumeapi = hc.GetAsync("ApiAuction/" + id.ToString());
+            consumeapi.Wait();
+
+            var readdata = consumeapi.Result;
+            if (readdata.IsSuccessStatusCode)
+            {
+                var displaydata = readdata.Content.ReadAsAsync<AuctionForCreationDto>();
+                displaydata.Wait();
+                auction = displaydata.Result;
+            }
+            return View(auction);
         }
 
         [HttpPost]

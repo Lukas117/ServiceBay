@@ -68,5 +68,16 @@ namespace ServiceBay.Controllers
         {
             return Json(mvc.AllAuctions());
         }
+
+        [HttpPost]
+        public void Bidding(double _Price, int _buyerId, int _AuctionId)
+        {
+            Bid newBid = new Bid{
+                Price = _Price,
+                BuyerId = _buyerId,
+                AuctionId = _AuctionId
+            };
+            Create(newBid);
+        }
     }
 }
