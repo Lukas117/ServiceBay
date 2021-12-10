@@ -1,12 +1,14 @@
 ﻿using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using ServiceBay.Contracts;
+using ServiceBay.Controllers;
 using ServiceBay.Models;
 
 namespace ServiceBay.Middleware
@@ -26,12 +28,16 @@ namespace ServiceBay.Middleware
 
         public async Task Invoke(HttpContext context)
         {
-            var token = context.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
+            var token = MvcAuthenticationController.tokenbased;
+            
+            //var token = context.Items["Token"]?.ToString().Split(" ").Last();
+           
 
             if (token != null)
                 AttachAccountToContext(context, token);
 
             await _next(context);
+           
         }
 
         private void AttachAccountToContext(HttpContext context, string token)
@@ -44,17 +50,24 @@ namespace ServiceBay.Middleware
                 {
                     ValidateIssuerSigningKey = true,
                     IssuerSigningKey = new SymmetricSecurityKey(key),
-                    ValidateIssuer = true,
-                    ValidateAudience = true,
+                    ValidateIssuer = false,
+                    ValidateAudience = false,
                     // set clockskew to zero so tokens expire exactly at token expiration time (instead of 5 minutes later)
                     ClockSkew = TimeSpan.Zero
                 }, out SecurityToken validatedToken);
 
                 var jwtToken = (JwtSecurityToken)validatedToken;
-                var accountId = jwtToken.Claims.First(x => x.Type == "id").Value;
-
+                var identity = new ClaimsIdentity(jwtToken.Claims, "basic");
+                context.User = new ClaimsPrincipal(identity);
+                //var accountId = jwtToken.Claims.First(x => x.Type == "id").Value;
                 // attach account to context on successful jwt validation
-              //  context.Items["Person"] = new Login {Email = "1086332@ucn.dk", Password = "a" };
+           //     Login login = new Login();
+             //   login.Email = jwtToken.Claims.First(x => x.Type == "email").Value.ToString();
+             //   login.Password = jwtToken.Claims.First(x => x.Type == "password").Value.ToString();
+                   //context.Items["User"] = accountId;
+                 //  context.Items["Token"] = validatedToken;
+               
+             
             }
             catch
             {
