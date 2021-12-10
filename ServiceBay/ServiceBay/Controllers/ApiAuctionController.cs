@@ -32,6 +32,13 @@ namespace ServiceBay.Controllers
             return await _auctionRepo.GetAuctions();
         }
 
+        // GET: api/ApiAuction
+        [HttpGet("Seller/{id}")]
+        public async Task<IEnumerable<Auction>> GetSellerAuctions(int sellerId)
+        {
+            return await _auctionRepo.GetSellerAuctions(sellerId);
+        }
+
         // GET: api/ApiAuction/5
         [HttpGet("{id}")]
         public async Task<ActionResult<AuctionForCreationDto>> GetAuction(int id)
@@ -90,10 +97,10 @@ namespace ServiceBay.Controllers
         }
 
         // PUT: api/ApiAuction/5
-        [HttpPut("disable/{id}")]
-        public async Task<IActionResult> DisableAuction(int id, AuctionForUpdateDto auctionDto)
+        [HttpPut("Disable/{id}")]
+        public async Task<IActionResult> DisableAuction(int id, Auction auction)
         {
-            var auction = _mapper.Map<Auction>(auctionDto);
+            //var auction = _mapper.Map<Auction>(auctionDto);
             if (id != auction.Id)
             {
                 return BadRequest();

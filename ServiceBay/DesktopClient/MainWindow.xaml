@@ -1,0 +1,28 @@
+﻿<Window x:Class="DesktopClient.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:DesktopClient"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="1" />
+            <RowDefinition Height="8*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Button x:Name="mainPage" Click="MainPage_Click" Width="150" Height="35" Content="Main Menu" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="0"/>
+        <Button x:Name="auctionPage" Click="AuctionPage_Click" Width="150" Height="35" Content="Auction Menu" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="1"/>
+        <Button x:Name="personPage" Click="PersonPage_Click" Width="150" Height="35" Content="User Menu" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="2"/>
+        <Button x:Name="logout" Click="Logout_Click"  Grid.Column="3" Content="Log out" FontSize="20" Width="100" Height="35"/>
+        <Rectangle Fill="Black" Grid.Row="1" Grid.ColumnSpan="4"/>
+        <Frame x:Name="MainFrame" Grid.Row="2" Grid.ColumnSpan="4" NavigationUIVisibility="Hidden" />
+    </Grid>
+</Window>

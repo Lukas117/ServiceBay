@@ -12,7 +12,14 @@ namespace ServiceBay.Controllers
     public class MvcBidController : Controller
     {
 
-        private readonly string uri = "https://localhost:5001/api/";
+        private readonly MvcAuctionController mvc;
+        private readonly string uri = "https://localhost:44349/api/";
+
+
+        public MvcBidController()
+        {
+            mvc = new MvcAuctionController();
+        }
 
         public IActionResult Index()
         {
@@ -54,6 +61,12 @@ namespace ServiceBay.Controllers
                 return RedirectToAction("Index");
             }
             return View("Create");
+        }
+
+        [HttpPost]
+        public JsonResult AllAuctions()
+        {
+            return Json(mvc.AllAuctions());
         }
     }
 }

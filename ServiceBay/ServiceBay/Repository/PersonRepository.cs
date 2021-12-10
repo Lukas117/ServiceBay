@@ -2,6 +2,7 @@
 using ServiceBay.Contracts;
 using ServiceBay.Data;
 using ServiceBay.Models;
+using ServiceBay.Security;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,16 +13,23 @@ namespace ServiceBay.Repository
     public class PersonRepository : IPersonRepository
     {
         private readonly ApplicationDbContext _context;
+        private readonly Encryption encryption;
 
         public PersonRepository(ApplicationDbContext context)
         {
             _context = context;
+            encryption = new Encryption();
         }
 
         public async Task<int> CreatePerson(Person person)
         {
             try
             {
+                //encryption
+                var salt = encryption.CreateSalt(5);
+                var password = encryption.GenerateHash(person.PasswordHash, salt);
+                person.PasswordHash = password;
+                person.PasswordSalt = salt;
                 _context.Person.Add(person);
                 return await _context.SaveChangesAsync();
             }

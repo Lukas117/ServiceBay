@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ServiceBay.Contracts;
 using ServiceBay.Data;
+using ServiceBay.Dto;
 using ServiceBay.Models;
 
 namespace ServiceBay.Controllers
@@ -16,16 +18,19 @@ namespace ServiceBay.Controllers
     public class ApiPersonController : ControllerBase
     {
         private readonly IPersonRepository _personRepo;
+        private readonly IMapper _mapper;
 
-        public ApiPersonController(IPersonRepository personRepo)
+        public ApiPersonController(IPersonRepository personRepo, IMapper mapper)
         {
             _personRepo = personRepo;
+            _mapper = mapper;
         }
 
         // POST: api/ApiPerson
         [HttpPost]
-        public async Task<ActionResult<Person>> PostPerson(Person person)
+        public async Task<ActionResult<PersonForCreationDto>> CreatePerson(PersonForCreationDto personDto)
         {
+            var person = _mapper.Map<Person>(personDto);
             await _personRepo.CreatePerson(person);
             return CreatedAtAction("GetPerson", new { id = person.Id }, person);
         }
