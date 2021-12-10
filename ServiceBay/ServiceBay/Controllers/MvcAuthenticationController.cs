@@ -14,7 +14,7 @@ namespace ServiceBay.Controllers
 {
     public class MvcAuthenticationController : Controller
     {
-        public string tokenbased;
+        public static string tokenbased;
 
         private readonly string uri = "https://localhost:5001/api/";
 

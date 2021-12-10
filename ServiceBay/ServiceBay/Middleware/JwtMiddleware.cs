@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using ServiceBay.Contracts;
+using ServiceBay.Controllers;
 using ServiceBay.Models;
 
 namespace ServiceBay.Middleware
@@ -27,7 +28,7 @@ namespace ServiceBay.Middleware
 
         public async Task Invoke(HttpContext context)
         {
-            var token = context.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
+            var token = MvcAuthenticationController.tokenbased;
             
             //var token = context.Items["Token"]?.ToString().Split(" ").Last();
            

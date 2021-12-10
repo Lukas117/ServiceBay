@@ -18,6 +18,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.AspNetCore.Authorization;
 using ServiceBay.Middleware;
+using Microsoft.AspNetCore.Http;
 
 namespace ServiceBay
 {
@@ -129,6 +130,8 @@ namespace ServiceBay
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
+           
+
             app.UseRouting();
 
             app.UseCors(x => x
@@ -140,6 +143,8 @@ namespace ServiceBay
             app.UseMiddleware<JwtMiddleware>();
             app.UseAuthentication();
             app.UseAuthorization();
+
+           
 
             app.UseEndpoints(endpoints =>
             {

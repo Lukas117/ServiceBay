@@ -26,7 +26,7 @@ namespace ServiceBay.Controllers
 
         // GET: api/ApiAuction
         [HttpGet]
-        [Authorize(AuthenticationSchemes = Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerDefaults.AuthenticationScheme)]
+       [Authorize]
         public async Task<IEnumerable<Auction>> GetAuctions()
         {
             return await _auctionRepo.GetAuctions();
