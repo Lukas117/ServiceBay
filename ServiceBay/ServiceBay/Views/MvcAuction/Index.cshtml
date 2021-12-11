@@ -1,10 +1,10 @@
 ﻿@model IEnumerable<ServiceBay.Models.Auction>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Auctions";
 }
 
-<h1>Index</h1>
+<h1>Auctions</h1>
 
 <p>
     <a asp-action="Create">Create New</a>
@@ -63,9 +63,9 @@
                 </td>
                 <td>
                     <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a> |
-                    <button onclick="Disable(@item.Id)">Disable</button>
+                    <a asp-action="Details" asp-route-id="@item.Id" >Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id" >Delete</a> |
+                    <button onclick="Disable(@item.Id)" >Disable</button>
                 </td>
             </tr>
         }

@@ -5,31 +5,17 @@
 
 <div class="text-center">
     <h1 class="display-4">Welcome to ServiceBay</h1>
-    <p>Login to your existing account or if you are not part of the ServiceBay please create an account.</p>
+    <p>Login to your existing account or if you are not registered yet, please create an account.</p>
 </div>
 
 
 <body>
     <div id="buttons" class="text-center">
-        <button onclick="window.location.href='/MvcAuthentication/Login'" >Login</button>
-        <button onclick="window.location.href='/MvcPerson/Create'" >Register</button>
+        <input type="button" class="btn btn-primary" value="Log in" onclick="window.location.href='/MvcAuthentication/Login'" />
+        <input type="button" class="btn btn-primary" value="Register" onclick="window.location.href='/MvcPerson/Create'" />
     </div>
 </body>
 
-<style>
-
-    button {
-        display: inline-block;
-        text-align: center;
-        background-color: lightblue;
-        color: black;
-        width: 100px;
-        font-size: 15px;
-        cursor: pointer;
-        margin: 5px;
-    }
-
-</style>
 <script>
 
 </script>

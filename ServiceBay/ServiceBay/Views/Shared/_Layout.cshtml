@@ -36,7 +36,7 @@
                     <div class="dropdown">
                         <div class="wrapper">
                             <div class="notification_wrap">
-                                <div class="notification_icon" id="icon">
+                                <div class="notification_icon" id="bellicon">
                                     <img src="~/css/bell.png" style="width:30px;height:30px"> <span class="caret"></span>
                                 </div>
                                 <div class="dropdown" id="dropdownList">
@@ -44,9 +44,16 @@
                             </div>
                         </div>
                     </div>
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="MvcBid" asp-action="Index">Bid</a>
-                    </li>
+                    <div class="dropdown" id="userDropdown" style="width:30px;height:30px">
+                        <div class="notification_icon" id="usericon" onclick="window.location.href='/MvcPerson/Details/6'">
+                            <img src="~/css/user.png" style="width:30px;height:30px" id="userimg"> <span class="caret"></span>
+                        </div>
+                        <div class="dropdown-content" id="ddowncont">
+                            <a href="#">My auctions</a>
+                            <a href="#">My bids</a>
+                            <a href="#">Log out</a>
+                        </div>
+                    </div>
                 </div>
             </nav>
         </header>
@@ -69,7 +76,7 @@
 </html>
     <script>
     $(document).ready(function () {
-        $(".notification_icon").click(function () {
+        $("#bellicon").click(function () {
             $(".dropdown").toggleClass("active");
         })
     });
@@ -126,3 +133,42 @@
     });
 
     </script>
+
+<style>
+
+    #userimg {
+        cursor:pointer;
+    }
+
+    #userDropdown {
+        margin-left: 15px;
+        margin-top: 5px;
+        position: relative;
+        display: inline-block;
+    }
+    
+    #ddowncont {
+        display: none;
+        position: absolute;
+        background-color: #f1f1f1;
+        min-width: 160px;
+        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+        z-index: 1;
+    }
+
+    #ddowncont a {
+        color: black;
+        padding: 12px 16px;
+        text-decoration: none;
+        display: block;
+    }
+
+    #ddowncont a:hover {
+        background-color: #ddd;
+    }
+
+    #userDropdown:hover #ddowncont {
+        display: block;
+    }
+
+</style>

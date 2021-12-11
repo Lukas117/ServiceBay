@@ -15,7 +15,7 @@ div#dropdownList {
     width: 300px;
     position: fixed;
     left: 50%;
-    margin-left: 380px;
+    margin-left: 335px;
 }
 
 .notification_wrap .notification_icon {
@@ -28,7 +28,7 @@ div#dropdownList {
     color: #605dff;
 }
 
-.notification_wrap .notification_icon {
+.notification_wrap #bellicon {
     cursor: pointer;
 }
 
@@ -85,5 +85,4 @@ div#dropdownList {
 
 .notification_wrap .dropdown.active {
     display: block;
-
 }
