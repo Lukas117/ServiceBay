@@ -22,7 +22,7 @@ namespace ServiceBay.Repository
         {
             try
             {
-                Lists.prevPrices.Add(auction.StartingPrice);
+                StaticVar.prevPrices.Add(auction.StartingPrice);
                 auction.Price = auction.StartingPrice;
                 _context.Auction.Add(auction);
                 return await _context.SaveChangesAsync();

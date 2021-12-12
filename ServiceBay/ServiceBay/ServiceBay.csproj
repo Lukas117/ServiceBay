@@ -54,6 +54,5 @@
     <Folder Include="Data\" />
     <Folder Include="Dto\Mapper\" />
     <Folder Include="Jwt\" />
-    <Folder Include="Middleware\" />
   </ItemGroup>
 </Project>

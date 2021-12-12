@@ -32,18 +32,18 @@ namespace ServiceBay.Controllers
             var auctions = result.ToList();
             foreach (var a in auctions)
             {
-                Lists.prevPrices.Add(a.Price);
+                StaticVar.prevPrices.Add(a.Price);
             }
-            return Json(Lists.prevPrices);
+            return Json(StaticVar.prevPrices);
         }
 
         public void GetPrices(IEnumerable<Auction> result)
         {
             var auctions = result.ToList();
-            Lists.newPrices.Clear();
+            StaticVar.newPrices.Clear();
             foreach (var a in auctions)
             {
-                Lists.newPrices.Add(a.Price);
+                StaticVar.newPrices.Add(a.Price);
             }
         }
 
@@ -74,14 +74,14 @@ namespace ServiceBay.Controllers
             var auctions = mvc.AllAuctions();
             GetPrices((IEnumerable<Auction>)auctions.Value);
             var all = new List<double?>();
-            for (int i = 0; i < Lists.newPrices.Count; i++)
+            for (int i = 0; i < StaticVar.newPrices.Count; i++)
             {
-                if (Lists.prevPrices.Count != 0)
+                if (StaticVar.prevPrices.Count != 0)
                 {
-                    if (!Lists.newPrices[i].Equals(Lists.prevPrices[i]))
+                    if (!StaticVar.newPrices[i].Equals(StaticVar.prevPrices[i]))
                     {
-                        all.Add(Lists.newPrices[i]);
-                        Lists.prevPrices[i] = Lists.newPrices[i];
+                        all.Add(StaticVar.newPrices[i]);
+                        StaticVar.prevPrices[i] = StaticVar.newPrices[i];
                     }
                 }
             }

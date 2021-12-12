@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -37,7 +38,8 @@ namespace ServiceBay.Controllers
 
         // GET: api/ApiPerson
         [HttpGet]
-        public async Task<IEnumerable<Person>> GetPersons()
+        [Authorize]
+         public async Task<IEnumerable<Person>> GetPersons()
         {
             return await _personRepo.GetPersons();
         }

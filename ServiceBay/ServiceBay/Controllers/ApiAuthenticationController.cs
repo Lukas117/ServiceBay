@@ -2,13 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using ServiceBay.Contracts;
 using ServiceBay.Jwt;
+using ServiceBay.Middleware;
 using ServiceBay.Models;
+using ServiceBay.Security;
 
 namespace ServiceBay.Controllers
 {
@@ -18,58 +19,32 @@ namespace ServiceBay.Controllers
     [ApiController]
     public class ApiAuthenticationController : ControllerBase
     {
-        private readonly IPersonRepository _personRepo;
-        
+        private readonly ITokenGenerator _tokenGenerator;
+        private readonly Encryption encryption;
 
-        public ApiAuthenticationController(IPersonRepository personRepository)
+        public ApiAuthenticationController(ITokenGenerator tokenGenerator)
         {
-            _personRepo = personRepository;
+            _tokenGenerator = tokenGenerator;
+            encryption = new Encryption();
         }
 
         [Route("UserLogin")]
         [HttpPost]
-        public  IActionResult UserLogin(Login objVM)
+        public IActionResult UserLogin(Login objVM)
         {
-            if(_personRepo.GetPersonByEmail(objVM.Email).Result.PasswordHash.Equals(objVM.Password))
-            {
-                var tokenString = TokenGenerator.GenerateToken(objVM.Email);
-                //var account = TokenGenerator.ValidateJwtToken(tokenString);
-                return Ok(tokenString);
-            }
-            return BadRequest();
+            var response = _tokenGenerator.Authenticate(objVM);
 
+            if (response == null)
+                return BadRequest(new { message = "Username or password is incorrect" });
 
-
-            //            var objlst = wmsEN.Usp_Login(objVM.Email, Utility.Encryptdata(objVM.Password), "").ToList<Usp_Login_Result>().FirstOrDefault();
-            //          if (objlst.Status == -1) return new Response
-            //        {
-            //          Status = "Invalid",
-            //        Message = "Invalid User."
-            //  };
-            //if (objlst.Status == 0) return new Response
-            //{
-            //    Status = "Inactive",
-            //    Message = "User Inactive."
-            //  };
-            //            else return new Response
-            //           {
-            //               Status = "Success",
-            //               Message = TokenGenerator.GenerateToken(objVM.Email)
-            //           };
-            
-            
-                
-            
+            return Ok(response.Token);
         }
 
-        [Authorize(AuthenticationSchemes = Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerDefaults.AuthenticationScheme)]
-        [HttpGet(nameof(GetResult))]
-        public IActionResult GetResult()
+        [Authorize]
+        [HttpGet]
+        public IActionResult GetAll()
         {
-            return Ok("API Validated");
+            return Ok("Api validated");
         }
-
     }
-
-
 }

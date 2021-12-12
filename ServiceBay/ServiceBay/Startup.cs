@@ -19,13 +19,12 @@ using System.Text;
 using Microsoft.AspNetCore.Authorization;
 using ServiceBay.Middleware;
 using Microsoft.AspNetCore.Http;
+using ServiceBay.Jwt;
 
 namespace ServiceBay
 {
     public class Startup
     {
-        public static readonly string Secret = "ERMN05OPLoDvbTTa/QkqLNMI7cPLguaRyHzyg7n5qNBVjQmtBhz4SzYh4NBVCXi3KJHlSXKP+oi2+bXr6CUYTR==";
-       // private Confi
 
         public Startup(IConfiguration configuration)
         {
@@ -47,6 +46,8 @@ namespace ServiceBay
             services.AddScoped<IPersonRepository, PersonRepository>();
             services.AddScoped<IAddressRepository, AddressRepository>();
             services.AddScoped<ICityRepository, CityRepository>();
+            services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));
+            services.AddScoped<ITokenGenerator, TokenGenerator>();
 
 
             services.AddAutoMapper(typeof(Startup));
@@ -100,7 +101,7 @@ namespace ServiceBay
                     ValidateIssuerSigningKey = true,
                     ValidIssuer = Configuration["Jwt:Issuer"],
                     ValidAudience = Configuration["Jwt:Audience"],
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"])) //Configuration["JwtToken:SecretKey"]
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["AppSettings:Secret"])) //Configuration["JwtToken:SecretKey"]
                 };
             });
            

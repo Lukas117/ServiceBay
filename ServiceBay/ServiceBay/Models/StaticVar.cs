@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace ServiceBay.Models
 {
-    public static class Lists
+    public static class StaticVar
     {
         public static List<double?> prevPrices = new List<double?>();
         public static List<double?> newPrices = new List<double?>();

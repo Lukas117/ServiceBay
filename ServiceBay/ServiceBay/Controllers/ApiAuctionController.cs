@@ -26,7 +26,6 @@ namespace ServiceBay.Controllers
 
         // GET: api/ApiAuction
         [HttpGet]
-       //[Authorize]
         public async Task<IEnumerable<Auction>> GetAuctions()
         {
             return await _auctionRepo.GetAuctions();
@@ -43,6 +42,8 @@ namespace ServiceBay.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<AuctionForCreationDto>> GetAuction(int id)
         {
+            //CURRENT USER 
+            Person currentUser = (Person)HttpContext.Items["User"];
             var auction = await _auctionRepo.GetAuction(id);
             var auctionDto = _mapper.Map<AuctionForCreationDto>(auction);
             if (auction == null) { return NotFound(); }

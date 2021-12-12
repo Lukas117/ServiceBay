@@ -1,74 +1,80 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using ServiceBay.Contracts;
+using ServiceBay.Middleware;
+using ServiceBay.Models;
+using ServiceBay.Security;
 
 namespace ServiceBay.Jwt
 {
-    public class TokenGenerator
+    public interface ITokenGenerator
     {
-        private static string Secret = "ERMN05OPLoDvbTTa/QkqLNMI7cPLguaRyHzyg7n5qNBVjQmtBhz4SzYh4NBVCXi3KJHlSXKP+oi2+bXr6CUYTR==";
-        public static IPersonRepository personRepository;
-        public static IConfiguration _configuration;
+        AuthenticateResponse Authenticate(Login model);
+        IEnumerable<Person> GetAll();
+        Person GetById(int id);
+    }
+    public class TokenGenerator : ITokenGenerator
+    {
+        private readonly IPersonRepository _personRepository;
+        private readonly AppSettings _appSettings;
+        private readonly Encryption encryption;
 
-        public TokenGenerator(IPersonRepository person, IConfiguration configuration)
+        public TokenGenerator(IPersonRepository personRepository, IOptions<AppSettings> appSettings)
         {
-            personRepository = person;
-            _configuration = configuration;
+            _appSettings = appSettings.Value;
+            _personRepository = personRepository;
+            encryption = new Encryption();
         }
 
-        public static string GenerateToken(string username)
+        public AuthenticateResponse Authenticate(Login login)
         {
-            //  if(!personRepository.GetPersonByEmail(username).Result.PasswordHash.Equals(password))
-            //  {
-            //      return null;
-            //  }
+            Person user = _personRepository.GetPersonByEmail(login.Email).Result;
+            var passwordHash = user.PasswordHash;
+            var salt = user.PasswordSalt;
+            var passwordInput = login.Password;
+            string token = null;
+
+            // return null if user not found
+            if (user == null) return null;
+
+            // authentication successful so generate jwt token
+            if (encryption.AreEqual(passwordInput, passwordHash, salt))
+            {
+                token = GenerateToken(user);
+            }
+            return new AuthenticateResponse(user, token);
+        }
+
+        public IEnumerable<Person> GetAll()
+        {
+            return _personRepository.GetPersons().Result;
+        }
+
+        public Person GetById(int id)
+        {
+            return _personRepository.GetPerson(id).Result;
+        }
+
+        public string GenerateToken(Person person)
+        {
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(Secret);
+            var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
             var tokenDescriptor = new SecurityTokenDescriptor
             {
-                Subject = new ClaimsIdentity(new[] { new Claim("id", username) }),
-                Expires = DateTime.UtcNow.AddHours(1),
-                Issuer = "https://localhost:5001",
-                Audience = "https://localhost:5001",
+                Subject = new ClaimsIdentity(new[] { new Claim("id", person.Id.ToString()) }),
+                Expires = DateTime.UtcNow.AddDays(7),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);
             return tokenHandler.WriteToken(token);
-        }
-
-        public static int? ValidateJwtToken(string token)
-        {
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(Secret);
-            try
-            {
-                tokenHandler.ValidateToken(token, new TokenValidationParameters
-                {
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(key),
-                    ValidateIssuer = false,
-                    ValidateAudience = false,
-                    // set clockskew to zero so tokens expire exactly at token expiration time (instead of 5 minutes later)
-                    ClockSkew = TimeSpan.Zero
-                }, out SecurityToken validatedToken);
-
-                var jwtToken = (JwtSecurityToken)validatedToken;
-                var accountId = int.Parse(jwtToken.Claims.First(x => x.Type == "id").Value);
-
-                // return account id from JWT token if validation successful
-                return accountId;
-            }
-            catch
-            {
-                // return null if validation fails
-                return null;
-            }
         }
     }
 }

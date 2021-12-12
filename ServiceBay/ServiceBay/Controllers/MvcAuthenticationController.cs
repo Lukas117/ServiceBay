@@ -37,7 +37,7 @@ namespace ServiceBay.Controllers
             hc.BaseAddress = new Uri(uri);
             hc.DefaultRequestHeaders.Clear();
             //var tokenbased = String.Empty;
-            hc.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+            hc.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             
 
             var response = hc.PostAsJsonAsync<Login>("ApiAuthentication/UserLogin", login);

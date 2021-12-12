@@ -4,11 +4,14 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using ServiceBay.Contracts;
 using ServiceBay.Controllers;
+using ServiceBay.Jwt;
 using ServiceBay.Models;
 
 namespace ServiceBay.Middleware
@@ -16,36 +19,35 @@ namespace ServiceBay.Middleware
     public class JwtMiddleware
     {
         private readonly RequestDelegate _next;
-        private readonly IConfiguration _configuration;
-        
+        private readonly AppSettings _appSettings;
 
-        public JwtMiddleware(RequestDelegate next, IConfiguration configuration)
+
+        public JwtMiddleware(RequestDelegate next, IOptions<AppSettings> appSettings)
         {
             _next = next;
-            _configuration = configuration;
-           
+            _appSettings = appSettings.Value;
+
         }
 
-        public async Task Invoke(HttpContext context)
+        public async Task Invoke(HttpContext context, ITokenGenerator tokenGenerator)
         {
+            //var token = context.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
+            //string token = context.Request.Headers["Authorization"];
             var token = MvcAuthenticationController.tokenbased;
-            
-            //var token = context.Items["Token"]?.ToString().Split(" ").Last();
-           
 
             if (token != null)
-                AttachAccountToContext(context, token);
+                AttachAccountToContext(context, tokenGenerator, token);
 
             await _next(context);
-           
+
         }
 
-        private void AttachAccountToContext(HttpContext context, string token)
+        private void AttachAccountToContext(HttpContext context, ITokenGenerator tokenGenerator, string token)
         {
             try
             {
                 var tokenHandler = new JwtSecurityTokenHandler();
-                var key = Encoding.ASCII.GetBytes(_configuration["Jwt:Key"]);
+                var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
                 tokenHandler.ValidateToken(token, new TokenValidationParameters
                 {
                     ValidateIssuerSigningKey = true,
@@ -57,22 +59,15 @@ namespace ServiceBay.Middleware
                 }, out SecurityToken validatedToken);
 
                 var jwtToken = (JwtSecurityToken)validatedToken;
-                var identity = new ClaimsIdentity(jwtToken.Claims, "basic");
-                context.User = new ClaimsPrincipal(identity);
-                //var accountId = jwtToken.Claims.First(x => x.Type == "id").Value;
-                // attach account to context on successful jwt validation
-           //     Login login = new Login();
-             //   login.Email = jwtToken.Claims.First(x => x.Type == "email").Value.ToString();
-             //   login.Password = jwtToken.Claims.First(x => x.Type == "password").Value.ToString();
-                   //context.Items["User"] = accountId;
-                 //  context.Items["Token"] = validatedToken;
-               
-             
+                var userId = int.Parse(jwtToken.Claims.First(x => x.Type == "id").Value);
+
+                // attach user to context on successful jwt validation
+                context.Items["User"] = tokenGenerator.GetById(userId);
             }
             catch
             {
                 // do nothing if jwt validation fails
-                // account is not attached to context so request won't have access to secure routes
+                // user is not attached to context so request won't have access to secure routes
             }
         }
     }

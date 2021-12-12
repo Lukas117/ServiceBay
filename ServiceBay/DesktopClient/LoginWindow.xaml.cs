@@ -1,6 +1,11 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using Newtonsoft.Json;
+using ServiceBay.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -19,6 +24,8 @@ namespace DesktopClient
     /// </summary>
     public partial class LoginWindow : Window
     {
+        public static string tokenbased;
+
         public LoginWindow()
         {
             InitializeComponent();
@@ -26,11 +33,28 @@ namespace DesktopClient
 
         private void LoginButton_Click(object sender, RoutedEventArgs e)
         {
-            //validating TODO
-            MainWindow mainWindow = new MainWindow();
-            mainWindow.Owner = Owner;
-            mainWindow.Show();
-            Close();
+            Login login = new Login() { Email = emailText.Text, Password = passwordText.Text };
+            HttpClient hc = new HttpClient();
+            hc.BaseAddress = new Uri("https://localhost:44349/api/");
+            hc.DefaultRequestHeaders.Clear();
+            hc.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+
+            var response = hc.PostAsJsonAsync<Login>("ApiAuthentication/UserLogin", login);
+            response.Wait();
+
+            var saved = response.Result;
+            if (saved.IsSuccessStatusCode)
+            {
+                var responseMessage = response.Result.Content.ReadAsStringAsync().Result;
+                tokenbased = JsonConvert.DeserializeObject<string>(responseMessage);
+                hc.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", tokenbased);
+                //context.Request.Headers["Authorization"] = tokenbased;
+                MainWindow mainWindow = new MainWindow();
+                mainWindow.Owner = Owner;
+                mainWindow.Show();
+                Close();
+            }
         }
 
         private void RegisterButton_Click(object sender, RoutedEventArgs e)

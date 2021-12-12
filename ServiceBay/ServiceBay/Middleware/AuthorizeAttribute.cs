@@ -11,7 +11,7 @@ namespace ServiceBay.Middleware
     {
         public void OnAuthorization(AuthorizationFilterContext context)
         {
-            var account = (Login)context.HttpContext.Items["User"];
+            var account = (Person)context.HttpContext.Items["User"];
             if (account == null)
             {
                 // not logged in
