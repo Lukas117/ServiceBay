@@ -46,11 +46,13 @@ namespace ServiceBay.Controllers
             hc.BaseAddress = new Uri(uri);
             var insertrecord = hc.PostAsJsonAsync<CityForCreationDto>("ApiCity", inserttemp.cityDto);
             insertrecord.Wait();
+            inserttemp.addressDto.CityZipcode = inserttemp.cityDto.Zipcode;
             var insertrecord1 = hc.PostAsJsonAsync<AddressForCreationDto>("ApiAddress", inserttemp.addressDto);
             insertrecord.Wait();
             string jsonString = insertrecord1.Result.Content.ReadAsStringAsync().Result;
             AddressForCreationDto returnedAddress = JsonConvert.DeserializeObject<AddressForCreationDto>(jsonString);
             inserttemp.personDto.AddressId = returnedAddress.Id;
+            inserttemp.personDto.UserRole = 0;
             var insertrecord2 = hc.PostAsJsonAsync<PersonForCreationDto>("ApiPerson", inserttemp.personDto);
             insertrecord.Wait();
 
