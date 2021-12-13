@@ -13,11 +13,13 @@ namespace ServiceBay.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly NotificationController noti;
+        private readonly MvcPersonController personController;
 
         public HomeController(ILogger<HomeController> logger)
         {
             _logger = logger;
             noti = new NotificationController();
+            personController = new MvcPersonController();
         }
 
         public IActionResult Index()

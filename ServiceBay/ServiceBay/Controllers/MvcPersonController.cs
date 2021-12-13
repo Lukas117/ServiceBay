@@ -53,14 +53,15 @@ namespace ServiceBay.Controllers
             return View("Create");
         }
 
-        public IActionResult Details(int id)
+        public IActionResult Details()
         {
             Person person = null;
 
             HttpClient hc = new HttpClient();
             hc.BaseAddress = new Uri(uri);
+            var currentUser = (Person)HttpContext.Items["User"];
 
-            var consumeapi = hc.GetAsync("ApiPerson/" + id.ToString());
+            var consumeapi = hc.GetAsync("ApiPerson/" + currentUser.Id.ToString());
             consumeapi.Wait();
 
             var readdata = consumeapi.Result;

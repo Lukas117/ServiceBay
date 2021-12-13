@@ -18,7 +18,7 @@ namespace ServiceBay.Controllers
     {
         public static string tokenbased;
 
-        private readonly string uri = "https://localhost:5001/api/";
+        private readonly string uri = "https://localhost:44349/api/";
 
         public ActionResult Index()
         {

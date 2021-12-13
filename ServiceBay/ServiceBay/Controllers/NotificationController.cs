@@ -23,7 +23,7 @@ namespace ServiceBay.Controllers
 
         public JsonResult SetPrevPrices()
         {
-            var auctions = mvc.AllAuctions();
+            var auctions = AllSellerAuctions(StaticVar.currentUser.Id);
             var prices = InsertIntoPrevPrices((IEnumerable<Auction>)auctions.Value);
             return Json(prices);
         }

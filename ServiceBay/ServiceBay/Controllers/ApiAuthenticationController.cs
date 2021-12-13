@@ -36,7 +36,7 @@ namespace ServiceBay.Controllers
 
             if (response == null)
                 return BadRequest(new { message = "Username or password is incorrect" });
-
+            
             return Ok(response.Token);
         }
 

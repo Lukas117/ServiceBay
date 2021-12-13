@@ -45,11 +45,11 @@
                         </div>
                     </div>
                     <div class="dropdown" id="userDropdown" style="width:30px;height:30px">
-                        <div class="notification_icon" id="usericon" onclick="window.location.href='/MvcPerson/Details/6'">
+                        <div class="notification_icon" id="usericon" onclick="window.location.href='/MvcPerson/Details'">
                             <img src="~/css/user.png" style="width:30px;height:30px" id="userimg"> <span class="caret"></span>
                         </div>
                         <div class="dropdown-content" id="ddowncont">
-                            <a href="#">My auctions</a>
+                            <a onclick="window.location.href='/MvcAuction/Seller'">My auctions</a>
                             <a href="#">My bids</a>
                             <a href="#">Log out</a>
                         </div>
@@ -79,8 +79,8 @@
         $("#bellicon").click(function () {
             $(".dropdown").toggleClass("active");
         })
-    });
 
+    });
 
         function CompareBids() {
             $.ajax({
