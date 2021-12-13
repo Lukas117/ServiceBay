@@ -22,9 +22,6 @@ namespace ServiceBay.Models
         public int SellerId { get; set; }
         public double? Price { get; set; }
 
-        [Timestamp]
-        public byte[] RowVersion { get; set; }
-
         public virtual Person Seller { get; set; }
         public virtual ICollection<Bid> Bids { get; set; }
     }
