@@ -39,18 +39,14 @@ namespace ServiceBay.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create(CityForCreationDto cityDto, AddressForCreationDto addressDto,PersonForCreationDto inserttemp)
+        public IActionResult Create(PersonForCreationDto inserttemp)
         {
             HttpClient hc = new HttpClient();
             hc.BaseAddress = new Uri(uri);
-            var insertRecord1 = hc.PostAsJsonAsync<CityForCreationDto>("ApiCity", cityDto);
-            insertRecord1.Wait();
-            var insertRecord2 = hc.PostAsJsonAsync<AddressForCreationDto>("ApiAddress", addressDto);
-            insertRecord2.Wait();
             var insertrecord = hc.PostAsJsonAsync<PersonForCreationDto>("ApiPerson", inserttemp);
             insertrecord.Wait();
 
-            if (insertRecord1.Result.IsSuccessStatusCode && insertRecord2.Result.IsSuccessStatusCode && insertrecord.Result.IsSuccessStatusCode)
+            if (insertrecord.Result.IsSuccessStatusCode)
             {
                 return RedirectToAction("Index");
             }
