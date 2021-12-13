@@ -14,6 +14,14 @@ namespace ServiceBay.Data
             : base(options)
         {
         }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Auction>()
+                .Property(u => u.RowVersion)
+                .IsRowVersion();
+        }
+
         public DbSet<ServiceBay.Models.Auction> Auction { get; set; }
         public DbSet<ServiceBay.Models.Bid> Bid { get; set; }
         public DbSet<ServiceBay.Models.Person> Person { get; set; }
