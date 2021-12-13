@@ -134,8 +134,6 @@ namespace ServiceBay
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
-           
-
             app.UseRouting();
 
             app.UseCors(x => x
@@ -146,9 +144,8 @@ namespace ServiceBay
 
             app.UseMiddleware<JwtMiddleware>();
             app.UseAuthentication();
-            app.UseAuthorization();
 
-           
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {

@@ -38,7 +38,6 @@ namespace ServiceBay.Controllers
 
         // GET: api/ApiPerson
         [HttpGet]
-        [Authorize]
          public async Task<IEnumerable<Person>> GetPersons()
         {
             return await _personRepo.GetPersons();

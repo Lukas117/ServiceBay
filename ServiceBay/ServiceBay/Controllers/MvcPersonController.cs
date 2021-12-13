@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ServiceBay.Models;
 
@@ -13,7 +12,6 @@ namespace ServiceBay.Controllers
     {
         private readonly string uri = "https://localhost:44349/api/";
 
-        [Authorize]
         public IActionResult Index()
         {
             IEnumerable<Person> person = null;

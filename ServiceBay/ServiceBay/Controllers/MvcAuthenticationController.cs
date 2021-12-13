@@ -9,6 +9,8 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using ServiceBay.Models;
 using System.Web;
+using System.Net;
+using System.Security.Claims;
 
 namespace ServiceBay.Controllers
 {
@@ -33,15 +35,14 @@ namespace ServiceBay.Controllers
         {
 
             HttpClient hc = new HttpClient();
-            HttpContext context = HttpContext;
             hc.BaseAddress = new Uri(uri);
             hc.DefaultRequestHeaders.Clear();
-            //var tokenbased = String.Empty;
+            //var tokenbased = String.Empty;\
             hc.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            
 
             var response = hc.PostAsJsonAsync<Login>("ApiAuthentication/UserLogin", login);
             response.Wait();
+
 
             var saved = response.Result;
             if (saved.IsSuccessStatusCode)
@@ -50,14 +51,7 @@ namespace ServiceBay.Controllers
                 //responseMessage.Split(":");
                 tokenbased = JsonConvert.DeserializeObject<string>(responseMessage);
                 hc.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", tokenbased);
-                context.Request.Headers["Authorization"] = tokenbased;
-
-               
-
-
-                //HttpContext.Items["Token"] = tokenbased;
-                //Session["TokenNumber"] = tokenbased;
-
+                //HttpContext.Request.Headers["Authorization"] = tokenbased;
                 return RedirectToAction("Login");
             }
             return View();
