@@ -15,13 +15,6 @@ namespace ServiceBay.Data
         {
         }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            modelBuilder.Entity<Auction>()
-                .Property(u => u.RowVersion)
-                .IsRowVersion();
-        }
-
         public DbSet<ServiceBay.Models.Auction> Auction { get; set; }
         public DbSet<ServiceBay.Models.Bid> Bid { get; set; }
         public DbSet<ServiceBay.Models.Person> Person { get; set; }
@@ -30,6 +23,7 @@ namespace ServiceBay.Data
         public DbSet<ServiceBay.Dto.AuctionForUpdateDto> AuctionForUpdateDto { get; set; }
         public DbSet<ServiceBay.Dto.AuctionForCreationDto> AuctionForCreationDto { get; set; }
         public DbSet<ServiceBay.Models.Login> Login { get; set; }
+        public DbSet<ServiceBay.Dto.PersonForCreationDto> PersonForCreationDto { get; set; }
         
     }
 }
