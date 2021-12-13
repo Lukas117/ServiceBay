@@ -15,11 +15,13 @@ using ServiceBay.Repository;
 using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-using System.Text;
+using System.Text.Json;
 using Microsoft.AspNetCore.Authorization;
 using ServiceBay.Middleware;
 using Microsoft.AspNetCore.Http;
 using ServiceBay.Jwt;
+using System.Text.Json.Serialization;
+using System.Text;
 
 namespace ServiceBay
 {
@@ -36,7 +38,9 @@ namespace ServiceBay
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllersWithViews();
+            services.AddControllersWithViews().AddJsonOptions(x =>
+                x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve); ;
+            
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));

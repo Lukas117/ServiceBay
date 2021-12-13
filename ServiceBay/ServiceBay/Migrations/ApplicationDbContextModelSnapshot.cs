@@ -35,6 +35,9 @@ namespace ServiceBay.Migrations
                     b.Property<DateTime>("EndDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("Price")
+                        .HasColumnType("int");
+
                     b.Property<int>("SellerId")
                         .HasColumnType("int");
 
@@ -44,33 +47,63 @@ namespace ServiceBay.Migrations
                     b.Property<double>("StartingPrice")
                         .HasColumnType("float");
 
-                    b.Property<DateTime>("Version")
-                        .HasColumnType("datetime2");
-
                     b.HasKey("Id");
 
                     b.ToTable("AuctionForCreationDto");
                 });
 
-            modelBuilder.Entity("ServiceBay.Dto.BidForCreationDto", b =>
+            modelBuilder.Entity("ServiceBay.Dto.AuctionForUpdateDto", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("AuctionId")
-                        .HasColumnType("int");
+                    b.Property<string>("AuctionDescription")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("BuyerId")
-                        .HasColumnType("int");
+                    b.Property<string>("AuctionName")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<double>("Price")
-                        .HasColumnType("float");
+                    b.Property<DateTime>("EndDate")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
-                    b.ToTable("BidForCreationDto");
+                    b.ToTable("AuctionForUpdateDto");
+                });
+
+            modelBuilder.Entity("ServiceBay.Dto.PersonForCreationDto", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("AddressId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Fname")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Lname")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PasswordHash")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Phoneno")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UserRole")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("PersonForCreationDto");
                 });
 
             modelBuilder.Entity("ServiceBay.Models.Address", b =>
@@ -115,8 +148,10 @@ namespace ServiceBay.Migrations
                     b.Property<double?>("Price")
                         .HasColumnType("float");
 
-                    b.Property<int>("RowVersion")
-                        .HasColumnType("int");
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
 
                     b.Property<int>("SellerId")
                         .HasColumnType("int");
@@ -173,6 +208,22 @@ namespace ServiceBay.Migrations
                     b.HasKey("Zipcode");
 
                     b.ToTable("City");
+                });
+
+            modelBuilder.Entity("ServiceBay.Models.Login", b =>
+                {
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("RememberMe")
+                        .HasColumnType("bit");
+
+                    b.ToTable("Login");
                 });
 
             modelBuilder.Entity("ServiceBay.Models.Person", b =>

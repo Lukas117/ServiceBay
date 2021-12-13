@@ -1,7 +1,8 @@
-﻿@model ServiceBay.Dto.PersonForCreationDto
+﻿@model ServiceBay.Dto.PersonViewModel
 
 @{
     ViewData["Title"] = "Create";
+    Layout = "~/Views/MvcPerson/_Layout.cshtml";
 }
 
 <h1>Create</h1>
@@ -13,39 +14,69 @@
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="Fname" class="control-label"></label>
-                <input asp-for="Fname" class="form-control" />
-                <span asp-validation-for="Fname" class="text-danger"></span>
+                <label asp-for="personDto.Fname" class="control-label"></label>
+                <input asp-for="personDto.Fname" class="form-control" />
+                <span asp-validation-for="personDto.Fname" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Lname" class="control-label"></label>
-                <input asp-for="Lname" class="form-control" />
-                <span asp-validation-for="Lname" class="text-danger"></span>
+                <label asp-for="personDto.Lname" class="control-label"></label>
+                <input asp-for="personDto.Lname" class="form-control" />
+                <span asp-validation-for="personDto.Lname" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Phoneno" class="control-label"></label>
-                <input asp-for="Phoneno" class="form-control" />
-                <span asp-validation-for="Phoneno" class="text-danger"></span>
+                <label asp-for="personDto.Phoneno" class="control-label"></label>
+                <input asp-for="personDto.Phoneno" class="form-control" />
+                <span asp-validation-for="personDto.Phoneno" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Email" class="control-label"></label>
-                <input asp-for="Email" class="form-control" />
-                <span asp-validation-for="Email" class="text-danger"></span>
+                <label asp-for="personDto.Email" class="control-label"></label>
+                <input asp-for="personDto.Email" class="form-control" />
+                <span asp-validation-for="personDto.Email" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="PasswordHash" class="control-label"></label>
-                <input asp-for="PasswordHash" class="form-control" />
-                <span asp-validation-for="PasswordHash" class="text-danger"></span>
+                <label asp-for="personDto.PasswordHash" class="control-label"></label>
+                <input asp-for="personDto.PasswordHash" class="form-control" />
+                <span asp-validation-for="personDto.PasswordHash" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="UserRole" class="control-label"></label>
-                <input asp-for="UserRole" class="form-control" />
-                <span asp-validation-for="UserRole" class="text-danger"></span>
+                <label asp-for="personDto.UserRole" class="control-label"></label>
+                <input asp-for="personDto.UserRole" class="form-control" />
+                <span asp-validation-for="personDto.UserRole" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="AddressId" class="control-label"></label>
-                <input asp-for="AddressId" class="form-control" />
-                <span asp-validation-for="AddressId" class="text-danger"></span>
+                <label asp-for="personDto.AddressId" class="control-label"></label>
+                <input asp-for="personDto.AddressId" class="form-control" />
+                <span asp-validation-for="personDto.AddressId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="addressDto.StreetName" class="control-label"></label>
+                <input asp-for="addressDto.StreetName" class="form-control" />
+                <span asp-validation-for="addressDto.StreetName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="addressDto.StreetNumber" class="control-label"></label>
+                <input asp-for="addressDto.StreetNumber" class="form-control" />
+                <span asp-validation-for="addressDto.StreetNumber" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="addressDto.CityZipcode" class="control-label"></label>
+                <input asp-for="addressDto.CityZipcode" class="form-control" />
+                <span asp-validation-for="addressDto.CityZipcode" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="cityDto.Zipcode" class="control-label"></label>
+                <input asp-for="cityDto.Zipcode" class="form-control" />
+                <span asp-validation-for="cityDto.Zipcode" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="cityDto.CityName" class="control-label"></label>
+                <input asp-for="cityDto.CityName" class="form-control" />
+                <span asp-validation-for="cityDto.CityName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="cityDto.Country" class="control-label"></label>
+                <input asp-for="cityDto.Country" class="form-control" />
+                <span asp-validation-for="cityDto.Country" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />

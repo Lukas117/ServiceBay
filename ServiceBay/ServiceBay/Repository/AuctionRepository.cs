@@ -62,7 +62,7 @@ namespace ServiceBay.Repository
             try
             {
                 //return await from a in _context.Auction where a.SellerId.Equals(sellerId) select a;
-                return await _context.Auction.Where(a => a.SellerId == sellerId).Select(a =>a).ToListAsync();
+                return await _context.Auction.Where(a => a.SellerId == sellerId).ToListAsync();
             }
             catch (Exception ex)
             {

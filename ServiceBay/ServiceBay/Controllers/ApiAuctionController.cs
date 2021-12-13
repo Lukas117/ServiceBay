@@ -2,11 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ServiceBay.Contracts;
 using ServiceBay.Dto;
+using ServiceBay.Middleware;
 using ServiceBay.Models;
 
 namespace ServiceBay.Controllers
@@ -40,6 +40,7 @@ namespace ServiceBay.Controllers
 
         // GET: api/ApiAuction/5
         [HttpGet("{id}")]
+        [Authorize]
         public async Task<ActionResult<AuctionForCreationDto>> GetAuction(int id)
         {
             //CURRENT USER 

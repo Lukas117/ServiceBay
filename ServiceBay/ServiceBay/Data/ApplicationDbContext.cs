@@ -19,7 +19,7 @@ namespace ServiceBay.Data
         {
             modelBuilder.Entity<Auction>()
                 .Property(u => u.RowVersion)
-                .IsRowVersion();
+                .IsConcurrencyToken();
         }
 
         public DbSet<ServiceBay.Models.Auction> Auction { get; set; }
@@ -31,6 +31,7 @@ namespace ServiceBay.Data
         public DbSet<ServiceBay.Dto.AuctionForCreationDto> AuctionForCreationDto { get; set; }
         public DbSet<ServiceBay.Models.Login> Login { get; set; }
         public DbSet<ServiceBay.Dto.PersonForCreationDto> PersonForCreationDto { get; set; }
+        public DbSet<ServiceBay.Dto.PersonViewModel> PersonViewModel { get; set; }
         
     }
 }

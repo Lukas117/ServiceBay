@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using ServiceBay.Dto;
 using ServiceBay.Models;
 
@@ -11,7 +12,7 @@ namespace ServiceBay.Controllers
 {
     public class MvcPersonController : Controller
     {
-        private readonly string uri = "https://localhost:5001/api/";
+        private readonly string uri = "https://localhost:44349/api/";
 
         public IActionResult Index()
         {
@@ -39,14 +40,21 @@ namespace ServiceBay.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create(PersonForCreationDto inserttemp)
+        public IActionResult Create(PersonViewModel inserttemp)
         {
             HttpClient hc = new HttpClient();
             hc.BaseAddress = new Uri(uri);
-            var insertrecord = hc.PostAsJsonAsync<PersonForCreationDto>("ApiPerson", inserttemp);
+            var insertrecord = hc.PostAsJsonAsync<CityForCreationDto>("ApiCity", inserttemp.cityDto);
+            insertrecord.Wait();
+            var insertrecord1 = hc.PostAsJsonAsync<AddressForCreationDto>("ApiAddress", inserttemp.addressDto);
+            insertrecord.Wait();
+            string jsonString = insertrecord1.Result.Content.ReadAsStringAsync().Result;
+            AddressForCreationDto returnedAddress = JsonConvert.DeserializeObject<AddressForCreationDto>(jsonString);
+            inserttemp.personDto.AddressId = returnedAddress.Id;
+            var insertrecord2 = hc.PostAsJsonAsync<PersonForCreationDto>("ApiPerson", inserttemp.personDto);
             insertrecord.Wait();
 
-            if (insertrecord.Result.IsSuccessStatusCode)
+            if (insertrecord.Result.IsSuccessStatusCode && insertrecord1.Result.IsSuccessStatusCode && insertrecord2.Result.IsSuccessStatusCode)
             {
                 return RedirectToAction("Index");
             }
