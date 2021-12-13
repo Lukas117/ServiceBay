@@ -94,22 +94,6 @@ namespace ServiceBay.Controllers
             return View(personView);
         }
 
-        [HttpDelete]
-        public IActionResult Delete(int id)
-        {
-            HttpClient hc = new HttpClient();
-            hc.BaseAddress = new Uri(uri);
-            var removerecord = hc.DeleteAsync("ApiPerson/" + id.ToString());
-            removerecord.Wait();
-
-            var deletedata = removerecord.Result;
-            if (deletedata.IsSuccessStatusCode)
-            {
-                return RedirectToAction("Index");
-            }
-            return View("Index");
-        }
-
         public IActionResult Edit()
         {
             return View();

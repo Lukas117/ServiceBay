@@ -33,9 +33,9 @@ namespace ServiceBay.Controllers
 
         // GET: api/ApiAuction
         [HttpGet("Seller/{id}")]
-        public async Task<IEnumerable<Auction>> GetSellerAuctions(int sellerId)
+        public async Task<IEnumerable<Auction>> GetSellerAuctions(int id)
         {
-            return await _auctionRepo.GetSellerAuctions(sellerId);
+            return await _auctionRepo.GetSellerAuctions(id);
         }
 
         // GET: api/ApiAuction/5

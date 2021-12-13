@@ -48,8 +48,7 @@ namespace DesktopClient
             {
                 var responseMessage = response.Result.Content.ReadAsStringAsync().Result;
                 tokenbased = JsonConvert.DeserializeObject<string>(responseMessage);
-                hc.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", tokenbased);
-                //context.Request.Headers["Authorization"] = tokenbased;
+                hc.DefaultRequestHeaders.TryAddWithoutValidation("UserToken", tokenbased);
                 MainWindow mainWindow = new MainWindow();
                 mainWindow.Owner = Owner;
                 mainWindow.Show();

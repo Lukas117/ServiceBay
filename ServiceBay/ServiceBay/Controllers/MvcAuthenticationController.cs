@@ -50,8 +50,8 @@ namespace ServiceBay.Controllers
                 var responseMessage = response.Result.Content.ReadAsStringAsync().Result;
                 //responseMessage.Split(":");
                 tokenbased = JsonConvert.DeserializeObject<string>(responseMessage);
-                hc.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", tokenbased);
-                //HttpContext.Request.Headers["Authorization"] = tokenbased;
+                //hc.DefaultRequestHeaders.TryAddWithoutValidation("UserToken", tokenbased);
+                HttpContext.Request.Headers["Authorization"] = tokenbased;
                 return RedirectToAction("Login");
             }
             return View();

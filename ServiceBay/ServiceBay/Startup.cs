@@ -53,6 +53,7 @@ namespace ServiceBay
             services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));
             services.AddScoped<ITokenGenerator, TokenGenerator>();
 
+            services.AddHttpContextAccessor();
 
             services.AddAutoMapper(typeof(Startup));
            
