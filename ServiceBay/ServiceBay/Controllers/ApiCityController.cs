@@ -34,7 +34,7 @@ namespace ServiceBay.Controllers
         }
 
         // GET: api/ApiCity/5
-        [HttpGet("{id}")]
+        [HttpGet("{zipcode}")]
         public async Task<ActionResult<City>> GetCity(string zipcode)
         {
             var city = await _cityRepo.GetCity(zipcode);

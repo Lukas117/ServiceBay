@@ -65,7 +65,7 @@ namespace ServiceBay.Controllers
 
         public IActionResult Details()
         {
-            Person person = null;
+            PersonViewModel personView = null;
 
             HttpClient hc = new HttpClient();
             hc.BaseAddress = new Uri(uri);
@@ -73,15 +73,25 @@ namespace ServiceBay.Controllers
 
             var consumeapi = hc.GetAsync("ApiPerson/" + currentUser.Id.ToString());
             consumeapi.Wait();
+            var consumeapi1 = hc.GetAsync("ApiAddress/" + currentUser.AddressId.ToString());
+            consumeapi1.Wait();
+            var read = consumeapi1.Result.Content.ReadAsAsync<AddressForCreationDto>();
+            var zipcode = read.Result.CityZipcode;
+            var consumeapi2 = hc.GetAsync("ApiCity/" + zipcode.ToString());
+            consumeapi2.Wait();
 
-            var readdata = consumeapi.Result;
-            if (readdata.IsSuccessStatusCode)
+            if (consumeapi.Result.IsSuccessStatusCode && consumeapi1.Result.IsSuccessStatusCode && consumeapi2.Result.IsSuccessStatusCode)
             {
-                var displaydata = readdata.Content.ReadAsAsync<Person>();
+                var displaydata = consumeapi.Result.Content.ReadAsAsync<PersonForCreationDto>();
                 displaydata.Wait();
-                person = displaydata.Result;
+                var displaydata2 = consumeapi2.Result.Content.ReadAsAsync<CityForCreationDto>();
+                displaydata2.Wait();
+                PersonForCreationDto person = displaydata.Result;
+                AddressForCreationDto address = read.Result;
+                CityForCreationDto city = displaydata2.Result;
+                personView = new() { personDto = person, addressDto = address, cityDto = city };
             }
-            return View(person);
+            return View(personView);
         }
 
         [HttpDelete]
