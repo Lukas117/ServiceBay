@@ -55,6 +55,8 @@ namespace ServiceBay
 
             services.AddHttpContextAccessor();
 
+            services.AddSession();
+
             services.AddAutoMapper(typeof(Startup));
            
             services.AddSwaggerGen(c =>
@@ -140,7 +142,7 @@ namespace ServiceBay
             app.UseStaticFiles();
 
             app.UseRouting();
-
+            app.UseSession();
             app.UseCors(x => x
                 .SetIsOriginAllowed(origin => true)
                 .AllowAnyMethod()

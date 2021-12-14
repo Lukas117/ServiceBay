@@ -31,8 +31,7 @@ namespace ServiceBay.Middleware
 
         public async Task Invoke(HttpContext context, ITokenGenerator tokenGenerator)
         {
-            //var token = context.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
-            var token = MvcAuthenticationController.tokenbased;
+            var token = context.Session.GetString("Token");
 
             if (token != null)
                 AttachAccountToContext(context, tokenGenerator, token);
