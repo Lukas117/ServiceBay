@@ -80,15 +80,21 @@
             var auction = @Model.Id;
 
             var inserttemp = {};
+            inserttemp.Id = null;
+            inserttemp.BuyerId = null;
             inserttemp.Price = price;
             inserttemp.AuctionId = auction;
+            inserttemp.Auction = null;
+            inserttemp.Buyer = null;
 
             $.ajax({ 
-                type: 'POST',
+                //type: 'POST',
+                method: 'POST',
                 url: '@Url.Action("Create", "MvcBid")',
-                data: '{inserttemp: ' + JSON.stringify(inserttemp) + '}',
-                contentType: "application/json; charset=utf-8",
-                dataType: "json"
+                data: inserttemp,
+                success: function () {
+                    location.reload();
+                }
             });
         });
     });
