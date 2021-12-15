@@ -39,6 +39,7 @@ namespace ServiceBay.Controllers
                 HttpContext.Session.SetString("Token", tokenbased);
                 return RedirectToAction("Index","Home");
             }
+            ModelState.AddModelError(nameof(login.Password), "Wrong email or password");
             return View();
         }
     }

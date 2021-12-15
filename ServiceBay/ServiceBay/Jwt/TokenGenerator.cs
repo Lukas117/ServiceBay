@@ -37,13 +37,13 @@ namespace ServiceBay.Jwt
         public AuthenticateResponse Authenticate(Login login)
         {
             Person user = _personRepository.GetPersonByEmail(login.Email).Result;
+            // return null if user not found
+            if (user == null) return null;
+
             var passwordHash = user.PasswordHash;
             var salt = user.PasswordSalt;
             var passwordInput = login.Password;
             string token = null;
-
-            // return null if user not found
-            if (user == null) return null;
 
             // authentication successful so generate jwt token
             if (encryption.AreEqual(passwordInput, passwordHash, salt))
