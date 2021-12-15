@@ -49,6 +49,8 @@ namespace ServiceBay.Controllers
         [HttpPost]
         public IActionResult Create(Bid inserttemp)
         {
+            var user = (Person)HttpContext.Items["User"];
+            inserttemp.BuyerId = user.Id;
             HttpClient hc = new HttpClient();
             hc.BaseAddress = new Uri(uri);
 

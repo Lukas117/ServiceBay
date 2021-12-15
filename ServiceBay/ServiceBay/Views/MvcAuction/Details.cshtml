@@ -4,7 +4,7 @@
     ViewData["Title"] = "Details";
 }
 
-<h1>@Model.AuctionName</h1>
+<h1>Details</h1>
 
 <div>
     <h4>Auction</h4>
@@ -71,21 +71,41 @@
 
 <script>
     $(document).ready(function () {
+        //$('#bidButton').click(function () {
+        //    bid();
+        //});
+
         $('#bidButton').click(function () {
-            bid();
+            var price = document.getElementById("inputPrice").value;
+            var auction = @Model.Id;
+
+            var inserttemp = {
+                Id: 13,
+                Price: price,
+                BuyerId: 0,
+                AuctionId: auction
+            };
+
+            $.ajax({ 
+                type: 'POST',
+                url: '/MvcBid/Create',
+                data: JSON.stringify(inserttemp),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json"
+            });
         });
     });
 
-    function bid() {
-        var x = inputPrice.value;
+    @*function bid() {
+        var x = document.getElementById("bidButton").value;
         $.ajax({
             type: "POST",
             url: "@Url.Action("Bidding")",
-            data: { Price: x, buyerId: 6, auctionId: @Model.Id},
+            data: { inputP: x, _AuctionId: @Model.Id},
             dataType: "json",
             success: function () {
                 console.log("success");
             }
         })
-    };
+    };*@
 </script>
