@@ -75,7 +75,7 @@
 <script>
     function Disable(id) {
                 $.ajax({
-                    type: "PUT",
+                    type: "POST",
                     url: "@Url.Action("Disable")",
                     data: { id: id },
                     dataType: "json",

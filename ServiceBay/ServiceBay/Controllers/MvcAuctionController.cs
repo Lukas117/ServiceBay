@@ -14,7 +14,7 @@ namespace ServiceBay.Controllers
 {
     public class MvcAuctionController : Controller
     {
-        private readonly string uri = "https://localhost:5001/api/";
+        private readonly string uri = "https://localhost:44349/api/";
 
         
         public IActionResult Index()
@@ -63,7 +63,7 @@ namespace ServiceBay.Controllers
             return View(auction);
         }
 
-        public IActionResult AllSellerAuctionsView()
+        public IActionResult MyAuctions()
         {
             IEnumerable<Auction> auction = null;
           //  var currentUser = (Person)HttpContext.Items["User"];
@@ -194,7 +194,7 @@ namespace ServiceBay.Controllers
             return View(auction);
         }
 
-        [HttpPut]
+        [HttpPost]
         public IActionResult DisableAuction(int id, Auction auction)
         {
             HttpClient hc = new HttpClient();
@@ -210,7 +210,7 @@ namespace ServiceBay.Controllers
             return View("Index");
         }
 
-        [HttpPut]
+        [HttpPost]
         public JsonResult Disable(int id)
         {
             Auction auction = DetailsAuction(id);

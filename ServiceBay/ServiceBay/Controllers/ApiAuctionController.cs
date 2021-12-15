@@ -60,7 +60,6 @@ namespace ServiceBay.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutAuction(int id, Auction auction)
         {
-            //var auction = _mapper.Map<Auction>(auctionDto);
             if (id != auction.Id)
             {
                 return BadRequest();
@@ -107,7 +106,6 @@ namespace ServiceBay.Controllers
         [HttpPut("Disable/{id}")]
         public async Task<IActionResult> DisableAuction(int id, Auction auction)
         {
-            //var auction = _mapper.Map<Auction>(auctionDto);
             if (id != auction.Id)
             {
                 return BadRequest();
