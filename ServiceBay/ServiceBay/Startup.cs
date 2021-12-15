@@ -39,7 +39,7 @@ namespace ServiceBay
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews().AddJsonOptions(x =>
-                x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve); ;
+                x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve);
             
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(

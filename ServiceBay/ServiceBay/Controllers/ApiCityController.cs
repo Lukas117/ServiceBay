@@ -49,34 +49,34 @@ namespace ServiceBay.Controllers
 
         // PUT: api/ApiCity/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        //[HttpPut("{id}")]
-        //public async Task<IActionResult> PutCity(string id, City city)
-        //{
-        //    if (id != city.Zipcode)
-        //    {
-        //        return BadRequest();
-        //    }
+        [HttpPut("{zipcode}")]
+        public async Task<IActionResult> PutCity(string zipcode, CityForCreationDto cityDto)
+        {
+            var city = _mapper.Map<City>(cityDto);
 
-        //    _context.Entry(city).State = EntityState.Modified;
+            if (!zipcode.Equals(city.Zipcode))
+            {
+                return BadRequest();
+            }
 
-        //    try
-        //    {
-        //        await _context.SaveChangesAsync();
-        //    }
-        //    catch (DbUpdateConcurrencyException)
-        //    {
-        //        if (!CityExists(id))
-        //        {
-        //            return NotFound();
-        //        }
-        //        else
-        //        {
-        //            throw;
-        //        }
-        //    }
+            try
+            {
+                await _cityRepo.UpdateCity(zipcode, city);
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!_cityRepo.CityExists(zipcode))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
 
-        //    return NoContent();
-        //}
+            return NoContent();
+        }
 
         // POST: api/ApiCity
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754

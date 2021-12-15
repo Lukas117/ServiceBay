@@ -24,7 +24,6 @@ namespace ServiceBay.Repository
             {
                 _context.Address.Add(address);
                 return await _context.SaveChangesAsync();
-                int id = address.Id;
             }
             catch (Exception ex)
             {
@@ -70,9 +69,19 @@ namespace ServiceBay.Repository
             }
         }
 
-        public Task<int> UpdateAddress(int id, Address address)
+        public async Task<int> UpdateAddress(int id, Address address)
         {
-            throw new NotImplementedException();
+            try
+            {
+                _context.Entry(address).Property(x => x.StreetName).IsModified = true;
+                _context.Entry(address).Property(x => x.StreetNumber).IsModified = true;
+                _context.Entry(address).Property(x => x.CityZipcode).IsModified = true;
+                return await _context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error updating address: '{ex.Message}'.", ex);
+            }
         }
 
         public bool AddressExists(int id)

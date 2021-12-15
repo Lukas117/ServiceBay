@@ -67,7 +67,10 @@ namespace ServiceBay.Repository
         {
             try
             {
-                _context.Entry(person).State = EntityState.Modified;
+                _context.Entry(person).Property(x => x.Fname).IsModified = true;
+                _context.Entry(person).Property(x => x.Lname).IsModified = true;
+                _context.Entry(person).Property(x => x.Phoneno).IsModified = true; 
+                _context.Entry(person).Property(x => x.Email).IsModified = true; 
                 return await _context.SaveChangesAsync();
             }
             catch (Exception ex)

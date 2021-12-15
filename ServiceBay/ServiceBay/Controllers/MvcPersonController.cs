@@ -69,6 +69,37 @@ namespace ServiceBay.Controllers
 
             HttpClient hc = new HttpClient();
             hc.BaseAddress = new Uri(uri);
+            var currentUser = StaticVar.currentUser;
+
+            var consumeapi = hc.GetAsync("ApiPerson/" + currentUser.Id.ToString());
+            consumeapi.Wait();
+            var consumeapi1 = hc.GetAsync("ApiAddress/" + currentUser.AddressId.ToString());
+            consumeapi1.Wait();
+            var read = consumeapi1.Result.Content.ReadAsAsync<AddressForCreationDto>();
+            var zipcode = read.Result.CityZipcode;
+            var consumeapi2 = hc.GetAsync("ApiCity/" + zipcode.ToString());
+            consumeapi2.Wait();
+
+            if (consumeapi.Result.IsSuccessStatusCode && consumeapi1.Result.IsSuccessStatusCode && consumeapi2.Result.IsSuccessStatusCode)
+            {
+                var displaydata = consumeapi.Result.Content.ReadAsAsync<PersonForCreationDto>();
+                displaydata.Wait();
+                var displaydata2 = consumeapi2.Result.Content.ReadAsAsync<CityForCreationDto>();
+                displaydata2.Wait();
+                PersonForCreationDto person = displaydata.Result;
+                AddressForCreationDto address = read.Result;
+                CityForCreationDto city = displaydata2.Result;
+                personView = new() { personDto = person, addressDto = address, cityDto = city };
+            }
+            return View(personView);
+        }
+
+        public IActionResult Edit(int id)
+        {
+            PersonViewModel personView = null;
+
+            HttpClient hc = new HttpClient();
+            hc.BaseAddress = new Uri(uri);
             var currentUser = (Person)HttpContext.Items["User"];
 
             var consumeapi = hc.GetAsync("ApiPerson/" + currentUser.Id.ToString());
@@ -94,32 +125,25 @@ namespace ServiceBay.Controllers
             return View(personView);
         }
 
-        public IActionResult Edit()
+        [HttpPost]
+        public IActionResult Edit(int id, PersonViewModel personView)
         {
-            return View();
-        }
-
-        [HttpPut]
-        public IActionResult Edit(int id)
-        {
-            Person person = null;
-
             HttpClient hc = new HttpClient();
             hc.BaseAddress = new Uri(uri);
-            var updaterecord = hc.GetAsync("ApiPerson/" + id.ToString());
+            var updaterecord = hc.PutAsJsonAsync<CityForCreationDto>("ApiCity/" + personView.cityDto.Zipcode.ToString(), personView.cityDto);
             updaterecord.Wait();
+            personView.addressDto.CityZipcode = personView.cityDto.Zipcode;
+            var updaterecord1 = hc.PutAsJsonAsync<AddressForCreationDto>("ApiAddress/" + personView.addressDto.Id.ToString(), personView.addressDto);
+            updaterecord1.Wait();
+            personView.personDto.AddressId = personView.addressDto.Id;
+            var updaterecord2 = hc.PutAsJsonAsync<PersonForCreationDto>("ApiPerson/" + id.ToString(), personView.personDto);
+            updaterecord2.Wait();
 
-            var updatadata = updaterecord.Result;
-            if (updatadata.IsSuccessStatusCode)
+            if (updaterecord.Result.IsSuccessStatusCode && updaterecord1.Result.IsSuccessStatusCode && updaterecord2.Result.IsSuccessStatusCode)
             {
-                var readTask = updatadata.Content.ReadAsAsync<Person>();
-                readTask.Wait();
-                person = readTask.Result;
-
+                return RedirectToAction("Details");
             }
-
-            return View(person);
-
+            return View(personView);
         }
     }
 }

@@ -45,34 +45,31 @@ namespace ServiceBay.Controllers
 
         // PUT: api/ApiAddress/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        //[HttpPut("{id}")]
-        //public async Task<IActionResult> PutAddress(int id, Address address)
-        //{
-        //    if (id != address.Id)
-        //    {
-        //        return BadRequest();
-        //    }
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutAddress(int id, AddressForCreationDto addressDto)
+        {
+            var address = _mapper.Map<Address>(addressDto);
 
-        //    _context.Entry(address).State = EntityState.Modified;
+            if (id != address.Id) { return BadRequest(); }
 
-        //    try
-        //    {
-        //        await _context.SaveChangesAsync();
-        //    }
-        //    catch (DbUpdateConcurrencyException)
-        //    {
-        //        if (!AddressExists(id))
-        //        {
-        //            return NotFound();
-        //        }
-        //        else
-        //        {
-        //            throw;
-        //        }
-        //    }
+            try
+            {
+                await _addressRepo.UpdateAddress(id, address);
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!_addressRepo.AddressExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
 
-        //    return NoContent();
-        //}
+            return NoContent();
+        }
 
         // POST: api/ApiAddress
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754

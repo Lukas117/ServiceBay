@@ -55,8 +55,10 @@ namespace ServiceBay.Controllers
 
         // PUT: api/ApiPerson/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutPerson(int id, Person person)
+        public async Task<IActionResult> PutPerson(int id, PersonForCreationDto personDto)
         {
+            var person = _mapper.Map<Person>(personDto);
+
             if (id != person.Id) { return BadRequest(); }
 
             try

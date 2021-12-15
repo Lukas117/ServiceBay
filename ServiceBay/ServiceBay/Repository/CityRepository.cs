@@ -62,9 +62,22 @@ namespace ServiceBay.Repository
             }
         }
 
-        public Task<int> UpdateCity(string zipcode, City city)
+        public async Task<int> UpdateCity(string zipcode, City city)
         {
-            throw new NotImplementedException();
+            try
+            {
+                if (!CityExists(city.Zipcode))
+                {
+                    await CreateCity(city);
+                }
+                _context.Entry(city).Property(x => x.CityName).IsModified = true;
+                _context.Entry(city).Property(x => x.Country).IsModified = true;
+                return await _context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error updating person: '{ex.Message}'.", ex);
+            }
         }
 
         public async Task<int> DeleteCity(string zipcode)
