@@ -14,7 +14,7 @@ namespace ServiceBay.Controllers
 {
     public class MvcAuctionController : Controller
     {
-        private readonly string uri = "https://localhost:5001/api/";
+        private readonly string uri = "https://localhost:44349/api/";
 
         
         public IActionResult Index()
@@ -89,14 +89,15 @@ namespace ServiceBay.Controllers
         {
             HttpClient hc = new HttpClient();
             hc.BaseAddress = new Uri(uri);
-
+            var currentUser = (Person)HttpContext.Items["User"];
+            inserttemp.SellerId = currentUser.Id;
             var insertrecord = hc.PostAsJsonAsync<AuctionForCreationDto>("ApiAuction", inserttemp);
             insertrecord.Wait();
 
             var savedata = insertrecord.Result;
             if(savedata.IsSuccessStatusCode)
             {
-                return RedirectToAction("Index");
+                return RedirectToAction("MyAuctions");
             }
             return View("Create");
         }
@@ -139,6 +140,11 @@ namespace ServiceBay.Controllers
                 auction = displaydata.Result;
             }
             return Json(auction);
+        }
+
+        public IActionResult Delete()
+        {
+            return View();
         }
 
         [HttpDelete]
@@ -189,7 +195,7 @@ namespace ServiceBay.Controllers
             var updatadata = updaterecord.Result;
             if (updatadata.IsSuccessStatusCode)
             {
-                return RedirectToAction("Index");
+                return RedirectToAction("MyAuctions");
             }
             return View(auction);
         }
@@ -205,9 +211,9 @@ namespace ServiceBay.Controllers
             var deletedata = disablerecord.Result;
             if (deletedata.IsSuccessStatusCode)
             {
-                return RedirectToAction("Index");
+                return RedirectToAction("MyAuctions");
             }
-            return View("Index");
+            return View("MyAuctions");
         }
 
         [HttpPost]
