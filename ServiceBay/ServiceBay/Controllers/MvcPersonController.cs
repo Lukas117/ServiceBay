@@ -12,7 +12,7 @@ namespace ServiceBay.Controllers
 {
     public class MvcPersonController : Controller
     {
-        private readonly string uri = "https://localhost:44349/api/";
+        private readonly string uri = "https://localhost:5001/api/";
 
         public IActionResult Index()
         {

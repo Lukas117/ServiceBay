@@ -16,7 +16,7 @@ namespace ServiceBay.Controllers
 {
     public class MvcAuthenticationController : Controller
     {
-        private readonly string uri = "https://localhost:44349/api/";
+        private readonly string uri = "https://localhost:5001/api/";
 
         public ActionResult Index()
         {

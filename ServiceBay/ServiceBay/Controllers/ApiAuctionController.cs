@@ -38,6 +38,14 @@ namespace ServiceBay.Controllers
             return await _auctionRepo.GetSellerAuctions(id);
         }
 
+        // GET: api/ApiAuction
+        [HttpGet("User")]
+        public async Task<IEnumerable<Auction>> GetUsersAuctions()
+        {
+            int id = StaticVar.currentUser.Id;
+            return await _auctionRepo.GetSellerAuctions(id);
+        }
+
         // GET: api/ApiAuction/5
         [HttpGet("{id}")]
         //[Authorize]

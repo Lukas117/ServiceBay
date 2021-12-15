@@ -43,10 +43,13 @@ namespace ServiceBay.Controllers
             StaticVar.newPrices.Clear();
             foreach (var a in auctions)
             {
-                if (a.SellerId == StaticVar.currentUser.Id)
-                {
-                    StaticVar.newPrices.Add(a.Price);
-                }
+               
+                    if (a.SellerId == StaticVar.currentUser.Id)
+                    {
+                        StaticVar.newPrices.Add(a.Price);
+                    }
+                
+             
             }
         }
 
@@ -84,7 +87,7 @@ namespace ServiceBay.Controllers
                     if (!StaticVar.newPrices[i].Equals(StaticVar.prevPrices[i]))
                     {
                         all.Add(StaticVar.newPrices[i]);
-                        StaticVar.prevPrices[i] = StaticVar.newPrices[i];
+                       StaticVar.prevPrices[i] = StaticVar.newPrices[i];
                     }
                 }
             }

@@ -13,7 +13,7 @@ namespace ServiceBay.Controllers
     {
 
         private readonly MvcAuctionController mvc;
-        private readonly string uri = "https://localhost:44349/api/";
+        private readonly string uri = "https://localhost:5001/api/";
 
 
         public MvcBidController()
