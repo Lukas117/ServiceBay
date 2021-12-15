@@ -16,5 +16,6 @@ namespace ServiceBay.Contracts
         public Task<int> DeleteBid(int id);
         public Task<IEnumerable<Bid>> GetBids();
         public bool BidExists(int id);
+        public Task<IEnumerable<Bid>> GetMyBids(int buyerId);
     }
 }

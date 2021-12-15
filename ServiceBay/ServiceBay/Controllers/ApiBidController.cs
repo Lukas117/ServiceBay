@@ -69,5 +69,13 @@ namespace ServiceBay.Controllers
             if (bid == 0) { return NotFound(); }
             return NoContent();
         }
+
+        //
+        [HttpGet("User")]
+        public async Task<IEnumerable<Bid>> GetUsersBids()
+        {
+            int id = StaticVar.currentUser.Id;
+            return await _bidRepo.GetMyBids(id);
+        }
     }
 }

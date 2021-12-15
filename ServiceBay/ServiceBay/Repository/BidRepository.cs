@@ -80,6 +80,18 @@ namespace ServiceBay.Repository
             }
         }
 
+        public async Task<IEnumerable<Bid>> GetMyBids(int buyerId)
+        {
+            try
+            {
+                return await _context.Bid.Where(a => a.BuyerId == buyerId).ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error getting auctions: '{ex.Message}'.", ex);
+            }
+        }
+
         public async Task<int> UpdateBid(int id, Bid bid)
         {
             try

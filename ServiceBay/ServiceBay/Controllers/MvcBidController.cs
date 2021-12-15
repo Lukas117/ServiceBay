@@ -79,5 +79,27 @@ namespace ServiceBay.Controllers
             };
             Create(newBid);
         }
+
+
+        public IActionResult MyBids()
+        {
+            IEnumerable<Bid> bids = null;
+            //  var currentUser = (Person)HttpContext.Items["User"];
+            HttpClient hc = new HttpClient();
+            hc.BaseAddress = new Uri(uri);
+
+            var consumeapi = hc.GetAsync("ApiBid/User");
+            consumeapi.Wait();
+
+            var readdata = consumeapi.Result;
+            if (readdata.IsSuccessStatusCode)
+            {
+                var displaydata = readdata.Content.ReadAsAsync<IList<Bid>>();
+                displaydata.Wait();
+
+                bids = displaydata.Result;
+            }
+            return View(bids);
+        }
     }
 }
