@@ -79,17 +79,14 @@
             var price = document.getElementById("inputPrice").value;
             var auction = @Model.Id;
 
-            var inserttemp = {
-                Id: 13,
-                Price: price,
-                BuyerId: 0,
-                AuctionId: auction
-            };
+            var inserttemp = {};
+            inserttemp.Price = price;
+            inserttemp.AuctionId = auction;
 
             $.ajax({ 
                 type: 'POST',
-                url: '/MvcBid/Create',
-                data: JSON.stringify(inserttemp),
+                url: '@Url.Action("Create", "MvcBid")',
+                data: '{inserttemp: ' + JSON.stringify(inserttemp) + '}',
                 contentType: "application/json; charset=utf-8",
                 dataType: "json"
             });
