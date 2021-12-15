@@ -55,7 +55,7 @@
                     <xctk:DateTimePicker  x:Name="endDate" VerticalAlignment="Center" Margin="5,140,5,140"/>
                     <TextBlock Text="Starting price" HorizontalAlignment="Left" Margin="5,165,100,90" FontSize="10"/>
                     <TextBox x:Name="startingPrice" VerticalAlignment="Center" Margin="5,180,5,100"/>
-                    <TextBlock Text="Seller Id" HorizontalAlignment="Left" Margin="5,205,100,50" FontSize="10"/>
+                    <TextBlock Text="Seller id" HorizontalAlignment="Left" Margin="5,205,100,50" FontSize="10"/>
                     <TextBox x:Name="sellerId" VerticalAlignment="Center" Margin="5,220,5,60"/>
                     <Button x:Name="popUpCreateButton" Click="CreateButton_Click" Content="Create" Margin="120,260,5,10"/>
                     <Button x:Name="popUpCloseButton" Click="PopUpCloseButton_Click" Content="Close" Margin="40,260,85,10"/>

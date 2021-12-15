@@ -22,8 +22,7 @@
         <TextBlock Text="Email" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="20" Grid.Row="1" Grid.Column="1"/>
         <TextBlock Text="Password" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="20" Grid.Row="2" Grid.Column="1"/>
         <TextBox x:Name="emailText" Grid.Row="1" Grid.Column="1" Margin="130,0,20,0" VerticalAlignment="Center" Height="27" />
-        <TextBox x:Name="passwordText" Grid.Row="2" Grid.Column="1" Margin="130,0,20,0" VerticalAlignment="Top" Height="27" />
+        <PasswordBox x:Name="passwordText" Grid.Row="2" Grid.Column="1" Margin="130,0,20,0" VerticalAlignment="Top" Height="27" PasswordChar="•" />
         <Button x:Name="loginButton" Grid.Row="3" Grid.Column="1" Click="LoginButton_Click" Width="100" Height="30" Content="Log in" VerticalAlignment="Center" HorizontalAlignment="Left" Grid.ColumnSpan="2" Margin="275,0,0,0"/>
-        <Button x:Name="registerButton" Grid.Row="3" Grid.Column="1" Click="RegisterButton_Click" Width="100" Height="30" Content="Register" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="170,0,0,0"/>
     </Grid>
 </Window>

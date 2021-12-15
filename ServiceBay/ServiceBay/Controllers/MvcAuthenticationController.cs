@@ -31,7 +31,6 @@ namespace ServiceBay.Controllers
         [HttpPost]
         public ActionResult Login(Login login)
         {
-
             HttpClient hc = new HttpClient();
             hc.BaseAddress = new Uri(uri);
             hc.DefaultRequestHeaders.Clear();

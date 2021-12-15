@@ -32,7 +32,7 @@ namespace ServiceBay.Controllers
         [HttpPost]
         public IActionResult UserLogin(Login objVM)
         {
-            var response = _tokenGenerator.Authenticate(objVM);
+            AuthenticateResponse response = _tokenGenerator.Authenticate(objVM);
 
             if (response == null)
                 return BadRequest(new { message = "Username or password is incorrect" });

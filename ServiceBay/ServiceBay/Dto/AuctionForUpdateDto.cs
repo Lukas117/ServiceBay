@@ -12,5 +12,6 @@ namespace ServiceBay.Dto
         public string AuctionName { get; set; }
         public string AuctionDescription { get; set; }
         public DateTime EndDate { get; set; }
+
     }
 }

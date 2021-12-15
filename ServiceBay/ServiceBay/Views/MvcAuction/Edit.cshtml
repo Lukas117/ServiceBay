@@ -1,4 +1,4 @@
-﻿@model ServiceBay.Dto.AuctionForUpdateDto
+﻿@model ServiceBay.Models.Auction
 
 @{
     ViewData["Title"] = "Edit";
@@ -28,6 +28,7 @@
                 <input asp-for="EndDate" class="form-control" />
                 <span asp-validation-for="EndDate" class="text-danger"></span>
             </div>
+            @Html.HiddenFor(x => x.RowVersion)
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>

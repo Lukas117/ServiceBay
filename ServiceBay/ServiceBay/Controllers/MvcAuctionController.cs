@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using ServiceBay.Dto;
+using ServiceBay.Middleware;
 using ServiceBay.Models;
 
 namespace ServiceBay.Controllers
@@ -155,10 +156,11 @@ namespace ServiceBay.Controllers
             }
             return View("Index");
         }
-
+        
+        //[Authorize]
         public IActionResult Edit(int id)
         {
-            AuctionForUpdateDto auction = null;
+            Auction auction = null;
 
             HttpClient hc = new HttpClient();
             hc.BaseAddress = new Uri(uri);
@@ -168,7 +170,7 @@ namespace ServiceBay.Controllers
             var readdata = readrecord.Result;
             if(readdata.IsSuccessStatusCode)
             {
-                var readTask = readdata.Content.ReadAsAsync<AuctionForUpdateDto>();
+                var readTask = readdata.Content.ReadAsAsync<Auction>();
                 readTask.Wait();
                 auction = readTask.Result;
 
@@ -177,11 +179,11 @@ namespace ServiceBay.Controllers
         }
 
         [HttpPost]
-        public IActionResult Edit(int id, AuctionForUpdateDto auction)
+        public IActionResult Edit(int id, Auction auction)
         {
             HttpClient hc = new HttpClient();
             hc.BaseAddress = new Uri(uri);
-            var updaterecord = hc.PutAsJsonAsync<AuctionForUpdateDto>("ApiAuction/" + id.ToString(), auction);
+            var updaterecord = hc.PutAsJsonAsync<Auction>("ApiAuction/" + id.ToString(), auction);
             updaterecord.Wait();
 
             var updatadata = updaterecord.Result;

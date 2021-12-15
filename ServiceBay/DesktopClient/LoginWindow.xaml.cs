@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using ServiceBay.Models;
 using System;
@@ -24,8 +25,6 @@ namespace DesktopClient
     /// </summary>
     public partial class LoginWindow : Window
     {
-        public static string tokenbased;
-
         public LoginWindow()
         {
             InitializeComponent();
@@ -33,12 +32,9 @@ namespace DesktopClient
 
         private void LoginButton_Click(object sender, RoutedEventArgs e)
         {
-            Login login = new Login() { Email = emailText.Text, Password = passwordText.Text };
+            Login login = new Login() { Email = emailText.Text, Password = passwordText.Password };
             HttpClient hc = new HttpClient();
             hc.BaseAddress = new Uri("https://localhost:44349/api/");
-            hc.DefaultRequestHeaders.Clear();
-            hc.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
 
             var response = hc.PostAsJsonAsync<Login>("ApiAuthentication/UserLogin", login);
             response.Wait();
@@ -46,19 +42,14 @@ namespace DesktopClient
             var saved = response.Result;
             if (saved.IsSuccessStatusCode)
             {
-                var responseMessage = response.Result.Content.ReadAsStringAsync().Result;
-                tokenbased = JsonConvert.DeserializeObject<string>(responseMessage);
-                hc.DefaultRequestHeaders.TryAddWithoutValidation("UserToken", tokenbased);
+                //var responseMessage = response.Result.Content.ReadAsStringAsync().Result;
+                //string tokenbased = JsonConvert.DeserializeObject<string>(responseMessage);
+                //HttpContext.Session.SetString("Token", tokenbased);
                 MainWindow mainWindow = new MainWindow();
                 mainWindow.Owner = Owner;
                 mainWindow.Show();
                 Close();
             }
-        }
-
-        private void RegisterButton_Click(object sender, RoutedEventArgs e)
-        {
-
         }
     }
 }

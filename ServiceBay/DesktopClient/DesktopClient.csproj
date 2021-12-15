@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <PackageReference Include="Extended.Wpf.Toolkit" Version="4.1.0" />
+    <PackageReference Include="Microsoft.AspNet.WebApi" Version="5.2.7" />
   </ItemGroup>
 
   <ItemGroup>

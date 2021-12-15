@@ -31,7 +31,7 @@ namespace ServiceBay.Middleware
 
         public async Task Invoke(HttpContext context, ITokenGenerator tokenGenerator)
         {
-            var token = context.Session.GetString("Token");
+            string token = context.Session.GetString("Token");
 
             if (token != null)
                 AttachAccountToContext(context, tokenGenerator, token);

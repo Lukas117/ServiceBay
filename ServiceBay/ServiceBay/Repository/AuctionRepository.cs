@@ -61,7 +61,6 @@ namespace ServiceBay.Repository
         {
             try
             {
-                //return await from a in _context.Auction where a.SellerId.Equals(sellerId) select a;
                 return await _context.Auction.Where(a => a.SellerId == sellerId).ToListAsync();
             }
             catch (Exception ex)
@@ -79,9 +78,9 @@ namespace ServiceBay.Repository
                 _context.Entry(auction).Property(x => x.EndDate).IsModified = true;
                 return await _context.SaveChangesAsync();
             }
-            catch (Exception ex)
+            catch (DbUpdateConcurrencyException ex)
             {
-                throw new Exception($"Error updating auction: '{ex.Message}'.", ex);
+                throw new DbUpdateConcurrencyException($"Error updating auction: '{ex.Message}'.", ex);
             }
         }
 

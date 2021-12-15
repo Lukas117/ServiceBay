@@ -80,7 +80,7 @@ namespace DesktopClient
 
         private void CreateButton_Click(object sender, RoutedEventArgs e)
         {
-            AuctionForCreationDto auction = new AuctionForCreationDto { AuctionName = name.Text, AuctionDescription = description.Text, StartingDate = startingDate.Value.Value, EndDate = endDate.Value.Value, StartingPrice = double.Parse(startingPrice.Text), SellerId = int.Parse(sellerId.Text) };
+            AuctionForCreationDto auction = new AuctionForCreationDto { AuctionName = name.Text, AuctionDescription = description.Text, StartingDate = startingDate.Value.Value, EndDate = endDate.Value.Value, StartingPrice = double.Parse(startingPrice.Text), SellerId = StaticVar.currentUser.Id };
             HttpClient hc = new HttpClient();
             hc.BaseAddress = new Uri("https://localhost:44349/api/");
 
@@ -120,19 +120,22 @@ namespace DesktopClient
             }
             else
             {
-                int id = row.Id;
-                HttpClient hc = new HttpClient();
-                hc.BaseAddress = new Uri("https://localhost:44349/api/");
-
-                HttpResponseMessage result = hc.DeleteAsync("ApiAuction/" + id).Result;
-
-                if (result.IsSuccessStatusCode)
+                if (MessageBox.Show("Delete person?", "Question", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
                 {
-                    IEnumerable<Auction> displaydata = await result.Content.ReadAsAsync<IEnumerable<Auction>>();
-                    auctionTable.ItemsSource = displaydata;
-                    auctionTable.Items.Remove(row);
+                    int id = row.Id;
+                    HttpClient hc = new HttpClient();
+                    hc.BaseAddress = new Uri("https://localhost:44349/api/");
+
+                    HttpResponseMessage result = hc.DeleteAsync("ApiAuction/" + id).Result;
+
+                    if (result.IsSuccessStatusCode)
+                    {
+                        IEnumerable<Auction> displaydata = await result.Content.ReadAsAsync<IEnumerable<Auction>>();
+                        auctionTable.ItemsSource = displaydata;
+                        auctionTable.Items.Remove(row);
+                    }
+                    LoadDataAsync();
                 }
-                LoadDataAsync();
             }
         }
 

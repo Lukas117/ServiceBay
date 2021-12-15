@@ -40,22 +40,19 @@ namespace ServiceBay.Controllers
 
         // GET: api/ApiAuction/5
         [HttpGet("{id}")]
-        [Authorize]
-        public async Task<ActionResult<AuctionForCreationDto>> GetAuction(int id)
+        //[Authorize]
+        public async Task<ActionResult<Auction>> GetAuction(int id)
         {
-            //CURRENT USER 
-            Person currentUser = (Person)HttpContext.Items["User"];
             var auction = await _auctionRepo.GetAuction(id);
-            var auctionDto = _mapper.Map<AuctionForCreationDto>(auction);
             if (auction == null) { return NotFound(); }
-            return auctionDto;
+            return auction;
         }
 
         // PUT: api/ApiAuction/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutAuction(int id, AuctionForUpdateDto auctionDto)
+        public async Task<IActionResult> PutAuction(int id, Auction auction)
         {
-            var auction = _mapper.Map<Auction>(auctionDto);
+            //var auction = _mapper.Map<Auction>(auctionDto);
             if (id != auction.Id)
             {
                 return BadRequest();
