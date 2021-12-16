@@ -43,13 +43,13 @@ namespace ServiceBay.Jwt
             var passwordHash = user.PasswordHash;
             var salt = user.PasswordSalt;
             var passwordInput = login.Password;
-            string token = null;
 
             // authentication successful so generate jwt token
-            if (encryption.AreEqual(passwordInput, passwordHash, salt))
+            if (!encryption.AreEqual(passwordInput, passwordHash, salt))
             {
-                token = GenerateToken(user);
+                return null;
             }
+            string token = GenerateToken(user);
             return new AuthenticateResponse(user, token);
         }
 

@@ -13,7 +13,7 @@ namespace ServiceBay.Controllers
     {
 
         private readonly MvcAuctionController mvc;
-        private readonly string uri = "https://localhost:5001/api/";
+        private readonly string uri = "https://localhost:44349/api/";
 
 
         public MvcBidController()
@@ -49,7 +49,7 @@ namespace ServiceBay.Controllers
         [HttpPost]
         public IActionResult Create(Bid inserttemp)
         {
-            var user = (Person)HttpContext.Items["User"];
+            var user = StaticVar.currentUser;
             inserttemp.BuyerId = user.Id;
             HttpClient hc = new HttpClient();
             hc.BaseAddress = new Uri(uri);
