@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using ServiceBay.Dto;
@@ -14,7 +15,7 @@ namespace ServiceBay.Controllers
 {
     public class MvcAuctionController : Controller
     {
-        private readonly string uri = "https://localhost:5001/api/";
+        private readonly string uri = "https://localhost:44349/api/";
 
         
         public IActionResult Index()
@@ -44,6 +45,27 @@ namespace ServiceBay.Controllers
 
         [HttpGet]
         public IActionResult Details(int id)
+        {
+            AuctionForCreationDto auction = null;
+
+            HttpClient hc = new HttpClient();
+            hc.BaseAddress = new Uri(uri);
+
+            var consumeapi = hc.GetAsync("ApiAuction/" + id.ToString());
+            consumeapi.Wait();
+
+            var readdata = consumeapi.Result;
+            if (readdata.IsSuccessStatusCode)
+            {
+                var displaydata = readdata.Content.ReadAsAsync<AuctionForCreationDto>();
+                displaydata.Wait();
+                auction = displaydata.Result;
+            }
+            return View(auction);
+        }
+
+        [HttpGet]
+        public IActionResult DetailsMyAuctions(int id)
         {
             AuctionForCreationDto auction = null;
 
@@ -142,14 +164,30 @@ namespace ServiceBay.Controllers
             return Json(auction);
         }
 
-        public IActionResult Delete()
-        {
-            return View();
-        }
-
-        [HttpDelete]
         public IActionResult Delete(int id)
         {
+            Auction auction = null;
+
+            HttpClient hc = new HttpClient();
+            hc.BaseAddress = new Uri(uri);
+            var readrecord = hc.GetAsync("ApiAuction/" + id.ToString());
+            readrecord.Wait();
+
+            var readdata = readrecord.Result;
+            if (readdata.IsSuccessStatusCode)
+            {
+                var readTask = readdata.Content.ReadAsAsync<Auction>();
+                readTask.Wait();
+                auction = readTask.Result;
+
+            }
+            return View(auction);
+        }
+
+        [HttpPost]
+        public IActionResult Delete(Auction auction)
+        {
+            int id = auction.Id;
             HttpClient hc = new HttpClient();
             hc.BaseAddress = new Uri(uri);
             var removerecord = hc.DeleteAsync("ApiAuction/" + id.ToString());
@@ -162,7 +200,7 @@ namespace ServiceBay.Controllers
             }
             return View("Index");
         }
-        
+
         //[Authorize]
         public IActionResult Edit(int id)
         {
