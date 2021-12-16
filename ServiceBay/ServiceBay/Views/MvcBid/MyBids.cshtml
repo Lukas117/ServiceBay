@@ -6,9 +6,6 @@
 
 <h1>My bids</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
 <table class="table">
     <thead>
         <tr>
@@ -17,9 +14,6 @@
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Auction)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Buyer)
             </th>
             <th></th>
         </tr>
@@ -31,15 +25,10 @@
                 @Html.DisplayFor(modelItem => item.Price)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Auction.Id)
+                @Html.DisplayFor(modelItem => item.AuctionId)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Buyer.Id)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                <a asp-controller="MvcAuction" asp-action="Details" asp-route-id="@item.AuctionId">Details</a>
             </td>
         </tr>
 }

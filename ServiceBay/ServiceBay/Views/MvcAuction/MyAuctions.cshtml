@@ -66,6 +66,9 @@
                     url: "@Url.Action("Disable")",
                     data: { id: id },
                     dataType: "json",
+                    success: function () {
+                        location.reload();
+                    }
                 });
     }
 </script>
