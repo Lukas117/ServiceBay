@@ -73,6 +73,7 @@ namespace ServiceBay.Repository
         {
             try
             {
+
                 _context.Entry(auction).Property(x => x.AuctionName).IsModified = true;
                 _context.Entry(auction).Property(x => x.AuctionDescription).IsModified = true;
                 _context.Entry(auction).Property(x => x.EndDate).IsModified = true;
@@ -89,10 +90,15 @@ namespace ServiceBay.Repository
             try
             {
                 var auction = await _context.Auction.FindAsync(id);
-                _context.Bid.RemoveRange
-                (_context.Bid.Where(b => auction.Id == b.AuctionId));
-                _context.Auction.Remove(auction);
-                return await _context.SaveChangesAsync();
+                if (StaticVar.currentUser.Id != auction.SellerId) return 0;
+                else
+                {
+                    _context.Bid.RemoveRange
+                    (_context.Bid.Where(b => auction.Id == b.AuctionId));
+                    _context.Auction.Remove(auction);
+                    return await _context.SaveChangesAsync();
+                }
+               
             }
             catch (Exception ex)
             {

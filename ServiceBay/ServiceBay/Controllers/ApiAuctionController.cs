@@ -49,7 +49,6 @@ namespace ServiceBay.Controllers
 
         // GET: api/ApiAuction/5
         [HttpGet("{id}")]
-        [Authorize]
         public async Task<ActionResult<Auction>> GetAuction(int id)
         {
             var auction = await _auctionRepo.GetAuction(id);
@@ -68,8 +67,8 @@ namespace ServiceBay.Controllers
 
             try
             {
-
-                await _auctionRepo.UpdateAuction(id, auction);
+                if (StaticVar.currentUser.Id != auction.SellerId) return NoContent();
+                else await _auctionRepo.UpdateAuction(id, auction);
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -98,6 +97,7 @@ namespace ServiceBay.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteAuction(int id)
         {
+
             var auction = await _auctionRepo.DeleteAuction(id);
             if (auction == 0) { return NotFound(); }
             return NoContent();
