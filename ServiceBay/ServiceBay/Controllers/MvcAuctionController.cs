@@ -255,10 +255,10 @@ namespace ServiceBay.Controllers
         }
 
         [HttpPost]
-        public JsonResult Disable(int id)
+        public void Disable(int id)
         {
             Auction auction = DetailsAuction(id);
-            return Json(DisableAuction(id, auction));
+            DisableAuction(id, auction);
         }
         
         [HttpGet]
