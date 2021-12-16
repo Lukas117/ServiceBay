@@ -3,12 +3,14 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ServiceBay.Contracts;
+using ServiceBay.Middleware;
 using ServiceBay.Models;
 
 namespace ServiceBay.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class ApiBidController : ControllerBase
     {
         private readonly IBidRepository _bidRepo;

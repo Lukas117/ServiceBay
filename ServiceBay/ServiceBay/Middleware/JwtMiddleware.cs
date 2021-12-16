@@ -60,6 +60,8 @@ namespace ServiceBay.Middleware
                 var userId = int.Parse(jwtToken.Claims.First(x => x.Type == "id").Value);
 
                 // attach user to context on successful jwt validation
+                string user = tokenGenerator.GetById(userId).Email.ToString();
+                context.Session.SetString("User", user);
                 context.Items["User"] = tokenGenerator.GetById(userId);
                 StaticVar.currentUser = (Person)context.Items["User"];
             }

@@ -13,6 +13,7 @@ namespace ServiceBay.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class ApiAuctionController : ControllerBase
     {
         private readonly IAuctionRepository _auctionRepo;
@@ -48,7 +49,7 @@ namespace ServiceBay.Controllers
 
         // GET: api/ApiAuction/5
         [HttpGet("{id}")]
-        //[Authorize]
+        [Authorize]
         public async Task<ActionResult<Auction>> GetAuction(int id)
         {
             var auction = await _auctionRepo.GetAuction(id);

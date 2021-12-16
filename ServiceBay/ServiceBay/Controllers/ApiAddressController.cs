@@ -9,12 +9,14 @@ using Microsoft.EntityFrameworkCore;
 using ServiceBay.Contracts;
 using ServiceBay.Data;
 using ServiceBay.Dto;
+using ServiceBay.Middleware;
 using ServiceBay.Models;
 
 namespace ServiceBay.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class ApiAddressController : ControllerBase
     {
         private readonly IAddressRepository _addressRepo;

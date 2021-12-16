@@ -2,7 +2,9 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using ServiceBay.Contracts;
 using ServiceBay.Models;
+using ServiceBay.Repository;
 
 namespace ServiceBay.Middleware
 {
@@ -10,8 +12,9 @@ namespace ServiceBay.Middleware
     public class AuthorizeAttribute : Attribute, IAuthorizationFilter
     {
         public void OnAuthorization(AuthorizationFilterContext context)
-        {
-            var account = (Person)context.HttpContext.Items["User"];
+        { 
+            var account = StaticVar.currentUser;
+        
             if (account == null)
             {
                 // not logged in

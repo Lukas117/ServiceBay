@@ -16,7 +16,7 @@ namespace ServiceBay.Repository
         private readonly ApplicationDbContext _context;
         private readonly IAuctionRepository _auctionRepo;
         private readonly EmailService emailService;
-        private readonly PersonRepository personRepository;
+        private readonly IPersonRepository personRepository;
 
         public BidRepository(ApplicationDbContext context)
         {
