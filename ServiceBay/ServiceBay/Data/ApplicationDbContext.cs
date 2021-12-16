@@ -20,6 +20,10 @@ namespace ServiceBay.Data
             modelBuilder.Entity<Auction>()
                 .Property(u => u.RowVersion)
                 .IsConcurrencyToken();
+
+            modelBuilder.Entity<Person>()
+                .HasIndex(u => u.Email)
+                .IsUnique();
         }
 
         public DbSet<ServiceBay.Models.Auction> Auction { get; set; }
