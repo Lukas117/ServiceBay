@@ -77,15 +77,15 @@
 
         function CompareBids() {
             $.ajax({
-                type: "GET",
-                url: "@Url.Action("PricesForNotification")",
-                //data: { id: id },
+                method: "POST",
+                url: "@Url.Action("CompareAndGetPrices", "Notification")",
                 dataType: "json",
                 success: function (response) {
-                    let list = response.value;
+                    var list = response.$values;
+                    console.log(list);
                     if (list.length != 0) {
                         var dropdown = document.getElementById("dropdownList");
-                        Array.from(list).forEach(function (element) {
+                        list.forEach(function (element) {
                             newlistitem = document.createElement("li");
                             newdiv = document.createElement("div");
                             newhr = document.createElement("hr");
@@ -108,8 +108,7 @@
         function SetList() {
             $.ajax({
                 type: "GET",
-                url: "@Url.Action("SetList")",
-                //data: { id: id },
+                url: "@Url.Action("SetPrevPrices", "Notification")",
                 dataType: "json",
                 success: function (response) {
                     const list = response.value;

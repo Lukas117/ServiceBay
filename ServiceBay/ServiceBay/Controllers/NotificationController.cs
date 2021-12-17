@@ -16,23 +16,21 @@ namespace ServiceBay.Controllers
             mvc = new MvcAuctionController();
         }
 
-        public JsonResult AllSellerAuctions(int sellerId)
-        {
-            return mvc.AllSellerAuctions(sellerId);
-        }
-
         public JsonResult SetPrevPrices()
         {
-            var auctions = AllSellerAuctions(StaticVar.currentUser.Id);
+            var auctions = mvc.AllSellerAuctions();
             var prices = InsertIntoPrevPrices((IEnumerable<Auction>)auctions.Value);
             return Json(prices);
         }
         public JsonResult InsertIntoPrevPrices(IEnumerable<Auction> result)
         {
-            var auctions = result.ToList();
-            foreach (var a in auctions)
+            if (StaticVar.prevPrices.Count == 0)
             {
-                StaticVar.prevPrices.Add(a.Price);
+                var auctions = result.ToList();
+                foreach (var a in auctions)
+                {
+                    StaticVar.prevPrices.Add(a.Price);
+                }
             }
             return Json(StaticVar.prevPrices);
         }
@@ -43,13 +41,7 @@ namespace ServiceBay.Controllers
             StaticVar.newPrices.Clear();
             foreach (var a in auctions)
             {
-               
-                    if (a.SellerId == StaticVar.currentUser.Id)
-                    {
-                        StaticVar.newPrices.Add(a.Price);
-                    }
-                
-             
+                StaticVar.newPrices.Add(a.Price);
             }
         }
 
@@ -77,7 +69,7 @@ namespace ServiceBay.Controllers
 
         public JsonResult CompareAndGetPrices()
         {
-            var auctions = mvc.AllAuctions();
+            var auctions = mvc.AllSellerAuctions();
             GetPrices((IEnumerable<Auction>)auctions.Value);
             var all = new List<double?>();
             for (int i = 0; i < StaticVar.newPrices.Count; i++)
@@ -86,7 +78,7 @@ namespace ServiceBay.Controllers
                 {
                     if (!StaticVar.newPrices[i].Equals(StaticVar.prevPrices[i]))
                     {
-                        all.Add(StaticVar.newPrices[i]);
+                       all.Add(StaticVar.newPrices[i]);
                        StaticVar.prevPrices[i] = StaticVar.newPrices[i];
                     }
                 }

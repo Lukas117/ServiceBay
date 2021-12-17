@@ -146,13 +146,13 @@ namespace ServiceBay.Controllers
             return Json(auction);
         }
 
-        public JsonResult AllSellerAuctions(int sellerId)
-         {
+        public JsonResult AllSellerAuctions()
+        {
             IEnumerable<Auction> auction = null;
             HttpClient hc = new HttpClient();
             hc.BaseAddress = new Uri(uri);
 
-            var consumeapi = hc.GetAsync("ApiAuction/Seller/" + sellerId.ToString());
+            var consumeapi = hc.GetAsync("ApiAuction/Seller/" + StaticVar.currentUser.Id.ToString());
             consumeapi.Wait();
 
             var readdata = consumeapi.Result;

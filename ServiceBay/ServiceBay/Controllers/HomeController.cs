@@ -32,17 +32,5 @@ namespace ServiceBay.Controllers
             return View();
         }
 
-        [HttpGet]
-        public JsonResult SetList()
-        {
-            return Json(noti.SetPrevPrices());
-        }
-
-        [HttpGet]
-        public JsonResult PricesForNotification()
-        {
-            return Json(noti.CompareAndGetPrices());
-        }
-
     }
 }
