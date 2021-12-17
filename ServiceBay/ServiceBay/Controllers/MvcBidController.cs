@@ -68,7 +68,7 @@ namespace ServiceBay.Controllers
             if (savedata.IsSuccessStatusCode)
             {
                 StaticVar.error = 0;
-                return RedirectToAction("Index");
+                return View("~/Views/MvcAuction/Details.cshtml", auction);
             }
             StaticVar.error = 2;
             return View("~/Views/MvcAuction/Details.cshtml", auction);
