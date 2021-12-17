@@ -34,7 +34,7 @@ namespace ServiceBay.Repository
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error creating city: '{ex.Message}'.", ex);
+                throw new Exception($"Error creating person: '{ex.Message}'.", ex);
             }
         }
 
@@ -46,7 +46,7 @@ namespace ServiceBay.Repository
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error getting city: '{ex.Message}'.", ex);
+                throw new Exception($"Error getting person: '{ex.Message}'.", ex);
             }
         }
 
@@ -58,7 +58,7 @@ namespace ServiceBay.Repository
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error getting cities: '{ex.Message}'.", ex);
+                throw new Exception($"Error getting people: '{ex.Message}'.", ex);
             }
         }
 
@@ -76,7 +76,7 @@ namespace ServiceBay.Repository
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error updating city: '{ex.Message}'.", ex);
+                throw new Exception($"Error updating person: '{ex.Message}'.", ex);
             }
         }
 
@@ -90,7 +90,7 @@ namespace ServiceBay.Repository
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error deleting city: '{ex.Message}'.", ex);
+                throw new Exception($"Error deleting person: '{ex.Message}'.", ex);
             }
         }
 

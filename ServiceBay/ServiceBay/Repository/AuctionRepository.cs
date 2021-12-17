@@ -27,9 +27,9 @@ namespace ServiceBay.Repository
                 _context.Auction.Add(auction);
                 return await _context.SaveChangesAsync();
             }
-            catch(Exception ex)
+            catch(DbUpdateConcurrencyException ex)
             {
-                throw new Exception($"Error creating auction: '{ex.Message}'.", ex);
+                throw new DbUpdateConcurrencyException($"Error creating auction: '{ex.Message}'.", ex);
             }
         }
 
@@ -73,6 +73,7 @@ namespace ServiceBay.Repository
         {
             try
             {
+
                 _context.Entry(auction).Property(x => x.AuctionName).IsModified = true;
                 _context.Entry(auction).Property(x => x.AuctionDescription).IsModified = true;
                 _context.Entry(auction).Property(x => x.EndDate).IsModified = true;
@@ -96,7 +97,8 @@ namespace ServiceBay.Repository
                     (_context.Bid.Where(b => auction.Id == b.AuctionId));
                     _context.Auction.Remove(auction);
                     return await _context.SaveChangesAsync();
-                }   
+                }
+               
             }
             catch (Exception ex)
             {
@@ -118,7 +120,7 @@ namespace ServiceBay.Repository
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error disabling auction: '{ex.Message}'.", ex);
+                throw new Exception($"Error updating auction: '{ex.Message}'.", ex);
             }
         }
 

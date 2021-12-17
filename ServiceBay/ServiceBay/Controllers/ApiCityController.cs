@@ -1,9 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ServiceBay.Contracts;
+using ServiceBay.Data;
 using ServiceBay.Dto;
 using ServiceBay.Middleware;
 using ServiceBay.Models;
@@ -22,15 +26,6 @@ namespace ServiceBay.Controllers
         {
             _cityRepo = cityRepo;
             _mapper = mapper;
-        }
-
-        // POST: api/ApiCity
-        [HttpPost]
-        public async Task<ActionResult<CityForCreationDto>> PostCity(CityForCreationDto cityDto)
-        {
-            var city = _mapper.Map<City>(cityDto);
-            await _cityRepo.CreateCity(city);
-            return CreatedAtAction("GetCity", new { zipcode = city.Zipcode }, city);
         }
 
         // GET: api/ApiCity
@@ -55,6 +50,7 @@ namespace ServiceBay.Controllers
         }
 
         // PUT: api/ApiCity/5
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{zipcode}")]
         public async Task<IActionResult> PutCity(string zipcode, CityForCreationDto cityDto)
         {
@@ -82,6 +78,16 @@ namespace ServiceBay.Controllers
             }
 
             return NoContent();
+        }
+
+        // POST: api/ApiCity
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [HttpPost]
+        public async Task<ActionResult<CityForCreationDto>> PostCity(CityForCreationDto cityDto)
+        {
+            var city = _mapper.Map<City>(cityDto);
+            await _cityRepo.CreateCity(city);
+            return CreatedAtAction("GetCity", new { zipcode = city.Zipcode }, city);
         }
 
         // DELETE: api/ApiCity/5

@@ -1,9 +1,14 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
+using System.Text.Json.Serialization;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using ServiceBay.Dto;
+using ServiceBay.Middleware;
 using ServiceBay.Models;
 
 namespace ServiceBay.Controllers
@@ -12,6 +17,7 @@ namespace ServiceBay.Controllers
     {
         private readonly string uri = "https://localhost:44349/api/";
 
+        
         public IActionResult Index()
         {
             IEnumerable<Auction> auction = null;
@@ -37,24 +43,6 @@ namespace ServiceBay.Controllers
             return View();
         }
 
-        [HttpPost]
-        public IActionResult Create(AuctionForCreationDto inserttemp)
-        {
-            HttpClient hc = new HttpClient();
-            hc.BaseAddress = new Uri(uri);
-            var currentUser = (Person)HttpContext.Items["User"];
-            inserttemp.SellerId = currentUser.Id;
-            var insertrecord = hc.PostAsJsonAsync<AuctionForCreationDto>("ApiAuction", inserttemp);
-            insertrecord.Wait();
-
-            var savedata = insertrecord.Result;
-            if (savedata.IsSuccessStatusCode)
-            {
-                return RedirectToAction("MyAuctions");
-            }
-            return View("Create");
-        }
-
         [HttpGet]
         public IActionResult Details(int id)
         {
@@ -74,10 +62,6 @@ namespace ServiceBay.Controllers
                 displaydata.Wait();
                 auction = displaydata.Result;
                 auction.Error = StaticVar.error;
-            }
-            if (auction.EndDate <= DateTime.UtcNow)
-            {
-                return View("~/Views/MvcAuction/DetailsMyAuctions.cshtml", auction);
             }
             return View(auction);
         }
@@ -106,6 +90,7 @@ namespace ServiceBay.Controllers
         public IActionResult MyAuctions()
         {
             IEnumerable<Auction> auction = null;
+          //  var currentUser = (Person)HttpContext.Items["User"];
             HttpClient hc = new HttpClient();
             hc.BaseAddress = new Uri(uri);
 
@@ -121,6 +106,24 @@ namespace ServiceBay.Controllers
                 auction = displaydata.Result;
             }
             return View(auction);
+        }
+
+        [HttpPost]
+        public IActionResult Create(AuctionForCreationDto inserttemp)
+        {
+            HttpClient hc = new HttpClient();
+            hc.BaseAddress = new Uri(uri);
+            var currentUser = (Person)HttpContext.Items["User"];
+            inserttemp.SellerId = currentUser.Id;
+            var insertrecord = hc.PostAsJsonAsync<AuctionForCreationDto>("ApiAuction", inserttemp);
+            insertrecord.Wait();
+
+            var savedata = insertrecord.Result;
+            if(savedata.IsSuccessStatusCode)
+            {
+                return RedirectToAction("MyAuctions");
+            }
+            return View("Create");
         }
 
         public JsonResult AllAuctions()
@@ -163,7 +166,6 @@ namespace ServiceBay.Controllers
             return Json(auction);
         }
 
-        [HttpGet]
         public IActionResult Delete(int id)
         {
             Auction auction = null;
@@ -201,7 +203,7 @@ namespace ServiceBay.Controllers
             return View("Index");
         }
 
-        [HttpGet]
+        //[Authorize]
         public IActionResult Edit(int id)
         {
             Auction auction = null;

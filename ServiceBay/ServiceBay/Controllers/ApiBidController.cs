@@ -75,7 +75,7 @@ namespace ServiceBay.Controllers
             return NoContent();
         }
 
-        // GET: api/ApiBid
+        //
         [HttpGet("User")]
         public async Task<IEnumerable<Bid>> GetUsersBids()
         {

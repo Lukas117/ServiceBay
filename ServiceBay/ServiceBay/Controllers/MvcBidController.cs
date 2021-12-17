@@ -13,8 +13,10 @@ namespace ServiceBay.Controllers
 {
     public class MvcBidController : Controller
     {
+
         private readonly MvcAuctionController mvc;
         private readonly string uri = "https://localhost:44349/api/";
+
 
         public MvcBidController()
         {
@@ -62,7 +64,7 @@ namespace ServiceBay.Controllers
                 return View("~/Views/MvcAuction/Details.cshtml", auction);
             }
 
-            var insertrecord = hc.PostAsJsonAsync<Bid>("ApiBid", inserttemp);
+             var insertrecord = hc.PostAsJsonAsync<Bid>("ApiBid", inserttemp);
             insertrecord.Wait();
             var savedata = insertrecord.Result;
             if (savedata.IsSuccessStatusCode)
@@ -80,9 +82,22 @@ namespace ServiceBay.Controllers
             return Json(mvc.AllAuctions());
         }
 
+        [HttpPost]
+        public void Bidding(double _Price, int _buyerId, int _AuctionId)
+        {
+            Bid newBid = new Bid{
+                Price = _Price,
+                BuyerId = _buyerId,
+                AuctionId = _AuctionId
+            };
+            Create(newBid);
+        }
+
+
         public IActionResult MyBids()
         {
             IEnumerable<Bid> bids = null;
+            //  var currentUser = (Person)HttpContext.Items["User"];
             HttpClient hc = new HttpClient();
             hc.BaseAddress = new Uri(uri);
 

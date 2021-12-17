@@ -7,6 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using ServiceBay.Services;
+using ServiceBay.Security;
 
 namespace ServiceBay.Repository
 {
@@ -87,7 +88,7 @@ namespace ServiceBay.Repository
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error getting bids: '{ex.Message}'.", ex);
+                throw new Exception($"Error getting auctions: '{ex.Message}'.", ex);
             }
         }
 
@@ -115,7 +116,7 @@ namespace ServiceBay.Repository
 
             catch (Exception ex)
             {
-                throw new Exception($"Error deleting bid: '{ex.Message}'.", ex);
+                throw new Exception($"Error getting bids: '{ex.Message}'.", ex);
             }
         }
 
