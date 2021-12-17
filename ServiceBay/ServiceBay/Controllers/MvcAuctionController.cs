@@ -47,6 +47,7 @@ namespace ServiceBay.Controllers
         public IActionResult Details(int id)
         {
             AuctionForCreationDto auction = null;
+            
 
             HttpClient hc = new HttpClient();
             hc.BaseAddress = new Uri(uri);
@@ -60,6 +61,7 @@ namespace ServiceBay.Controllers
                 var displaydata = readdata.Content.ReadAsAsync<AuctionForCreationDto>();
                 displaydata.Wait();
                 auction = displaydata.Result;
+                auction.Error = StaticVar.error;
             }
             return View(auction);
         }
@@ -255,10 +257,10 @@ namespace ServiceBay.Controllers
         }
 
         [HttpPost]
-        public void Disable(int id)
+        public IActionResult Disable(int id)
         {
             Auction auction = DetailsAuction(id);
-            DisableAuction(id, auction);
+            return DisableAuction(id, auction);
         }
         
         [HttpGet]

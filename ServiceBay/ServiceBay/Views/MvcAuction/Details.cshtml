@@ -61,6 +61,18 @@
     <div class="form-group">
         <input type="submit" value="Bid" id="bidButton" class="btn btn-primary" style="margin-top: 10px" />
     </div>
+    @if (Model.Error == 1)
+    {
+        <div class="alert alert-danger" role="alert">
+            You cannot bid on your own auctions!
+        </div>
+    }
+    @if (Model.Error == 2)
+    {
+        <div class="alert alert-danger" role="alert">
+            The current bid was changed!
+        </div>
+    }
 </div>
 <div>
     <a asp-action="Index">Back to List</a>
@@ -70,10 +82,6 @@
 
 <script>
     $(document).ready(function () {
-        //$('#bidButton').click(function () {
-        //    bid();
-        //});
-
         $('#bidButton').click(function () {
             var price = document.getElementById("inputPrice").value;
             var auction = @Model.Id;
@@ -87,7 +95,6 @@
             inserttemp.Buyer = null;
 
             $.ajax({ 
-                //type: 'POST',
                 method: 'POST',
                 url: '@Url.Action("Create", "MvcBid")',
                 data: inserttemp,
@@ -97,17 +104,4 @@
             });
         });
     });
-
-    @*function bid() {
-        var x = document.getElementById("bidButton").value;
-        $.ajax({
-            type: "POST",
-            url: "@Url.Action("Bidding")",
-            data: { inputP: x, _AuctionId: @Model.Id},
-            dataType: "json",
-            success: function () {
-                console.log("success");
-            }
-        })
-    };*@
 </script>

@@ -1,10 +1,7 @@
 ﻿using ServiceBay.Models;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Net.Mail;
-using System.Threading.Tasks;
 
 namespace ServiceBay.Services
 {
@@ -32,7 +29,7 @@ namespace ServiceBay.Services
             message.Subject = SUBJECT;
             message.Body = BODY;
 
-            using (var client = new System.Net.Mail.SmtpClient(HOST, PORT))
+            using (var client = new SmtpClient(HOST, PORT))
             {
                 client.Credentials = new NetworkCredential(SMTP_USERNAME, SMTP_PASSWORD);
                 client.EnableSsl = true;
@@ -72,7 +69,7 @@ namespace ServiceBay.Services
             message.Subject = SUBJECT;
             message.Body = BODY;
 
-            using (var client = new System.Net.Mail.SmtpClient(HOST, PORT))
+            using (var client = new SmtpClient(HOST, PORT))
             {
                 client.Credentials = new NetworkCredential(SMTP_USERNAME, SMTP_PASSWORD);
                 client.EnableSsl = true;

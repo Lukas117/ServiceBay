@@ -10,5 +10,6 @@ namespace ServiceBay.Models
         public static List<double?> prevPrices = new List<double?>();
         public static List<double?> newPrices = new List<double?>();
         public static Person currentUser = new Person();
+        public static int error = 0;
     }
 }

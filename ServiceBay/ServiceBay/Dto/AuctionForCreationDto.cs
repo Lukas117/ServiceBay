@@ -22,5 +22,6 @@ namespace ServiceBay.Dto
         public int SellerId { get; set; }
         [Display(Name = "Current bid")]
         public double? Price { get; set; }
+        public int Error { get; set; }
     }
 }
