@@ -13,6 +13,7 @@
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="personDto.Id" />
+            <input type="hidden" asp-for="personDto.PasswordHash" />
             <input type="hidden" asp-for="addressDto.Id" />
             <div class="form-group">
                 <label asp-for="personDto.Fname" class="control-label">First name</label>
