@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -15,10 +10,8 @@ using ServiceBay.Repository;
 using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-using System.Text.Json;
 using Microsoft.AspNetCore.Authorization;
 using ServiceBay.Middleware;
-using Microsoft.AspNetCore.Http;
 using ServiceBay.Jwt;
 using System.Text.Json.Serialization;
 using System.Text;
@@ -87,9 +80,6 @@ namespace ServiceBay
                     }
                 });
             });
-            //   config.JwtToken.Issuer = "https://mysite.com";
-            //   config.JwtToken.Audience = "https://mysite.com";
-            // Configuration.JwtToken.SigningKey = "12345@4321";  //  some long id
 
             // Configure Authentication
             services.AddAuthentication(option =>
@@ -108,12 +98,10 @@ namespace ServiceBay
                     ValidateIssuerSigningKey = true,
                     ValidIssuer = Configuration["Jwt:Issuer"],
                     ValidAudience = Configuration["Jwt:Audience"],
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["AppSettings:Secret"])) //Configuration["JwtToken:SecretKey"]
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["AppSettings:Secret"]))
                 };
             });
            
-                
-
             services.AddAuthorization(auth =>
             {
                 auth.AddPolicy("Bearer", new AuthorizationPolicyBuilder()
@@ -150,8 +138,8 @@ namespace ServiceBay
                 .AllowCredentials());
 
             app.UseMiddleware<JwtMiddleware>();
+            
             app.UseAuthentication();
-
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

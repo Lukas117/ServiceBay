@@ -91,7 +91,7 @@ namespace ServiceBay.Controllers
         }
 
         // DELETE: api/ApiCity/5
-        [HttpDelete("{id}")]
+        [HttpDelete("{zipcode}")]
         public async Task<IActionResult> DeleteCity(string zipcode)
         {
             var city = await _cityRepo.DeleteCity(zipcode);

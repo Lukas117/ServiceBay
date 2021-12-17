@@ -2,9 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using ServiceBay.Contracts;
 using ServiceBay.Models;
-using ServiceBay.Repository;
 
 namespace ServiceBay.Middleware
 {

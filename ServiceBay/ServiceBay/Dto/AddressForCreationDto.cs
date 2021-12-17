@@ -10,9 +10,12 @@ namespace ServiceBay.Dto
     {
         public int Id { get; set; }
         [Display(Name = "Street name")]
+        [Required]
         public string StreetName { get; set; }
+        [Required]
         [Display(Name = "Street number")]
         public string StreetNumber { get; set; }
+        [Required]
         public string CityZipcode { get; set; }
     }
 }

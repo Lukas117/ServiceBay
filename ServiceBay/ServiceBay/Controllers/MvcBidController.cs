@@ -5,6 +5,8 @@ using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using ServiceBay.Dto;
 using ServiceBay.Models;
 
 namespace ServiceBay.Controllers
@@ -53,16 +55,25 @@ namespace ServiceBay.Controllers
             inserttemp.BuyerId = user.Id;
             HttpClient hc = new HttpClient();
             hc.BaseAddress = new Uri(uri);
+            var getrecord = hc.GetAsync("ApiAuction/" + inserttemp.AuctionId.ToString());
+            getrecord.Wait();
+            string jsonString = getrecord.Result.Content.ReadAsStringAsync().Result;
+            AuctionForCreationDto auction = JsonConvert.DeserializeObject<AuctionForCreationDto>(jsonString);
+            if (user.Id == auction.SellerId) {
+                StaticVar.error = 1;
+                return View("~/Views/MvcAuction/Details.cshtml", auction);
+            }
 
-            var insertrecord = hc.PostAsJsonAsync<Bid>("ApiBid", inserttemp);
+             var insertrecord = hc.PostAsJsonAsync<Bid>("ApiBid", inserttemp);
             insertrecord.Wait();
-
             var savedata = insertrecord.Result;
             if (savedata.IsSuccessStatusCode)
             {
+                StaticVar.error = 0;
                 return RedirectToAction("Index");
             }
-            return View("Create");
+            StaticVar.error = 2;
+            return View("~/Views/MvcAuction/Details.cshtml", auction);
         }
 
         [HttpPost]

@@ -48,17 +48,17 @@ namespace ServiceBay.Controllers
             insertrecord.Wait();
             inserttemp.addressDto.CityZipcode = inserttemp.cityDto.Zipcode;
             var insertrecord1 = hc.PostAsJsonAsync<AddressForCreationDto>("ApiAddress", inserttemp.addressDto);
-            insertrecord.Wait();
+            insertrecord1.Wait();
             string jsonString = insertrecord1.Result.Content.ReadAsStringAsync().Result;
             AddressForCreationDto returnedAddress = JsonConvert.DeserializeObject<AddressForCreationDto>(jsonString);
             inserttemp.personDto.AddressId = returnedAddress.Id;
             inserttemp.personDto.UserRole = 0;
             var insertrecord2 = hc.PostAsJsonAsync<PersonForCreationDto>("ApiPerson", inserttemp.personDto);
-            insertrecord.Wait();
-
+            insertrecord2.Wait();
+            if (!insertrecord2.Result.IsSuccessStatusCode) { ModelState.AddModelError("personDto.Email", "The user with this email already exists"); }
             if (insertrecord.Result.IsSuccessStatusCode && insertrecord1.Result.IsSuccessStatusCode && insertrecord2.Result.IsSuccessStatusCode)
             {
-                return RedirectToAction("Index");
+                return RedirectToAction("Index","LoginHome");
             }
             return View("Create");
         }
