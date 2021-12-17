@@ -78,9 +78,9 @@ namespace ServiceBay.Repository
                 _context.Entry(address).Property(x => x.CityZipcode).IsModified = true;
                 return await _context.SaveChangesAsync();
             }
-            catch (Exception ex)
+            catch (DbUpdateConcurrencyException ex)
             {
-                throw new Exception($"Error updating address: '{ex.Message}'.", ex);
+                throw new DbUpdateConcurrencyException($"Error updating address: '{ex.Message}'.", ex);
             }
         }
 

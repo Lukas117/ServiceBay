@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ServiceBay.Contracts;
-using ServiceBay.Data;
 using ServiceBay.Dto;
 using ServiceBay.Middleware;
 using ServiceBay.Models;
@@ -46,7 +42,6 @@ namespace ServiceBay.Controllers
         }
 
         // PUT: api/ApiAddress/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
         public async Task<IActionResult> PutAddress(int id, AddressForCreationDto addressDto)
         {
@@ -74,7 +69,6 @@ namespace ServiceBay.Controllers
         }
 
         // POST: api/ApiAddress
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public async Task<ActionResult<AddressForCreationDto>> PostAddress(AddressForCreationDto addressDto)
         {
