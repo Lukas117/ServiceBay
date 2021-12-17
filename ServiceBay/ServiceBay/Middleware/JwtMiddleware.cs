@@ -1,16 +1,12 @@
 ﻿using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
-using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using ServiceBay.Contracts;
-using ServiceBay.Controllers;
 using ServiceBay.Jwt;
 using ServiceBay.Models;
 
@@ -20,7 +16,6 @@ namespace ServiceBay.Middleware
     {
         private readonly RequestDelegate _next;
         private readonly AppSettings _appSettings;
-
 
         public JwtMiddleware(RequestDelegate next, IOptions<AppSettings> appSettings)
         {
@@ -37,7 +32,6 @@ namespace ServiceBay.Middleware
                 AttachAccountToContext(context, tokenGenerator, token);
 
             await _next(context);
-
         }
 
         private void AttachAccountToContext(HttpContext context, ITokenGenerator tokenGenerator, string token)

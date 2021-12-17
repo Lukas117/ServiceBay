@@ -1,9 +1,5 @@
-﻿using ServiceBay.Dto;
-using ServiceBay.Models;
-using ServiceBay.Services;
-using System;
+﻿using ServiceBay.Models;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace ServiceBay.Contracts
