@@ -90,7 +90,7 @@ namespace ServiceBay.Repository
             try
             {
                 var auction = await _context.Auction.FindAsync(id);
-                if (StaticVar.currentUser.Id != auction.SellerId) return 0;
+                if (StaticVar.currentUser.Id != auction.SellerId && StaticVar.currentUser.UserRole == 0) return 0;
                 else
                 {
                     _context.Bid.RemoveRange
