@@ -32,12 +32,12 @@ namespace ServiceBay.Controllers
             return await _auctionRepo.GetAuctions();
         }
 
-        // GET: api/ApiAuction
-        [HttpGet("Seller/{id}")]
-        public async Task<IEnumerable<Auction>> GetSellerAuctions(int id)
-        {
-            return await _auctionRepo.GetSellerAuctions(id);
-        }
+        //// GET: api/ApiAuction
+        //[HttpGet("Seller/{id}")]
+        //public async Task<IEnumerable<Auction>> GetSellerAuctions(int id)
+        //{
+        //    return await _auctionRepo.GetSellerAuctions(id);
+        //}
 
         // GET: api/ApiAuction
         [HttpGet("User")]
