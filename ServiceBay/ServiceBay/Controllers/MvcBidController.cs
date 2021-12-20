@@ -63,8 +63,8 @@ namespace ServiceBay.Controllers
                 StaticVar.error = 1;
                 return View("~/Views/MvcAuction/Details.cshtml", auction);
             }
-
-             var insertrecord = hc.PostAsJsonAsync<Bid>("ApiBid", inserttemp);
+            
+            var insertrecord = hc.PostAsJsonAsync<Bid>("ApiBid", inserttemp);
             insertrecord.Wait();
             var savedata = insertrecord.Result;
             if (savedata.IsSuccessStatusCode)
