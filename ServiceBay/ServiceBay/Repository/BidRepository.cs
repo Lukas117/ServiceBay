@@ -1,4 +1,4 @@
-﻿using ServiceBay.Contracts;
+﻿ using ServiceBay.Contracts;
 using ServiceBay.Data;
 using ServiceBay.Models;
 using System;
